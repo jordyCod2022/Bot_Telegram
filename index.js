@@ -21,7 +21,7 @@ let id_Perfil=0;
 let banderaPerfil=false
 let incidentesPendientes=null;
 let validarPerfil=false
-let validarIngresar;false
+let validarIngresar=false
 
 
 //consultar el id_Perfil
