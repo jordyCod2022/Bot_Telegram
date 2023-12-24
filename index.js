@@ -21,7 +21,8 @@ let id_Perfil=0;
 let banderaPerfil=false
 let incidentesPendientes=null;
 let validarPerfil=false
-let validarIngresar;false
+let validarIngresar=false;
+
 
 
 //consultar el id_Perfil
@@ -112,11 +113,9 @@ async function ObtenerRespuestaTitulo_Base(agent) {
 
     if (match) {
       const textoCompleto = match[1].trim();
-      const palabras = textoCompleto.split(' ');
-      nombreTituloGlobal = palabras.shift();
       descripcionInciGlobal = textoCompleto;
 
-      return { nombreTituloGlobal, descripcionInciGlobal };
+      return { descripcionInciGlobal };
     }
 
     return null;
@@ -125,6 +124,7 @@ async function ObtenerRespuestaTitulo_Base(agent) {
     return null;
   }
 }
+
 
 
 /*---------------------------------------*/
@@ -746,16 +746,16 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
 
 async function buscarSolucionBaseConocimientos() {
   try {
-    // Verifica si nombreTituloGlobal es null
-    if (nombreTituloGlobal === null) {
-      console.error('El título es nulo. No se puede buscar en la base de conocimientos.');
+    // Verifica si descripcionInciGlobal es null
+    if (descripcionInciGlobal === null) {
+      console.error('La descripción es nula. No se puede buscar en la base de conocimientos.');
       return null;
     }
 
-    // Utiliza la variable global para obtener el título
-    const nombre_titulo = nombreTituloGlobal;
+    // Utiliza la variable global para obtener la descripción
+    const descripcion = descripcionInciGlobal;
 
-    // Realiza la búsqueda en la base de conocimientos utilizando el título
+    // Realiza la búsqueda en la base de conocimientos utilizando la descripción
     const query = `
       SELECT * 
       FROM public.base_conocimiento_incidentes
@@ -763,9 +763,8 @@ async function buscarSolucionBaseConocimientos() {
         EXISTS (
           SELECT 1
           FROM UNNEST(etiquetas_conocimiento_incidente) AS etiqueta
-          WHERE LOWER(etiqueta) LIKE '%${nombre_titulo}%'
+          WHERE LOWER(etiqueta) LIKE '%${descripcion}%'
         )
-      
     `;
 
     const result = await pool.query(query);
