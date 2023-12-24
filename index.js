@@ -1104,7 +1104,7 @@ async function validar_cedula(agent) {
     globalIncidentes = await obtenerIncidentesReportados(usuario_cedula);
     incidentesPendientes  = await obtenerIncidentesAsignadosPendientesUltimosDosDias(usuario_cedula)
 
-    await delay(1000);
+    
 
     if (mensajeForma) {
       agent.add(`${mensajeForma} ¡Validación exitosa! ✅`);
