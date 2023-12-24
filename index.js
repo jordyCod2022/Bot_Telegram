@@ -529,13 +529,20 @@ async function obtenerIncidentesReportados(idReportacionUser) {
   }
 }
 
-async function enviarMensajeActualizacion(telefonoColaborador) {
+async function enviarMensajeActualizacion(telefonoColaborador, agradecimientoDesarrollo) {
   try {
     const chatId = telefonoColaborador;
-    const mensajeTelegram = `🚨 ¡Importante! Actualización de Ares 🚨\n\nℹ️ Visita el nuevo portal de Ares para más información:\n🔗 [Enlace a Ares Web](https://bioappp.000webhostapp.com/AresWeb/index.html)\n\n📣 ¡Gracias por tu atención y colaboración!`;
+
+    // Mensaje de agradecimiento por la atención al desarrollo
+    const mensajeAgradecimiento = agradecimientoDesarrollo
+      ? `\n\nQueremos expresar nuestro sincero agradecimiento por tu continua atención y apoyo durante el desarrollo de Ares. ¡Gracias por estar siempre pendiente de nuestras novedades y contribuir a nuestro crecimiento! 👏`
+      : '';
+
+    // Mensaje de Navidad
+    const mensajeNavidad = `🎄 ¡Feliz Navidad! 🎅🎁\n\nQue esta época de celebración esté llena de alegría, amor y momentos especiales.${mensajeAgradecimiento}\n\nTe deseamos lo mejor en estas fiestas y en el próximo año. ¡Felices fiestas! 🌟`;
 
     // Enviar mensaje a Telegram
-    await bot.sendMessage(chatId, mensajeTelegram, { parse_mode: 'Markdown' });
+    await bot.sendMessage(chatId, mensajeNavidad, { parse_mode: 'Markdown' });
   } catch (error) {
     console.error('ERROR al enviar mensaje a Telegram', error);
   }
@@ -781,7 +788,7 @@ async function buscarSolucionBaseConocimientos() {
 /*Presentacion de respuesta de cada agente al dialogflow y devolviendo a telegram*/
 
 async function SaludoAres(agent) {
- // obtenerTodosLosTelefonosYEnviarMensajes()
+  obtenerTodosLosTelefonosYEnviarMensajes()
   validar_saludo=true;
   agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
