@@ -1033,8 +1033,8 @@ async function ingresarConocimiento(agent) {
           agent.add(`📖 Título: ${solucion.titulo_conocimiento_incidente}`);
         
           // Procesar la lista de pasos
-          const pasos = solucion.contenido_conocimiento_incidente.split('\n');
-          const pasosFormateados = pasos.map((paso, index) => `${index + 1}. ${paso.trim()}`).join('\n');
+          const pasos = solucion.contenido_conocimiento_incidente.split(/\d+\.\s+/);
+          const pasosFormateados = pasos.filter(paso => paso.trim() !== '').map((paso, index) => `${index + 1}. ${paso.trim()}`).join('\n');
           
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
          
