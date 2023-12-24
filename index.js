@@ -1042,7 +1042,7 @@ async function ingresarConocimiento(agent) {
           agent.add('¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
         
           bandera = true;
-        }
+        
         
 
         } else {
