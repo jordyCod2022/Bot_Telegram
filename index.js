@@ -21,8 +21,7 @@ let id_Perfil=0;
 let banderaPerfil=false
 let incidentesPendientes=null;
 let validarPerfil=false
-let validarIngresar=false;
-
+let validarIngresar;false
 
 
 //consultar el id_Perfil
@@ -113,9 +112,11 @@ async function ObtenerRespuestaTitulo_Base(agent) {
 
     if (match) {
       const textoCompleto = match[1].trim();
+      const palabras = textoCompleto.split(' ');
+      nombreTituloGlobal = palabras.shift();
       descripcionInciGlobal = textoCompleto;
 
-      return { descripcionInciGlobal };
+      return { nombreTituloGlobal, descripcionInciGlobal };
     }
 
     return null;
@@ -124,7 +125,6 @@ async function ObtenerRespuestaTitulo_Base(agent) {
     return null;
   }
 }
-
 
 
 /*---------------------------------------*/
@@ -529,23 +529,6 @@ async function obtenerIncidentesReportados(idReportacionUser) {
   }
 }
 
-async function enviarMensajeActualizacion(telefonoColaborador) {
-  try {
-    const chatId = telefonoColaborador;
- 
-    // Mensaje de Navidad
-    const mensajeNavidad = `🎄 ¡Feliz Navidad! 🎅🎁\n\nQue esta época de celebración esté llena de alegría, amor y momentos especiales.\n\nQueremos expresar nuestro sincero agradecimiento todos ustedes que estuvieron pendientes del desarrollo de Ares. ¡Gracias por su continuo interés y apoyo! 👏\n\nTe deseamos lo mejor en estas fiestas y en el próximo año. ¡Felices fiestas! 🌟`;
-
-
-    // Enviar mensaje a Telegram
-    await bot.sendMessage(chatId, mensajeNavidad, { parse_mode: 'Markdown' });
-  } catch (error) {
-    console.error('ERROR al enviar mensaje a Telegram', error);
-  }
-}
-
-
-
 
 
 async function enviarMensajeTelegram(infoColaborador, telefonoColaborador) {
@@ -746,16 +729,16 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
 
 async function buscarSolucionBaseConocimientos() {
   try {
-    // Verifica si descripcionInciGlobal es null
-    if (descripcionInciGlobal === null) {
-      console.error('La descripción es nula. No se puede buscar en la base de conocimientos.');
+    // Verifica si nombreTituloGlobal es null
+    if (nombreTituloGlobal === null) {
+      console.error('El título es nulo. No se puede buscar en la base de conocimientos.');
       return null;
     }
 
-    // Utiliza la variable global para obtener la descripción
-    const descripcion = descripcionInciGlobal;
+    // Utiliza la variable global para obtener el título
+    const nombre_titulo = nombreTituloGlobal;
 
-    // Realiza la búsqueda en la base de conocimientos utilizando la descripción
+    // Realiza la búsqueda en la base de conocimientos utilizando el título
     const query = `
       SELECT * 
       FROM public.base_conocimiento_incidentes
@@ -763,8 +746,9 @@ async function buscarSolucionBaseConocimientos() {
         EXISTS (
           SELECT 1
           FROM UNNEST(etiquetas_conocimiento_incidente) AS etiqueta
-          WHERE LOWER(etiqueta) LIKE '%${descripcion}%'
+          WHERE LOWER(etiqueta) LIKE '%${nombre_titulo}%'
         )
+      
     `;
 
     const result = await pool.query(query);
@@ -783,7 +767,7 @@ async function buscarSolucionBaseConocimientos() {
 /*Presentacion de respuesta de cada agente al dialogflow y devolviendo a telegram*/
 
 async function SaludoAres(agent) {
-  //obtenerTodosLosTelefonosYEnviarMensajes()
+ // obtenerTodosLosTelefonosYEnviarMensajes()
   validar_saludo=true;
   agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
