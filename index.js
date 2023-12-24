@@ -1034,14 +1034,18 @@ async function ingresarConocimiento(agent) {
         
           // Procesar la lista de pasos
           const pasos = solucion.contenido_conocimiento_incidente.split(/\d+\.\s+/);
-          const pasosFormateados = pasos.filter(paso => paso.trim() !== '').map((paso, index) => `${index + 1}. ${paso.trim()}`).join('\n');
-          
+          const pasosFormateados = pasos
+            .filter(paso => paso.trim() !== '')
+            .map((paso, index) => `${index + 1}. ${paso.trim()}\n`) // Agregamos \n al final de cada paso
+            .join(''); // Unimos los pasos sin agregar espacio entre ellos
+        
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
          
           // Preguntar por la satisfacción del usuario
           agent.add('💡 ¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n🔄 ¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
         
           bandera = true;
+        
         
         
         
