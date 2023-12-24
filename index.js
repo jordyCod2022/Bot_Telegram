@@ -1039,9 +1039,10 @@ async function ingresarConocimiento(agent) {
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
          
           // Preguntar por la satisfacción del usuario
-          agent.add('¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
+          agent.add('💡 ¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n🔄 ¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
         
           bandera = true;
+        
         
         
 
