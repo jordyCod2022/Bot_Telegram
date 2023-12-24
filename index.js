@@ -788,7 +788,7 @@ async function buscarSolucionBaseConocimientos() {
 /*Presentacion de respuesta de cada agente al dialogflow y devolviendo a telegram*/
 
 async function SaludoAres(agent) {
-  obtenerTodosLosTelefonosYEnviarMensajes()
+  //obtenerTodosLosTelefonosYEnviarMensajes()
   validar_saludo=true;
   agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
