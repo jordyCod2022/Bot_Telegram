@@ -1,0 +1,17 @@
+{
+  "name": "project-code",
+  "version": "1.0.0",
+  "description": "This is a Fiverr client project.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Raj Kapadia",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "pg": "^8.11.3",
+    "simple-git": "^3.21.0"
+  }
+}
