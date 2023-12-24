@@ -22,8 +22,7 @@ let banderaPerfil=false
 let incidentesPendientes=null;
 let validarPerfil=false
 let validarIngresar=false
-let nombreTituloGlobal = null;
-let descripcionInciGlobal = null;
+
 
 //consultar el id_Perfil
 
@@ -103,7 +102,8 @@ const pool = new Pool({
 
 
 
-
+let nombreTituloGlobal = null;
+let descripcionInciGlobal = null;
 
 async function ObtenerRespuestaTitulo_Base(agent) {
   try {
@@ -726,23 +726,19 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
 
 
 
+
 async function buscarSolucionBaseConocimientos() {
   try {
-    // Verifica si descripcionInciGlobal es null
-    if (descripcionInciGlobal === null) {
-      console.error('La descripción es nula. No se puede buscar en la base de conocimientos.');
+    // Verifica si nombreTituloGlobal es null
+    if (nombreTituloGlobal === null) {
+      console.error('El título es nulo. No se puede buscar en la base de conocimientos.');
       return null;
     }
 
-    // Utiliza la variable global para obtener la descripción
-    const descripcion = descripcionInciGlobal;
+    // Utiliza la variable global para obtener el título
+    const nombre_titulo = nombreTituloGlobal;
 
-    // Divide la descripción en palabras
-    const palabras = descripcion.split(/\s+/);
-
-    // Realiza la búsqueda en la base de conocimientos utilizando cada palabra por separado
-    const condicionesPalabras = palabras.map(palabra => `LOWER(etiqueta) = LOWER('${palabra}')`).join(' OR ');
-
+    // Realiza la búsqueda en la base de conocimientos utilizando el título
     const query = `
       SELECT * 
       FROM public.base_conocimiento_incidentes
@@ -750,8 +746,9 @@ async function buscarSolucionBaseConocimientos() {
         EXISTS (
           SELECT 1
           FROM UNNEST(etiquetas_conocimiento_incidente) AS etiqueta
-          WHERE ${condicionesPalabras}
+          WHERE LOWER(etiqueta) LIKE '%${nombre_titulo}%'
         )
+      
     `;
 
     const result = await pool.query(query);
