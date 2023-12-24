@@ -532,14 +532,10 @@ async function obtenerIncidentesReportados(idReportacionUser) {
 async function enviarMensajeActualizacion(telefonoColaborador, agradecimientoDesarrollo) {
   try {
     const chatId = telefonoColaborador;
-
-    // Mensaje de agradecimiento por la atención al desarrollo
-    const mensajeAgradecimiento = agradecimientoDesarrollo
-      ? `\n\nQueremos expresar nuestro sincero agradecimiento por tu continua atención y apoyo durante el desarrollo de Ares. ¡Gracias por estar siempre pendiente de nuestras novedades y contribuir a nuestro crecimiento! 👏`
-      : '';
-
+ 
     // Mensaje de Navidad
-    const mensajeNavidad = `🎄 ¡Feliz Navidad! 🎅🎁\n\nQue esta época de celebración esté llena de alegría, amor y momentos especiales.${mensajeAgradecimiento}\n\nTe deseamos lo mejor en estas fiestas y en el próximo año. ¡Felices fiestas! 🌟`;
+    const mensajeNavidad = `🎄 ¡Feliz Navidad! 🎅🎁\n\nQue esta época de celebración esté llena de alegría, amor y momentos especiales.\n\nQueremos expresar nuestro sincero agradecimiento a todas las personas que estuvieron pendientes del desarrollo de Ares. ¡Gracias por su continuo interés y apoyo! 👏\n\nTe deseamos lo mejor en estas fiestas y en el próximo año. ¡Felices fiestas! 🌟`;
+
 
     // Enviar mensaje a Telegram
     await bot.sendMessage(chatId, mensajeNavidad, { parse_mode: 'Markdown' });
