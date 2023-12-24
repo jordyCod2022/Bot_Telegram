@@ -1031,15 +1031,19 @@ async function ingresarConocimiento(agent) {
         if (solucion) {
           // Mostrar la información de la solución
           agent.add(`📖 Título: ${solucion.titulo_conocimiento_incidente}`);
-
+        
           // Procesar la lista de pasos
           const pasos = solucion.contenido_conocimiento_incidente.split('\n');
           const pasosFormateados = pasos.map((paso, index) => `${index + 1}. ${paso.trim()}`).join('\n');
           
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
-       
+         
+          // Preguntar por la satisfacción del usuario
+          agent.add('¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
+        
           bandera = true;
-          agent.add('💡 ¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n🔄 ¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
+        }
+        
 
         } else {
           // Manejar el caso en que no se encuentra una solución
