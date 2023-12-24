@@ -741,7 +741,7 @@ async function buscarSolucionBaseConocimientos() {
     const palabras = descripcion.split(/\s+/);
 
     // Realiza la búsqueda en la base de conocimientos utilizando cada palabra por separado
-    const condicionesPalabras = palabras.map(palabra => `LOWER(etiqueta) LIKE LOWER('%${palabra}%')`).join(' OR ');
+    const condicionesPalabras = palabras.map(palabra => `LOWER(etiqueta) = LOWER('${palabra}')`).join(' OR ');
 
     const query = `
       SELECT * 
