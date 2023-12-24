@@ -726,7 +726,6 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
 
 
 
-
 async function buscarSolucionBaseConocimientos() {
   try {
     // Verifica si descripcionInciGlobal es null
@@ -738,7 +737,12 @@ async function buscarSolucionBaseConocimientos() {
     // Utiliza la variable global para obtener la descripción
     const descripcion = descripcionInciGlobal;
 
-    // Realiza la búsqueda en la base de conocimientos utilizando la descripción
+    // Divide la descripción en palabras
+    const palabras = descripcion.split(/\s+/);
+
+    // Realiza la búsqueda en la base de conocimientos utilizando cada palabra por separado
+    const condicionesPalabras = palabras.map(palabra => `LOWER(etiqueta) LIKE LOWER('%${palabra}%')`).join(' OR ');
+
     const query = `
       SELECT * 
       FROM public.base_conocimiento_incidentes
@@ -746,7 +750,7 @@ async function buscarSolucionBaseConocimientos() {
         EXISTS (
           SELECT 1
           FROM UNNEST(etiquetas_conocimiento_incidente) AS etiqueta
-          WHERE LOWER(etiqueta) LIKE LOWER('%${descripcion}%')
+          WHERE ${condicionesPalabras}
         )
     `;
 
@@ -758,7 +762,6 @@ async function buscarSolucionBaseConocimientos() {
     throw error; // Propagar el error para manejarlo en el código que llama a esta función
   }
 }
-
 
 
 
