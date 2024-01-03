@@ -1263,7 +1263,7 @@ async function obtenerTodosLosTelefonos() {
     // Devuelve todos los valores del campo 'telefono_colaborador'
     return result.rows.map(row => row.telefono_colaborador) || [];
   } catch (error) {
-    console.error('Error al obtener los teléfonos de los colaboradores:', error);
+    console.error('Error al obtener los teléfonos de los colaborador:', error);
     return [];
   }
 }
