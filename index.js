@@ -608,19 +608,14 @@ async function registrar_INCI(agent) {
     let estado_id = 2;
     let cierre_id = 2;
 
-
     if (nombreTituloGlobal && descripcionInciGlobal) {
       user_asignado = await obtenerUsuariosDisponiblesIn();
 
-      if (!user_asignado || user_asignado.length === 0) {
-        agent.add('🚨 No hay usuarios asignados disponibles en este momento, tu reporte será enviado al encargado general.');
-        console.log('No hay usuarios asignados disponibles en este momento.');
-        return;
-      }
+      // Eliminamos la validación y el mensaje de error relacionado con usuarios disponibles
 
-      const asignacion_user_id = user_asignado[0].id_asignacion_user;
-      id_asignado= await obtenerChatId(asignacion_user_id);
-      
+      const asignacion_user_id = user_asignado.length > 0 ? user_asignado[0].id_asignacion_user : null;
+      id_asignado = await obtenerChatId(asignacion_user_id);
+
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
       const idCate = defectoCate ? defectoCate.id_cate : null;
@@ -645,7 +640,7 @@ async function registrar_INCI(agent) {
       const defectUr = urgenDis.length > 0 ? urgenDis[0] : null;
       const urgencia_id = defectUr ? defectUr.id_urgencia : null;
 
-      const repoartacion_user_id = usuario_cedula
+      const repoartacion_user_id = usuario_cedula;
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
@@ -663,21 +658,22 @@ async function registrar_INCI(agent) {
         asignacion_user_id,
         cierre_id,
         resolucion_id,
-        nombreTituloGlobal, 
-        descripcionInciGlobal, 
+        nombreTituloGlobal,
+        descripcionInciGlobal,
         fechaRegi,
         estado_incidente
       ];
 
       await pool.query(query, valores);
 
-      const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
-      await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
-      
+      if (asignacion_user_id) {
+        const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
+        await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
+      }
+
       console.log('Incidente registrado exitosamente.');
       agent.add('✅ El incidente ha sido registrado exitosamente.');
-      validarIngresar=false
-
+      validarIngresar = false;
     } else {
       console.log('Campos obligatorios faltantes:');
       console.log('nombre:', nombreTituloGlobal);
@@ -695,10 +691,9 @@ async function registrar_INCI(agent) {
     }
 
     agent.add('🚨 Ocurrió un error al registrar el incidente. Por favor, inténtalo más tarde o contacta al soporte técnico.');
-  
-
   }
 }
+
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
   try {
