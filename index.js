@@ -620,7 +620,7 @@ async function registrar_INCI(agent) {
 
       //elegir usuarios 
       const randomIndex = Math.floor(Math.random() * usersDisponibles.length);
-      const user_asignado = usersDisponibles[randomIndex];
+      const asignacion_user_id = user_asignado[randomIndex].id_asignacion_user;
       id_asignado= await obtenerChatId(asignacion_user_id);
       
       const categoriasDisponiblesa = await obtenerCategorias();
