@@ -633,7 +633,7 @@ async function registrar_INCI(agent) {
 
       const PrioDispo = await obtenerPrioridad();
       const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
-      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
+      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null   ;
 
       const ImpactoDis = await obtenerImpactos();
       const defectImpa = ImpactoDis.length > 0 ? ImpactoDis[0] : null;

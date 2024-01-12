@@ -9,8 +9,10 @@
   "author": "Raj Kapadia",
   "license": "ISC",
   "dependencies": {
+    "dialogflow-fulfillment": "^0.6.1",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "node-telegram-bot-api": "^0.64.0",
     "pg": "^8.11.3",
     "simple-git": "^3.21.0"
   }
