@@ -1356,7 +1356,7 @@ const server = app.listen(PORT, () => {
 
 // Manejar eventos de conexión y desconexión de la base de datos
 pool.on('connect', () => {
-  console.log('Conexión a la base de datos establecida con éxito.');
+  console.log('Conexión a la base de datos establecida con éxit.');
 });
 
 pool.on('error', (err) => {
