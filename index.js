@@ -3,15 +3,13 @@ const app = express();
 const { WebhookClient } = require('dialogflow-fulfillment');
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
-
+const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
-
 dotenv.config();
-
 const connectionTimeoutMillis = 40000;
-
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const bot = new TelegramBot(telegramToken, { polling: false });
+
 let validadCedula=false;
 let usuario_cedula=0;
 let validar_saludo=false;
@@ -22,6 +20,175 @@ let banderaPerfil=false
 let incidentesPendientes=null;
 let validarPerfil=false
 let validarIngresar=false
+let nombreTituloGlobal = null;
+let descripcionInciGlobal = null;
+
+//Variables para enviar datos a Zammad
+let tituloZammad;
+let idClienteZammad;
+let nombreClienteZammad;
+let apellidoClienteZammad;
+
+
+
+const pool = new Pool({
+  connectionString: process.env.conexion,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  connectionTimeoutMillis: connectionTimeoutMillis,
+});
+
+//Rutas base de datos:
+
+
+app.get('/getNombre', async (req, res) => {
+  try {
+    // Obtener el id_colaborador del usuario autenticado desde la solicitud
+    const id_colaborador = req.query.id_colaborador; // Cambiado de req.query.username a req.query.id_colaborador
+
+    // Realizar la consulta a la base de datos para obtener el nombre y el id_colaborador
+    const result = await pool.query(
+      'SELECT id_colaborador, nombre_colaborador, apellido_colaborador FROM public.colaboradores WHERE id_colaborador = $1',
+      [id_colaborador]
+    );
+
+    if (result.rows.length > 0) {
+      // Desestructurar los resultados de la consulta
+      const { id_colaborador, nombre_colaborador, apellido_colaborador } = result.rows[0];
+
+      // Imprimir los resultados en la consola del servidor
+      console.log('ID del usuario:', id_colaborador);
+      console.log('Nombre del usuario:', nombre_colaborador);
+      console.log('Apellido del usuario:', apellido_colaborador);
+      console.log('ID de usuario:', id_colaborador);
+
+      // Enviar la respuesta JSON con los resultados
+      res.json({ id_colaborador, nombre: nombre_colaborador, apellido: apellido_colaborador, id_colaborador: id_colaborador });
+    } else {
+      // Si no se encuentra un usuario con el id_colaborador proporcionado
+      res.json({ id_colaborador: null, nombre: null, apellido: null, id_colaborador: null });
+    }
+  } catch (error) {
+    // Manejar errores durante la consulta a la base de datos
+    console.error('Error en la consulta a la base de datos:', error);
+    res.status(500).json({ error: 'Error al obtener el nombre, apellido e ID del usuario' });
+  }
+});
+
+
+async function getNombre(id_colaborador) {
+  try {
+    // Hacer una solicitud al servidor para obtener la información del usuario
+    const response = await fetch(`/getNombre?id_colaborador=${id_colaborador}`);
+    
+    // Verificar si la solicitud fue exitosa (código de estado 200)
+    if (response.ok) {
+      // Parsear la respuesta JSON
+      const data = await response.json();
+      
+      // Mostrar los resultados en la consola del cliente
+      console.log('ID del usuario:', data.id_colaborador);
+      console.log('Nombre del usuario:', data.nombre);
+      nombreClienteZammad=data.nombre
+      console.log('Apellido del usuario:', data.apellido);
+      apellidoClienteZammad=data.apellido
+      console.log('Username del usuario:', data.username);
+    } else {
+      // Manejar errores si la solicitud no fue exitosa
+      console.error('Error en la solicitud al servidor:', response.statusText);
+    }
+  } catch (error) {
+    // Manejar errores durante la ejecución de la solicitud
+    console.error('Error al realizar la solicitud al servidor:', error);
+  }
+}
+
+//Rutas zammad:
+
+//Listar todos los tickets de zammad
+
+app.get('/listarTickets', async (req, res) => {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://192.168.100.163/api/v1/tickets';
+    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+
+    // Realiza la solicitud a la API de Zammad usando axios
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al listar tickets:', error);
+    res.status(500).json({ error: 'Error al listar tickets' });
+  }
+});
+
+app.post('/crearTicket', async (req, res) => {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://192.168.100.163/api/v1/tickets';
+    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+
+    // Datos del nuevo ticket a crear
+    const nuevoTicket = {
+      title: 'Problemas de red',
+      group_id: 1,
+      customer_id:  5,
+      organization_id:  1,
+     
+    };
+
+    // Realiza la solicitud POST a la API de Zammad usando axios
+    const response = await axios.post(apiUrl, nuevoTicket, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al crear el ticket:', error);
+    res.status(500).json({ error: 'Error al crear el ticket' });
+  }
+});
+
+
+
+app.get('/listarUsuarios', async (req, res) => {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://192.168.100.163/api/v1/users';
+    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+
+    // Realiza la solicitud a la API de Zammad usando axios
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    const usuariosConId = response.data.map(usuario => ({
+      id: usuario.id,
+      nombre: usuario.firstname,
+      apellido: usuario.lastname,
+      
+    }));
+
+    res.json(usuariosConId);
+  } catch (error) {
+    console.error('Error al listar usuarios:', error);
+    res.status(500).json({ error: 'Error al listar usuarios' });
+  }
+});
+
 
 
 //consultar el id_Perfil
@@ -84,26 +251,6 @@ async function obtenerIncidentesAsignadosPendientesUltimosDosDias(idUsuario) {
     throw error;
   }
 }
-
-
-
-// Crear una instancia del bot de Telegram
-
-
-const pool = new Pool({
-  connectionString: process.env.conexion,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: connectionTimeoutMillis,
-});
-
-/*Extraer formato de mensaje enviadas por prametros por dialogflow*/
-
-
-
-let nombreTituloGlobal = null;
-let descripcionInciGlobal = null;
 
 async function ObtenerRespuestaTitulo_Base(agent) {
   try {
@@ -592,10 +739,6 @@ async function Confirmacion(agent) {
 
 
 
-
-
-
-
 async function registrar_INCI(agent) {
   let user_asignado;
 
@@ -610,6 +753,10 @@ async function registrar_INCI(agent) {
 
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
+
+      tituloZammad=nombreTituloGlobal
+
+
       user_asignado = await obtenerUsuariosDisponiblesIn();
 
       if (!user_asignado || user_asignado.length === 0) {
@@ -649,6 +796,11 @@ async function registrar_INCI(agent) {
 
       const repoartacion_user_id = usuario_cedula
 
+      idClienteZammad=repoartacion_user_id
+
+      getNombre(idClienteZammad);
+
+
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
@@ -675,6 +827,8 @@ async function registrar_INCI(agent) {
 
       const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
       await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
+
+
       
       console.log('Incidente registrado exitosamente.');
       agent.add('✅ El incidente ha sido registrado exitosamente.');
@@ -764,16 +918,19 @@ async function buscarSolucionBaseConocimientos() {
 
 
 
-/*---------------------------------------*/
-
-/*Presentacion de respuesta de cada agente al dialogflow y devolviendo a telegram*/
 
 async function SaludoAres(agent) {
  // obtenerTodosLosTelefonosYEnviarMensajes()
+
   validar_saludo=true;
   agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
 }
+
+
+
+
+
 
 async function Estado_Incidente_ADMIN(agent) {
   try {
@@ -1288,32 +1445,6 @@ async function obtenerTodosLosTelefonosYEnviarMensajes() {
 }
 
 
-
-
-async function Reportar_Incidente(agent) {
-  try {
-
-    const respuestaTitulo = await ObtenerRespuestaTitulo_Base(agent);
-
-    if (!respuestaTitulo || !respuestaTitulo.nombre_titulo || !respuestaTitulo.descripcion_inci) {
-      console.error('No se pudo obtener la información del título o está incompleta:', respuestaTitulo);
-      agent.add('No se pudo obtener la información del título o está incompleta.');
-    } else {
-      console.log('titulo:', respuestaTitulo.nombre_titulo);
-      console.log('descripcion: ', respuestaTitulo.descripcion_inci);
-      console.log("Información del título obtenida correctamente. Nombre:", respuestaTitulo.nombre_titulo, "Descripción:", respuestaTitulo.descripcion_inci);
-      await registrar_INCI(agent, respuestaTitulo.nombre_titulo, respuestaTitulo.descripcion_inci);
-      agent.add('El incidente ha sido registrado exitosamente.');
-    }
-  } catch (error) {
-    console.error('Error al registrar el incidente:', error);
-    agent.add("Ocurrió un error al registrar el incidente.")
-  }
-}
-
-
-
-/*---------------------------------------*/
 
 
 app.get("/", (req, res) => {
