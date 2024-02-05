@@ -12,16 +12,16 @@ const bot = new TelegramBot(telegramToken, { polling: false });
 const bodyParser = require('body-parser');
 
 
-let validadCedula = false;
-let usuario_cedula = 0;
-let validar_saludo = false;
-let bandera = false;
-let id_asignado = 0;
-let id_Perfil = 0;
-let banderaPerfil = false
-let incidentesPendientes = null;
-let validarPerfil = false
-let validarIngresar = false
+let validadCedula=false;
+let usuario_cedula=0;
+let validar_saludo=false;
+let bandera=false;
+let id_asignado=0;
+let id_Perfil=0;
+let banderaPerfil=false
+let incidentesPendientes=null;
+let validarPerfil=false
+let validarIngresar=false
 let nombreTituloGlobal = null;
 let descripcionInciGlobal = null;
 
@@ -116,9 +116,9 @@ app.post('/crearTicket', async (req, res) => {
     const nuevoTicket = {
       title: 'Problemas de red',
       group_id: 1,
-      customer_id: 5,
-      organization_id: 1,
-
+      customer_id:  5,
+      organization_id:  1,
+     
     };
 
     // Realiza la solicitud POST a la API de Zammad usando axios
@@ -137,6 +137,8 @@ app.post('/crearTicket', async (req, res) => {
   }
 });
 
+
+
 app.get('/listarUsuarios', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
@@ -153,6 +155,7 @@ app.get('/listarUsuarios', async (req, res) => {
     const usuariosConId = response.data.map(usuario => ({
       id: usuario.id,
       nombre: usuario.firstname,
+     
       apellido: usuario.lastname,
     
       
@@ -256,110 +259,110 @@ async function ObtenerRespuestaTitulo_Base(agent) {
 /*Funciones de consulta a la base de datos*/
 
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+function delay (ms){
+  return new Promise (resolve => setTimeout(resolve,ms));
+} 
 
 async function obtenerCategorias() {
-  const query = 'SELECT * FROM incidente_categoria';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las categorías de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerEstado() {
-  const query = 'SELECT * FROM incidente_estado';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre los estados de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerResolucion() {
-  const query = 'SELECT * FROM incidente_resolucion';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerImpactos() {
-  const query = 'SELECT * FROM incidente_impacto';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerUrgencia() {
-  const query = 'SELECT * FROM incidente_urgencia';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerCierre() {
-  const query = 'SELECT * FROM incidente_cierre';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerPrioridad() {
-  const query = 'SELECT * FROM incidente_prioridad';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerUsuariosDisponiblesIn() {
-  const query = 'SELECT asignacion_user.*, colaboradores.nombre_colaborador FROM asignacion_user INNER JOIN usuarios ON asignacion_user.id_usuario = usuarios.id_usuario INNER JOIN colaboradores ON usuarios.id_colaborador = colaboradores.id_colaborador WHERE disponibilidad IN (0, 1)';
-
-  try {
-    const { rows } = await pool.query(query);
-    return rows;
-  } catch (error) {
-    console.error('Error al obtener los usuarios disponibles:', error);
-    throw new Error('Lo siento, ocurrió un error al obtener los usuarios disponibles.');
-  }
-}
-
-async function escala_niveles() {
-  const query = 'SELECT * FROM incidente_escala';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre los niveles de incidentes", error);
-    throw error;
+    const query = 'SELECT * FROM incidente_categoria';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las categorías de incidentes", error);
+      throw error;
+    }
   }
 
-}
+  async function obtenerEstado() {
+    const query = 'SELECT * FROM incidente_estado';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre los estados de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerResolucion(){
+    const query = 'SELECT * FROM incidente_resolucion';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerImpactos(){
+    const query = 'SELECT * FROM incidente_impacto';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerUrgencia(){
+    const query = 'SELECT * FROM incidente_urgencia';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerCierre(){
+    const query = 'SELECT * FROM incidente_cierre';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerPrioridad(){
+    const query = 'SELECT * FROM incidente_prioridad';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
+      throw error;
+    }
+  }
+
+  async function obtenerUsuariosDisponiblesIn() {
+    const query = 'SELECT asignacion_user.*, colaboradores.nombre_colaborador FROM asignacion_user INNER JOIN usuarios ON asignacion_user.id_usuario = usuarios.id_usuario INNER JOIN colaboradores ON usuarios.id_colaborador = colaboradores.id_colaborador WHERE disponibilidad IN (0, 1)';
+  
+    try {
+      const { rows } = await pool.query(query);
+      return rows;
+    } catch (error) {
+      console.error('Error al obtener los usuarios disponibles:', error);
+      throw new Error('Lo siento, ocurrió un error al obtener los usuarios disponibles.');
+    }
+  }
+
+  async function escala_niveles(){
+    const query = 'SELECT * FROM incidente_escala';
+    try {
+      const { rows } = await pool.query(query);
+      return rows; // Devolver las categorías
+    } catch (error) {
+      console.error("Lo sentimos, no pudimos obtener información sobre los niveles de incidentes", error);
+      throw error;
+    }
+
+  }
 
 
 async function obtenerColaboradorPorCedula(numeroCedula) {
@@ -477,7 +480,7 @@ async function Base_Conocimiento(agent) {
       agent.add('🔒 Lo siento, debes identificarte, esta opción solo es válida para usuarios normales');
       return;
     }
-
+    
     // 📚 Llamas a ObtenerRespuestaTitulo_Base para obtener información del título
     const respuestaTitulo = await ObtenerRespuestaTitulo_Base(agent);
 
@@ -501,13 +504,13 @@ async function Base_Conocimiento(agent) {
       resultadoBaseConocimientos.forEach((solucion, index) => {
         agent.add(`🆔 ID: ${solucion.id_conocimiento_incidente}, 📖 Título: ${solucion.titulo_conocimiento_incidente}`);
       });
-
-
+      
+      
       bandera = true;
       agent.add('🤖✨ ¡Perfecto! Ahora puedes seleccionar una solución. Escribe el numero 7️⃣ para elegir un título de solución.');
-      validarIngresar = true;
+      validarIngresar=true;
 
-
+     
     } else {
       // 🤔 Manejas el caso en que no se encuentra una solución
       console.log('❌ No se encontró una solución en la base de conocimientos.');
@@ -536,10 +539,10 @@ async function registrar_INCI_SI(agent) {
     let estado_id = 3;
     let cierre_id = 2;
     let asignacion_user_id = null;
-    let bandera = false;
+    let bandera=false;
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
-
+      
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
       const idCate = defectoCate ? defectoCate.id_cate : null;
@@ -582,8 +585,8 @@ async function registrar_INCI_SI(agent) {
         asignacion_user_id,
         cierre_id,
         resolucion_id,
-        nombreTituloGlobal,
-        descripcionInciGlobal,
+        nombreTituloGlobal, 
+        descripcionInciGlobal, 
         fechaRegi,
         estado_incidente
       ];
@@ -592,7 +595,7 @@ async function registrar_INCI_SI(agent) {
 
       console.log('Incidente registrado exitosamente.');
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
-      validadCedula = false
+      validadCedula=false
 
     } else {
       console.log('Campos obligatorios faltantes:');
@@ -604,7 +607,7 @@ async function registrar_INCI_SI(agent) {
     }
   } catch (error) {
     console.error('ERROR al registrar el incidente', error);
-
+    
     if (user_asignado && user_asignado.length > 0) {
       const queryRevertirUsuarioAsignado = 'UPDATE asignacion_user SET disponibilidad = 0 WHERE id_asignacion_user = $1';
       await pool.query(queryRevertirUsuarioAsignado, [user_asignado[0].id_asignacion_user]);
@@ -644,11 +647,11 @@ async function obtenerIncidentesReportados(idReportacionUser) {
   `;
 
   try {
-    const { rows } = await pool.query(query, [idReportacionUser]);
-    return rows;
+      const { rows } = await pool.query(query, [idReportacionUser]);
+      return rows;
   } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre los incidentes reportados", error);
-    throw error;
+      console.error("Lo sentimos, no pudimos obtener información sobre los incidentes reportados", error);
+      throw error;
   }
 }
 
@@ -684,8 +687,8 @@ async function Confirmacion(agent) {
       bandera = false;
       validadCedula = false;
       validar_saludo = false;
-      banderaPerfil = false;
-      validarIngresar = false
+      banderaPerfil=false;
+      validarIngresar=false
     } else if (respuestaUsuario.includes('no')) {
       agent.add('Procesando incidente');
       await delay(3000);
@@ -698,11 +701,11 @@ async function Confirmacion(agent) {
       await enviarMensajeTelegram(infoColaborador, id_asignado);
 
       agent.add('✅ Incidente enviado al departamento de TICs. Está en estado pendiente. ¡Gracias por tu reporte! 🚀');
-
+      
       bandera = false;
       validar_saludo = false;
-      banderaPerfil = false;
-      validarIngresar = false
+      banderaPerfil=false;
+      validarIngresar=false
     } else {
       agent.add('No reconocemos la respuesta proporcionada. Por favor, responde "Si" o "No".');
     }
@@ -730,7 +733,7 @@ async function registrar_INCI(agent) {
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
 
-      tituloZammad = nombreTituloGlobal
+      tituloZammad=nombreTituloGlobal
 
 
       user_asignado = await obtenerUsuariosDisponiblesIn();
@@ -744,8 +747,8 @@ async function registrar_INCI(agent) {
       //elegir usuarios 
       const randomIndex = Math.floor(Math.random() * user_asignado.length);
       const asignacion_user_id = user_asignado[randomIndex].id_asignacion_user;
-      id_asignado = await obtenerChatId(asignacion_user_id);
-
+      id_asignado= await obtenerChatId(asignacion_user_id);
+      
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
       const idCate = defectoCate ? defectoCate.id_cate : null;
@@ -756,7 +759,7 @@ async function registrar_INCI(agent) {
 
       const PrioDispo = await obtenerPrioridad();
       const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
-      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
+      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null   ;
 
       const ImpactoDis = await obtenerImpactos();
       const defectImpa = ImpactoDis.length > 0 ? ImpactoDis[0] : null;
@@ -772,9 +775,18 @@ async function registrar_INCI(agent) {
 
       const repoartacion_user_id = usuario_cedula
 
-      idClienteZammad = repoartacion_user_id
+      idClienteZammad=repoartacion_user_id
       getNombre(idClienteZammad)
-     
+      .then(data => {
+    
+        console.log('Datos obtenidos:', data);
+        
+      })
+      .catch(error => {
+        // Manejar el error
+        console.error('Error:', error.message);
+      });
+
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
@@ -791,8 +803,8 @@ async function registrar_INCI(agent) {
         asignacion_user_id,
         cierre_id,
         resolucion_id,
-        nombreTituloGlobal,
-        descripcionInciGlobal,
+        nombreTituloGlobal, 
+        descripcionInciGlobal, 
         fechaRegi,
         estado_incidente
       ];
@@ -803,10 +815,10 @@ async function registrar_INCI(agent) {
       await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
 
 
-
+      
       console.log('Incidente registrado exitosamente.');
       agent.add('✅ El incidente ha sido registrado exitosamente.');
-      validarIngresar = false
+      validarIngresar=false
 
     } else {
       console.log('Campos obligatorios faltantes:');
@@ -825,7 +837,7 @@ async function registrar_INCI(agent) {
     }
 
     agent.add('🚨 Ocurrió un error al registrar el incidente. Por favor, inténtalo más tarde o contacta al soporte técnico.');
-
+  
 
   }
 }
@@ -894,9 +906,9 @@ async function buscarSolucionBaseConocimientos() {
 
 
 async function SaludoAres(agent) {
-  // obtenerTodosLosTelefonosYEnviarMensajes()
+ // obtenerTodosLosTelefonosYEnviarMensajes()
 
-  validar_saludo = true;
+  validar_saludo=true;
   agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
 }
@@ -1005,7 +1017,7 @@ async function Prioridad_Incidentes_ADMIN(agent) {
   }
 }
 
-async function Escalamiento_Niveles_ADMIN(agent) {
+async function Escalamiento_Niveles_ADMIN(agent){
   try {
     const nivelesEscalamiento = await escala_niveles();
     const listanivel = nivelesEscalamiento.map(nivel =>
@@ -1152,7 +1164,7 @@ function obtenerCedulaDesdeMensaje(agent) {
 }
 
 async function ingresarConocimiento(agent) {
-
+  
   const id_titulo = obtenerIdConocimientoDesdeMensaje(agent);
 
   if (validarIngresar) {
@@ -1164,24 +1176,24 @@ async function ingresarConocimiento(agent) {
         if (solucion) {
           // Mostrar la información de la solución
           agent.add(`📖 Título: ${solucion.titulo_conocimiento_incidente}`);
-
+        
           // Procesar la lista de pasos
           const pasos = solucion.contenido_conocimiento_incidente.split(/\d+\.\s+/);
           const pasosFormateados = pasos
             .filter(paso => paso.trim() !== '')
             .map((paso, index) => `${index + 1}. ${paso.trim()}\n`) // Agregamos \n al final de cada paso
             .join(''); // Unimos los pasos sin agregar espacio entre ellos
-
+        
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
-
+         
           // Preguntar por la satisfacción del usuario
           agent.add('💡 ¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n🔄 ¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
-
+        
           bandera = true;
-
-
-
-
+        
+        
+        
+        
 
         } else {
           // Manejar el caso en que no se encuentra una solución
@@ -1235,9 +1247,9 @@ async function validar_cedula(agent) {
     id_Perfil = await obtenerIdPerfilUsuario(usuario_cedula); // se guarda el perfil de usuario admin o normal
 
     globalIncidentes = await obtenerIncidentesReportados(usuario_cedula);
-    incidentesPendientes = await obtenerIncidentesAsignadosPendientesUltimosDosDias(usuario_cedula)
+    incidentesPendientes  = await obtenerIncidentesAsignadosPendientesUltimosDosDias(usuario_cedula)
 
-
+    
 
     if (mensajeForma) {
       agent.add(`${mensajeForma} ¡Validación exitosa! ✅`);
@@ -1246,23 +1258,23 @@ async function validar_cedula(agent) {
 
       if (id_usuario) {
         if (id_Perfil === 2) {
-          validarPerfil = false
-          banderaPerfil = true
-
+          validarPerfil=false
+          banderaPerfil=true
+          
 
           // Acciones para el perfil 2 (Usuario Administrador)
           agent.add("A continuación, te presento las acciones disponibles:\n\n3️⃣ Consultar Pendientes\n4️⃣ Gestionar Incidentes Asignados\n0️⃣ Salir")
 
-
-
-
+         
+        
+        
         } else {
           // Acciones para otros perfiles (Usuario Normal)
           try {
 
-
-            banderaPerfil = false
-            validarPerfil = true
+            
+            banderaPerfil=false
+            validarPerfil=true
             await InsertarUsuarioRepotado(numeroCedula);
             console.log("*******");
             console.log(globalIncidentes);
@@ -1272,7 +1284,7 @@ async function validar_cedula(agent) {
           } catch (error) {
             agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
 
-
+           
           }
         }
       }
@@ -1285,7 +1297,7 @@ async function validar_cedula(agent) {
   }
 }
 
-async function gestionar(agent) {
+async function gestionar(agent){
 
   if (id_Perfil === 2) {
     // Generar y actualizar el token
@@ -1310,7 +1322,7 @@ async function gestionar(agent) {
 async function Usuarios_Disponibles_incidente(agent) {
   try {
     const usuariosDisponibles = await obtenerUsuariosDisponiblesIn();
-
+    
 
     if (usuariosDisponibles.length > 0) {
       const nombresUsuarios = usuariosDisponibles.map(usuario => usuario.nombre_colaborador).join(', ');
@@ -1326,7 +1338,7 @@ async function Usuarios_Disponibles_incidente(agent) {
     agent.add('🚨 Lo siento, ocurrió un error al obtener usuarios disponibles. Por favor, inténtalo más tarde.');
     return null;
   }
-}
+} 
 
 async function obtenerInformacionColaborador(idColaborador) {
   try {
@@ -1364,7 +1376,7 @@ async function Salida(agent) {
   banderaPerfil = false;
   incidentesPendientes = null;
   validarPerfil = false;
-  validarIngresar = false;
+  validarIngresar=false;
 
   // Agregar la frase de despedida al agente
   agent.add(despedidaAleatoria);
@@ -1440,15 +1452,15 @@ app.post("/", express.json(), (request, response) => {
   intentMap.set('Cierre_Incidente_ADMIN', Cierre_Incidente_ADMIN);
   intentMap.set('Prioridad_Incidentes_ADMIN', Prioridad_Incidentes_ADMIN)
   intentMap.set('validar_cedula', validar_cedula);
-  intentMap.set('Usuarios_Disponibles_incidente', Usuarios_Disponibles_incidente);
+  intentMap.set('Usuarios_Disponibles_incidente',Usuarios_Disponibles_incidente);
   intentMap.set('SaludoAres', SaludoAres);
   intentMap.set('Escalamiento_Niveles_ADMIN', Escalamiento_Niveles_ADMIN);
-  intentMap.set('Base_Conocimiento', Base_Conocimiento);
-  intentMap.set('Confirmacion', Confirmacion);
-  intentMap.set('Consultar_Seguimiento', obtenerIncidenteInfo);
-  intentMap.set('Accion_Admin', Accion_Admin);
-  intentMap.set('Salida', Salida);
-  intentMap.set('gestionar', gestionar);
+  intentMap.set('Base_Conocimiento',Base_Conocimiento);
+  intentMap.set('Confirmacion',Confirmacion);
+  intentMap.set('Consultar_Seguimiento',obtenerIncidenteInfo);
+  intentMap.set('Accion_Admin',Accion_Admin);
+  intentMap.set('Salida',Salida);
+  intentMap.set('gestionar',gestionar);
   intentMap.set('ingresarConocimiento', ingresarConocimiento);
   agent.handleRequest(intentMap);
 });
