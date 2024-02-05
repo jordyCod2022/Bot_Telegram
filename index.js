@@ -9,6 +9,8 @@ dotenv.config();
 const connectionTimeoutMillis = 40000;
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const bot = new TelegramBot(telegramToken, { polling: false });
+const bodyParser = require('body-parser');
+
 
 let validadCedula=false;
 let usuario_cedula=0;
@@ -40,13 +42,8 @@ const pool = new Pool({
 });
 
 //Rutas base de datos:
-
-
-app.get('/getNombre', async (req, res) => {
+async function getNombre(id_colaborador) {
   try {
-    // Obtener el id_colaborador del usuario autenticado desde la solicitud
-    const id_colaborador = req.query.id_colaborador; // Cambiado de req.query.username a req.query.id_colaborador
-
     // Realizar la consulta a la base de datos para obtener el nombre y el id_colaborador
     const result = await pool.query(
       'SELECT id_colaborador, nombre_colaborador, apellido_colaborador FROM public.colaboradores WHERE id_colaborador = $1',
@@ -57,50 +54,26 @@ app.get('/getNombre', async (req, res) => {
       // Desestructurar los resultados de la consulta
       const { id_colaborador, nombre_colaborador, apellido_colaborador } = result.rows[0];
 
-      // Imprimir los resultados en la consola del servidor
+      // Mostrar los resultados en la consola del cliente
       console.log('ID del usuario:', id_colaborador);
       console.log('Nombre del usuario:', nombre_colaborador);
+      nombreClienteZammad = nombre_colaborador;
       console.log('Apellido del usuario:', apellido_colaborador);
+      apellidoClienteZammad = apellido_colaborador;
       console.log('ID de usuario:', id_colaborador);
 
-      // Enviar la respuesta JSON con los resultados
-      res.json({ id_colaborador, nombre: nombre_colaborador, apellido: apellido_colaborador, id_colaborador: id_colaborador });
+      // También puedes retornar los datos directamente
+      return { id_colaborador, nombre: nombre_colaborador, apellido: apellido_colaborador, id_colaborador: id_colaborador };
     } else {
       // Si no se encuentra un usuario con el id_colaborador proporcionado
-      res.json({ id_colaborador: null, nombre: null, apellido: null, id_colaborador: null });
+      console.log('Usuario no encontrado');
+      return { id_colaborador: null, nombre: null, apellido: null, id_colaborador: null };
     }
   } catch (error) {
     // Manejar errores durante la consulta a la base de datos
     console.error('Error en la consulta a la base de datos:', error);
-    res.status(500).json({ error: 'Error al obtener el nombre, apellido e ID del usuario' });
-  }
-});
-
-
-async function getNombre(id_colaborador) {
-  try {
-    // Hacer una solicitud al servidor para obtener la información del usuario
-    const response = await fetch(`/getNombre?id_colaborador=${id_colaborador}`);
-    
-    // Verificar si la solicitud fue exitosa (código de estado 200)
-    if (response.ok) {
-      // Parsear la respuesta JSON
-      const data = await response.json();
-      
-      // Mostrar los resultados en la consola del cliente
-      console.log('ID del usuario:', data.id_colaborador);
-      console.log('Nombre del usuario:', data.nombre);
-      nombreClienteZammad=data.nombre
-      console.log('Apellido del usuario:', data.apellido);
-      apellidoClienteZammad=data.apellido
-      console.log('Username del usuario:', data.username);
-    } else {
-      // Manejar errores si la solicitud no fue exitosa
-      console.error('Error en la solicitud al servidor:', response.statusText);
-    }
-  } catch (error) {
-    // Manejar errores durante la ejecución de la solicitud
-    console.error('Error al realizar la solicitud al servidor:', error);
+    // Puedes lanzar el error para que sea manejado en el contexto que llama a esta función
+    throw new Error('Error al obtener el nombre, apellido e ID del usuario');
   }
 }
 
@@ -797,9 +770,15 @@ async function registrar_INCI(agent) {
       const repoartacion_user_id = usuario_cedula
 
       idClienteZammad=repoartacion_user_id
-
-      getNombre(idClienteZammad);
-
+      getNombre(idClienteZammad)
+      .then(data => {
+        // Hacer lo que necesitas con los datos
+        console.log('Datos obtenidos:', data);
+      })
+      .catch(error => {
+        // Manejar el error
+        console.error('Error:', error.message);
+      });
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
