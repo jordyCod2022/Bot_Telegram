@@ -85,6 +85,52 @@ async function getNombre(id_colaborador) {
 
 //Listar todos los tickets de zammad
 
+async function listarUsuarios() {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://192.168.100.163/api/v1/users';
+    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+
+    // Realiza la solicitud a la API de Zammad usando axios
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    const usuariosConId = response.data.map(usuario => ({
+      id: usuario.id,
+      nombre: usuario.firstname,
+      apellido: usuario.lastname,
+    }));
+
+    // Verificar si hay coincidencia con las variables deseadas
+    const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
+
+    if (idCoincidente !== null) {
+      console.log('ID del usuario que coincide:', idCoincidente);
+      return idCoincidente;
+    } else {
+      console.log('Ningún usuario coincide');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error al listar usuarios:', error);
+    throw new Error('Error al listar usuarios');
+  }
+}
+
+function obtenerIdCoincidente(usuarios, nombreCliente, apellidoCliente) {
+  for (const usuario of usuarios) {
+    if (usuario.nombre === nombreCliente && usuario.apellido === apellidoCliente) {
+      return usuario.id;
+    }
+  }
+  return null; // Retorna null si no se encuentra coincidencia
+}
+
+
+
 app.get('/listarTickets', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
@@ -776,16 +822,17 @@ async function registrar_INCI(agent) {
       const repoartacion_user_id = usuario_cedula
 
       idClienteZammad=repoartacion_user_id
-      getNombre(idClienteZammad)
-      .then(data => {
-    
-        console.log('Datos obtenidos:', data);
-        
-      })
-      .catch(error => {
-        // Manejar el error
-        console.error('Error:', error.message);
-      });
+      getNombre(idClienteZammad);
+      const idCoincidente = await listarUsuarios();
+      if (idCoincidente !== null) {
+        console.log('ID del usuario que coincide:', idCoincidente);
+        res.json({ idCoincidente });
+      } else {
+        console.log('Ningún usuario coincide');
+        res.json({ idCoincidente: null });
+      }
+
+   
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
