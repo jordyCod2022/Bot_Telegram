@@ -826,10 +826,8 @@ async function registrar_INCI(agent) {
       const idCoincidente = listarUsuarios();
       if (idCoincidente !== null) {
         console.log('ID del usuario que coincide:', idCoincidente);
-        res.json({ idCoincidente });
       } else {
         console.log('Ningún usuario coincide');
-        res.json({ idCoincidente: null });
       }
 
    
