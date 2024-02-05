@@ -137,7 +137,7 @@ app.post('/crearTicket', async (req, res) => {
   }
 });
 
-async function obtenerUsuariosZammad() {
+app.get('/listarUsuarios', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
     const apiUrl = 'http://192.168.100.163/api/v1/users';
@@ -150,24 +150,36 @@ async function obtenerUsuariosZammad() {
       },
     });
 
-    // Mapea los usuarios para incluir la información deseada
     const usuariosConId = response.data.map(usuario => ({
       id: usuario.id,
       nombre: usuario.firstname,
       apellido: usuario.lastname,
     }));
 
-    // Imprimir los resultados directamente
-    console.log('Usuarios obtenidos:', usuariosConId);
+    // Verificar si hay coincidencia con las variables deseadas
+    const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
 
-    return usuariosConId;
+    if (idCoincidente !== null) {
+      console.log('ID del usuario que coincide:', idCoincidente);
+      res.json({ idCoincidente });
+    } else {
+      console.log('Ningún usuario coincide');
+      res.json({ idCoincidente: null });
+    }
   } catch (error) {
-    // Manejar errores
-    console.error('Error al obtener usuarios en Zammad:', error);
-    throw new Error('Error al obtener usuarios en Zammad');
+    console.error('Error al listar usuarios:', error);
+    res.status(500).json({ error: 'Error al listar usuarios' });
   }
-}
+});
 
+function obtenerIdCoincidente(usuarios, nombre, apellido) {
+  for (const usuario of usuarios) {
+    if (usuario.nombre === nombre && usuario.apellido === apellido) {
+      return usuario.id;
+    }
+  }
+  return null;
+}
 
 //consultar el id_Perfil
 
