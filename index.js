@@ -823,7 +823,7 @@ async function registrar_INCI(agent) {
 
       idClienteZammad=repoartacion_user_id
       getNombre(idClienteZammad);
-      const idCoincidente = listarUsuarios();
+      const idCoincidente = await listarUsuarios();
       if (idCoincidente !== null) {
         console.log('ID del usuario que coincide:', idCoincidente);
       } else {
