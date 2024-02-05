@@ -775,23 +775,8 @@ async function registrar_INCI(agent) {
       const repoartacion_user_id = usuario_cedula
 
       idClienteZammad = repoartacion_user_id
-      
+      getNombre(idClienteZammad)
       obtenerUsuariosZammad()
-        .then(usuarios => {
-          // Hacer lo que necesitas con los usuarios
-          console.log('Usuarios obtenidos:', usuarios);
-          getnombreZammad=usuarios.nombre;
-          getapellidoZammad=usuarios.apellido;
-
-          console.log("He obtenido esto: ". getnombreZammad, getapellidoZammad)
-
-
-        })
-        .catch(error => {
-          // Manejar el error
-          console.error('Error:', error.message);
-        });
-
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
