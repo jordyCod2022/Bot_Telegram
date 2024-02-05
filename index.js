@@ -833,7 +833,7 @@ async function registrar_INCI(agent) {
       } catch (error) {
         console.error('Error al llamar a /listarUsuarios:', error);
       }
-    }
+    
     
 
       const query = `
