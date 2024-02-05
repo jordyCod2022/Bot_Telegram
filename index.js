@@ -45,9 +45,8 @@ const pool = new Pool({
   connectionTimeoutMillis: connectionTimeoutMillis,
 });
 
-//Rutas base de datos: 
+//Rutas base de datos:
 async function getNombre(id_colaborador) {
-  console.log("Entre a getNombre")
   try {
     // Realizar la consulta a la base de datos para obtener el nombre y el id_colaborador
     const result = await pool.query(
@@ -138,7 +137,6 @@ app.post('/crearTicket', async (req, res) => {
   }
 });
 
-
 app.get('/listarUsuarios', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
@@ -156,18 +154,11 @@ app.get('/listarUsuarios', async (req, res) => {
       id: usuario.id,
       nombre: usuario.firstname,
       apellido: usuario.lastname,
+    
+      
     }));
 
-    // Verificar si hay coincidencia con las variables deseadas
-    const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
-
-    if (idCoincidente !== null) {
-      console.log('ID del usuario que coincide:', idCoincidente);
-      res.json({ idCoincidente });
-    } else {
-      console.log('Ningún usuario coincide');
-      res.json({ idCoincidente: null });
-    }
+    res.json(usuariosConId);
   } catch (error) {
     console.error('Error al listar usuarios:', error);
     res.status(500).json({ error: 'Error al listar usuarios' });
@@ -175,15 +166,6 @@ app.get('/listarUsuarios', async (req, res) => {
 });
 
 
-
-function obtenerIdCoincidente(usuarios, nombre, apellido) {
-  for (const usuario of usuarios) {
-    if (usuario.nombre === nombre && usuario.apellido === apellido) {
-      return usuario.id;
-    }
-  }
-  return null;
-}
 
 //consultar el id_Perfil
 
@@ -791,23 +773,8 @@ async function registrar_INCI(agent) {
       const repoartacion_user_id = usuario_cedula
 
       idClienteZammad = repoartacion_user_id
-      if (idClienteZammad) {
-        const nombreUsuario = await getNombre(idClienteZammad);
-        console.log('Nombre del usuario:', nombreUsuario);
-        // Puedes hacer lo que necesites con el nombre del usuario aquí
-      }
-  
-      // Llamada a /listarUsuarios
-      const response = await axios.get(`http://localhost:${PORT}/listarUsuarios`);
-      const idCoincidente = response.data.idCoincidente;
-  
-      if (idCoincidente !== null) {
-        console.log('ID del usuario que coincide:', idCoincidente);
-        // Haz lo que necesites con el ID coincidente aquí
-      } else {
-        console.log('Ningún usuario coincide');
-      }
-
+      getNombre(idClienteZammad)
+     
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
