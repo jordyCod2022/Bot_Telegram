@@ -823,14 +823,8 @@ async function registrar_INCI(agent) {
 
       idClienteZammad=repoartacion_user_id
       getNombre(idClienteZammad);
-      const idCoincidente = await listarUsuarios();
-      if (idCoincidente !== null) {
-        console.log('ID del usuario que coincide:', idCoincidente);
-      } else {
-        console.log('Ningún usuario coincide');
-      }
-
-   
+      listarUsuarios()
+    
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
