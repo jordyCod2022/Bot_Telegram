@@ -86,6 +86,7 @@ async function getNombre(id_colaborador) {
 //Listar todos los tickets de zammad
 
 async function listarUsuarios() {
+  console.log("Entre a listar usuarios")
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
     const apiUrl = 'http://192.168.100.163/api/v1/users';
