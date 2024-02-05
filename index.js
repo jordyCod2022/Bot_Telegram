@@ -84,9 +84,7 @@ async function getNombre(id_colaborador) {
 //Rutas zammad:
 
 //Listar todos los tickets de zammad
-
-async function listarUsuarios() {
-  console.log("Entre a listar usuarios")
+app.get('/listarUsuarios', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
     const apiUrl = 'http://192.168.100.163/api/v1/users';
@@ -107,20 +105,20 @@ async function listarUsuarios() {
 
     // Verificar si hay coincidencia con las variables deseadas
     const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
-    console.log("El resultado es este: ", usuariosConId)
 
     if (idCoincidente !== null) {
       console.log('ID del usuario que coincide:', idCoincidente);
-      return idCoincidente;
+      res.json({ idCoincidente });
     } else {
       console.log('Ningún usuario coincide');
-      return null;
+      res.json({ idCoincidente: null });
     }
   } catch (error) {
     console.error('Error al listar usuarios:', error);
-    throw new Error('Error al listar usuarios');
+    res.status(500).json({ error: 'Error al listar usuarios' });
   }
-}
+});
+
 
 function obtenerIdCoincidente(usuarios, nombreCliente, apellidoCliente) {
   for (const usuario of usuarios) {
@@ -825,7 +823,17 @@ async function registrar_INCI(agent) {
 
       idClienteZammad=repoartacion_user_id
       getNombre(idClienteZammad);
-      listarUsuarios()
+
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';  // Reemplaza 3000 con el puerto correcto de tu servidor
+        const response = await axios.get(apiUrl);
+    
+        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
+        console.log('Respuesta de /listarUsuarios:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /listarUsuarios:', error);
+      }
+    }
     
 
       const query = `
