@@ -107,6 +107,7 @@ async function listarUsuarios() {
 
     // Verificar si hay coincidencia con las variables deseadas
     const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
+    console.log("El resultado es este: ", usuariosConId)
 
     if (idCoincidente !== null) {
       console.log('ID del usuario que coincide:', idCoincidente);
