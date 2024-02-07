@@ -151,7 +151,7 @@ app.get('/listarTickets', async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.error('Error al listar tickets:', error);
-    res.status(500).json({ error: 'Error al listar tickets' });
+    res.status(500).json({ error: 'Error al listar ticket' });
   }
 });
 
