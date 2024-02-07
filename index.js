@@ -878,7 +878,7 @@ async function registrar_INCI(agent) {
 
       
       console.log('Incidente registrado exitosamente.');
-      agent.add('✅ El incidente ha sido registrado exitosamente.');
+      agent.add('✅ El incidente ha sido registrado exitosamente');
       validarIngresar=false
 
     } else {
