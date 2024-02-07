@@ -167,20 +167,32 @@ app.post('/crearTicket', async (req, res) => {
     const nuevoTicket = {
       title: tituloZammad,
       group_id: 1,
-      customer_id: idRegistroTickets,
       organization_id: 1,
       article: {
-        type: 'web',
+        type: 'note',
         internal: false,
-        customer_id: idRegistroTickets,
         subject: 'Incidentes',
         body: descripcionTickets
       }
     };
-    
 
-    // Realiza la solicitud POST a la API de Zammad usando axios
+    // Realiza la solicitud POST a la API de Zammad para crear el ticket
     const response = await axios.post(apiUrl, nuevoTicket, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Si la creación del ticket es exitosa, ajusta el ticket para asociar el artículo al cliente
+    const ticketId = response.data.id;
+    const ajusteTicketUrl = `http://34.145.88.14/api/v1/tickets/${ticketId}`;
+    const ajusteTicketData = {
+      customer_id: idRegistroTickets,
+    };
+
+    // Realiza la solicitud PUT para ajustar el ticket con el customer_id
+    await axios.put(ajusteTicketUrl, ajusteTicketData, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
         'Content-Type': 'application/json',
