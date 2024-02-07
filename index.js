@@ -87,8 +87,8 @@ async function getNombre(id_colaborador) {
 app.get('/listarUsuarios', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
-    const apiUrl = 'http://192.168.100.163/api/v1/users';
-    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+    const apiUrl = 'http://34.145.88.14//api/v1/users';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
     // Realiza la solicitud a la API de Zammad usando axios
     const response = await axios.get(apiUrl, {
@@ -134,8 +134,8 @@ function obtenerIdCoincidente(usuarios, nombreCliente, apellidoCliente) {
 app.get('/listarTickets', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
-    const apiUrl = 'http://192.168.100.163/api/v1/tickets';
-    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+    const apiUrl = 'http://34.145.88.14/api/v1/tickets';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
     // Realiza la solicitud a la API de Zammad usando axios
     const response = await axios.get(apiUrl, {
@@ -155,8 +155,8 @@ app.get('/listarTickets', async (req, res) => {
 app.post('/crearTicket', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
-    const apiUrl = 'http://192.168.100.163/api/v1/tickets';
-    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+    const apiUrl = 'http://34.145.88.14/api/v1/tickets';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
     // Datos del nuevo ticket a crear
     const nuevoTicket = {
@@ -185,11 +185,11 @@ app.post('/crearTicket', async (req, res) => {
 
 
 
-app.get('/listarUsuarios', async (req, res) => {
+app.get('/listarUsers', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
-    const apiUrl = 'http://192.168.100.163/api/v1/users';
-    const authToken = 'GyCCh_k7OMZ-tlZVmCILjzft49v3gCfKlc0GNtR9iz4cA80e4vJYwiv1L7QiCUsR';
+    const apiUrl = 'http://34.145.88.14/api/v1/users';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
     // Realiza la solicitud a la API de Zammad usando axios
     const response = await axios.get(apiUrl, {
