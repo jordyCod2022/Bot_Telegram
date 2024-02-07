@@ -155,6 +155,7 @@ app.get('/listarTickets', async (req, res) => {
   }
 });
 
+
 app.post('/crearTicket', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
@@ -167,6 +168,11 @@ app.post('/crearTicket', async (req, res) => {
       group_id: 1,
       customer_id:  idRegistroTickets,
       organization_id:  1,
+      article:{
+        subject: 'My subject',
+        body: "Esto es una prueba",
+        internal:true
+      }
      
     };
 
