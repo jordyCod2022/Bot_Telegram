@@ -839,7 +839,7 @@ async function registrar_INCI(agent) {
 
       try {
         const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';  // Reemplaza 3000 con el puerto correcto de tu servidor
-        const response = await axios.get(apiUrl);
+        const response = await axios.post(apiUrl);
     
         // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
         console.log('Respuesta de /crearTicket:', response.data);
