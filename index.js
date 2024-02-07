@@ -31,6 +31,7 @@ let idClienteZammad;
 let nombreClienteZammad;
 let apellidoClienteZammad;
 let idRegistroTickets;
+let descripcionTickets;
 
 //variables validacion zammad
 
@@ -169,8 +170,8 @@ app.post('/crearTicket', async (req, res) => {
       customer_id:  idRegistroTickets,
       organization_id:  1,
       article:{
-        subject: 'My subject',
-        body: "Esto es una prueba",
+        subject: 'Incidentes',
+        body: descripcionTickets,
         internal:true
       }
      
@@ -779,6 +780,7 @@ async function registrar_INCI(agent) {
   try {
     console.log("nombre_titulo:", nombreTituloGlobal);
     console.log("descripcion_inci:", descripcionInciGlobal);
+    descripcionTickets=descripcionInciGlobal
 
     const fechaRegi = new Date();
     let estado_incidente = 1; // Inicializar el estado como "Nuevo"
