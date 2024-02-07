@@ -167,15 +167,17 @@ app.post('/crearTicket', async (req, res) => {
     const nuevoTicket = {
       title: tituloZammad,
       group_id: 1,
-      customer_id:  idRegistroTickets,
-      organization_id:  1,
-      article:{
+      customer_id: idRegistroTickets,
+      organization_id: 1,
+      article: {
+        type: 'web',
+        internal: false,
+        customer_id: idRegistroTickets,
         subject: 'Incidentes',
-        body: descripcionTickets,
-        internal:true
+        body: descripcionTickets
       }
-     
     };
+    
 
     // Realiza la solicitud POST a la API de Zammad usando axios
     const response = await axios.post(apiUrl, nuevoTicket, {
