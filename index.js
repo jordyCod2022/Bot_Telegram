@@ -30,11 +30,13 @@ let tituloZammad;
 let idClienteZammad;
 let nombreClienteZammad;
 let apellidoClienteZammad;
+let idRegistroTickets;
 
 //variables validacion zammad
 
 let getnombreZammad;
 let getapellidoZammad;
+
 
 
 const pool = new Pool({
@@ -108,6 +110,7 @@ app.get('/listarUsuarios', async (req, res) => {
 
     if (idCoincidente !== null) {
       console.log('ID del usuario que coincide:', idCoincidente);
+      idRegistroTickets=idCoincidente
       res.json({ idCoincidente });
     } else {
       console.log('Ningún usuario coincide');
@@ -160,9 +163,9 @@ app.post('/crearTicket', async (req, res) => {
 
     // Datos del nuevo ticket a crear
     const nuevoTicket = {
-      title: 'Problemas de red',
+      title: tituloZammad,
       group_id: 1,
-      customer_id:  5,
+      customer_id:  idRegistroTickets,
       organization_id:  1,
      
     };
@@ -833,9 +836,18 @@ async function registrar_INCI(agent) {
       } catch (error) {
         console.error('Error al llamar a /listarUsuarios:', error);
       }
-    
-    
 
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';  // Reemplaza 3000 con el puerto correcto de tu servidor
+        const response = await axios.get(apiUrl);
+    
+        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
+        console.log('Respuesta de /crearTicket:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /crearTicket:', error);
+      }
+    
+    
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
