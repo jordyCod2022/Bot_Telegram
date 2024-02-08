@@ -168,8 +168,13 @@ app.post('/crearTicket', async (req, res) => {
       title: tituloZammad,
       group_id: 1,
       customer_id: idRegistroTickets,
-      description: "No puedo iniciar sesión en mi cuenta. He intentado restablecer mi contraseña, pero no he recibido el correo electrónico de restablecimiento.",
-      
+      article: {
+        type: 'web',
+        internal: false,
+        customer_id: idRegistroTickets,
+        subject: 'Incidentes',
+        body: descripcionTickets
+      }
     };
     
 
