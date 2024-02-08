@@ -172,7 +172,7 @@ app.post('/crearTicket', async (req, res) => {
         customer_id: idRegistroTickets,
         subject: 'Incidentes',
         from: 'freddy.valentin@inclusion.gob.ec',
-        body_html: descripcionTickets
+        body: descripcionTickets
       }
     };
     
