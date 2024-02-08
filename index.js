@@ -163,6 +163,7 @@ app.post('/crearTicket', async (req, res) => {
     const apiUrl = 'http://34.145.88.14/api/v1/tickets';
     const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
+    // Datos del nuevo ticket a crear
     const nuevoTicket = {
       title: tituloZammad,
       group_id: 1,
@@ -171,7 +172,7 @@ app.post('/crearTicket', async (req, res) => {
         type: 'web',
         customer_id: idRegistroTickets,
         subject: 'Incidentes',
-        from: 'freddy.valentin@inclusion.gob.ec',
+        from:'freddy.valentin@inclusion.gob.ec',
         body: descripcionTickets
       }
     };
