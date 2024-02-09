@@ -778,8 +778,7 @@ async function registrar_INCI(agent) {
       }
 
       //elegir usuarios 
-      const randomIndex = Math.floor(Math.random() * user_asignado.length);
-      const asignacion_user_id = user_asignado[randomIndex].id_asignacion_user;
+      const asignacion_user_id  = asignarUsuarioAleatorio(user_asignado);
       id_asignado= await obtenerChatId(asignacion_user_id);
       
       const categoriasDisponiblesa = await obtenerCategorias();
@@ -885,6 +884,11 @@ async function registrar_INCI(agent) {
   
 
   }
+}
+
+function asignarUsuarioAleatorio(usuariosAsignados) {
+  const indiceAleatorio = Math.floor(Math.random() * usuariosAsignados.length);
+  return usuariosAsignados[indiceAleatorio].id_asignacion_user;
 }
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
