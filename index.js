@@ -503,26 +503,7 @@ async function InsertarUsuarioRepotado(numeroCedula) {
 }
 
 
-async function UltimoUsuarioReportadoIncidente() {
-  try {
-    const query = `
-      SELECT u.id_usuario
-      FROM Usuarios u
-      INNER JOIN reportacion_user ur ON u.id_usuario = ur.id_usuario
-      ORDER BY ur.id_usuario DESC
-      LIMIT 1
-    `;
-    const { rows: results } = await pool.query(query);
-    if (results.length > 0) {
-      const ultimoIdUsuario = results[0].id_usuario;
-      return ultimoIdUsuario;
-    } else {
-      throw new Error('No se encontraron usuarios reportados.');
-    }
-  } catch (error) {
-    throw error;
-  }
-}
+
 
 async function Base_Conocimiento(agent) {
   try {
@@ -768,143 +749,133 @@ async function Confirmacion(agent) {
 }
 
 
-
 async function registrar_INCI(agent) {
-  let user_asignado;
-
   try {
-    console.log("nombre_titulo:", nombreTituloGlobal);
-    console.log("descripcion_inci:", descripcionInciGlobal);
-    descripcionTickets=descripcionInciGlobal
+    
+
+    if (!nombreTituloGlobal || !descripcionInciGlobal) {
+      console.log('Campos obligatorios faltantes:', nombreTituloGlobal, descripcionInciGlobal);
+      agent.add('Faltan campos obligatorios para registrar el incidente.');
+      return;
+    }
+
+    console.log('nombre_titulo:', nombreTituloGlobal);
+    console.log('descripcion_inci:', descripcionInciGlobal);
 
     const fechaRegi = new Date();
-    let estado_incidente = 1; // Inicializar el estado como "Nuevo"
-    let estado_id = 2;
-    let cierre_id = 2;
+    const estadoIncidente = 1;
+    const estadoId = 2;
+    const cierreId = 2;
 
+    const usuariosAsignados = await obtenerUsuariosDisponiblesIn();
 
-    if (nombreTituloGlobal && descripcionInciGlobal) {
-
-      tituloZammad=nombreTituloGlobal
-
-
-      user_asignado = await obtenerUsuariosDisponiblesIn();
-
-      if (!user_asignado || user_asignado.length === 0) {
-        agent.add('🚨 No hay usuarios asignados disponibles en este momento, tu reporte será enviado al encargado general.');
-        console.log('No hay usuarios asignados disponibles en este momento.');
-        return;
-      }
-
-      //elegir usuarios 
-      const randomIndex = Math.floor(Math.random() * user_asignado.length);
-      const asignacion_user_id = user_asignado[randomIndex].id_asignacion_user;
-      id_asignado= await obtenerChatId(asignacion_user_id);
-      
-      const categoriasDisponiblesa = await obtenerCategorias();
-      const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
-      const idCate = defectoCate ? defectoCate.id_cate : null;
-
-      const nivelIncidente = await escala_niveles();
-      const defectoNiveles = nivelIncidente.length > 0 ? nivelIncidente[0] : null;
-      const idNivel = defectoNiveles ? defectoNiveles.id_nivelescala : null;
-
-      const PrioDispo = await obtenerPrioridad();
-      const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
-      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null   ;
-
-      const ImpactoDis = await obtenerImpactos();
-      const defectImpa = ImpactoDis.length > 0 ? ImpactoDis[0] : null;
-      const impacto_id = defectImpa ? defectImpa.id_impacto : null;
-
-      const resolucionDispo = await obtenerResolucion();
-      const detectReso = resolucionDispo.length > 0 ? resolucionDispo[0] : null;
-      const resolucion_id = detectReso ? detectReso.id_resolucion : null;
-
-      const urgenDis = await obtenerUrgencia();
-      const defectUr = urgenDis.length > 0 ? urgenDis[0] : null;
-      const urgencia_id = defectUr ? defectUr.id_urgencia : null;
-
-      const repoartacion_user_id = usuario_cedula
-
-      idClienteZammad=repoartacion_user_id
-      getNombre(idClienteZammad);
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';  // Reemplaza 3000 con el puerto correcto de tu servidor
-        const response = await axios.get(apiUrl);
-    
-        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
-        console.log('Respuesta de /listarUsuarios:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /listarUsuarios:', error);
-      }
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';  // Reemplaza 3000 con el puerto correcto de tu servidor
-        const response = await axios.post(apiUrl);
-    
-        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
-        console.log('Respuesta de /crearTicket:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /crearTicket:', error);
-      }
-    
-    
-      const query = `
-        INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      `;
-
-      const valores = [
-        idCate,
-        estado_id,
-        prioridad_id,
-        impacto_id,
-        urgencia_id,
-        idNivel,
-        repoartacion_user_id,
-        asignacion_user_id,
-        cierre_id,
-        resolucion_id,
-        nombreTituloGlobal, 
-        descripcionInciGlobal, 
-        fechaRegi,
-        estado_incidente
-      ];
-
-      await pool.query(query, valores);
-
-      const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
-      await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
-
-
-      
-      console.log('Incidente registrado exitosamente.');
-      agent.add('✅ El incidente ha sido registrado exitosamente');
-      validarIngresar=false
-
-    } else {
-      console.log('Campos obligatorios faltantes:');
-      console.log('nombre:', nombreTituloGlobal);
-      console.log('descripcion:', nombreTituloGlobal);
-      console.log('fechaRegistro:', fechaRegi);
-
-      agent.add('Faltan campos obligatorios para registrar el incidente.');
+    if (!usuariosAsignados || usuariosAsignados.length === 0) {
+      agent.add('🚨 No hay usuarios asignados disponibles en este momento, tu reporte será enviado al encargado general.');
+      console.log('No hay usuarios asignados disponibles en este momento.');
+      return;
     }
+
+    const idUsuarioAsignado = asignarUsuarioAleatorio(usuariosAsignados);
+    const idAsignado = await obtenerChatId(idUsuarioAsignado);
+    const categoriasDisponibles = await obtenerCategorias();
+
+    const defectoCate = categoriasDisponibles.length > 0 ? categoriasDisponibles[0] : null;
+    const idCate = defectoCate ? defectoCate.id_cate : null;
+
+    const nivelesIncidente = await escala_niveles();
+    const defectoNiveles = nivelesIncidente.length > 0 ? nivelesIncidente[0] : null;
+    const idNivel = defectoNiveles ? defectoNiveles.id_nivelescala : null;
+
+    const prioridadesDisponibles = await obtenerPrioridad();
+    const defectoPrioridad = prioridadesDisponibles.length > 0 ? prioridadesDisponibles[0] : null;
+    const prioridadId = defectoPrioridad ? defectoPrioridad.id_prioridad : null;
+
+    const impactosDisponibles = await obtenerImpactos();
+    const defectoImpacto = impactosDisponibles.length > 0 ? impactosDisponibles[0] : null;
+    const impactoId = defectoImpacto ? defectoImpacto.id_impacto : null;
+
+    const resolucionesDisponibles = await obtenerResolucion();
+    const defectoResolucion = resolucionesDisponibles.length > 0 ? resolucionesDisponibles[0] : null;
+    const resolucionId = defectoResolucion ? defectoResolucion.id_resolucion : null;
+
+    const urgenciasDisponibles = await obtenerUrgencia();
+    const defectoUrgencia = urgenciasDisponibles.length > 0 ? urgenciasDisponibles[0] : null;
+    const urgenciaId = defectoUrgencia ? defectoUrgencia.id_urgencia : null;
+
+    const idClienteZammad = usuario_cedula;
+    getNombre(idClienteZammad);
+
+    try {
+      await llamarAPI('https://bot-telegram-ares.onrender.com/listarUsuarios');
+    } catch (error) {
+      console.error('Error al llamar a /listarUsuarios:', error);
+    }
+
+    try {
+      await llamarAPI('https://bot-telegram-ares.onrender.com/crearTicket');
+    } catch (error) {
+      console.error('Error al llamar a /crearTicket:', error);
+    }
+
+    const query = `
+      INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    `;
+
+    const valores = [
+      idCate,
+      estadoId,
+      prioridadId,
+      impactoId,
+      urgenciaId,
+      idNivel,
+      idClienteZammad,
+      idUsuarioAsignado,
+      cierreId,
+      resolucionId,
+      nombreTituloGlobal, 
+      descripcionInciGlobal, 
+      fechaRegi,
+      estadoIncidente
+    ];
+
+    await pool.query(query, valores);
+
+    const consultaActualizarAsignacionUsuario = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
+    await pool.query(consultaActualizarAsignacionUsuario, [idUsuarioAsignado]);
+
+    console.log('Incidente registrado exitosamente.');
+    agent.add('✅ El incidente ha sido registrado exitosamente');
   } catch (error) {
-    console.error('ERROR al registrar el incidente', error);
-
-    if (user_asignado && user_asignado.length > 0) {
-      const queryRevertirUsuarioAsignado = 'UPDATE asignacion_user SET disponibilidad = 0 WHERE id_asignacion_user = $1';
-      await pool.query(queryRevertirUsuarioAsignado, [user_asignado[0].id_asignacion_user]);
-    }
-
-    agent.add('🚨 Ocurrió un error al registrar el incidente. Por favor, inténtalo más tarde o contacta al soporte técnico.');
-  
-
+    handleError(error, agent);
   }
 }
+
+function asignarUsuarioAleatorio(usuariosAsignados) {
+  const indiceAleatorio = Math.floor(Math.random() * usuariosAsignados.length);
+  return usuariosAsignados[indiceAleatorio].id_asignacion_user;
+}
+
+async function llamarAPI(apiUrl) {
+  try {
+    const respuesta = await axios.get(apiUrl);
+    console.log(`Respuesta de ${apiUrl}:`, respuesta.data);
+  } catch (error) {
+    console.error(`Error al llamar a ${apiUrl}:`, error);
+  }
+}
+
+async function handleError(error, agent) {
+  console.error('ERROR:', error);
+
+  if (usuariosAsignados && usuariosAsignados.length > 0) {
+    const consultaRevertirUsuarioAsignado = 'UPDATE asignacion_user SET disponibilidad = 0 WHERE id_asignacion_user = $1';
+    await pool.query(consultaRevertirUsuarioAsignado, [usuariosAsignados[0].id_asignacion_user]);
+  }
+
+  agent.add('🚨 Ocurrió un error al registrar el incidente. Por favor, inténtalo más tarde o contacta al soporte técnico.');
+}
+
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
   try {
