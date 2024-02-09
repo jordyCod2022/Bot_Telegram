@@ -160,6 +160,7 @@ app.post('/crearTicket', async (req, res) => {
       group_id: 1,
       customer_id: idRegistroTickets,
       organization_id: 1,
+      owner_id:3,
       article: {
         type: 'web',
         internal: false,
