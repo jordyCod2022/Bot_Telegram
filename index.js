@@ -224,7 +224,7 @@ app.post('/crearTicket', async (req, res) => {
         internal: true,
         subject: 'Incidentes',
         body: descripcionTickets,
-        origin_by_id: 5,
+       
       }
     };
   
