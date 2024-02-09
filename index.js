@@ -32,6 +32,7 @@ let nombreClienteZammad;
 let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
+let idticketZammad;
 
 
 const pool = new Pool({
@@ -207,7 +208,6 @@ app.get('/listarUsers', async (req, res) => {
 });
 
 
-
 app.post('/crearTicket', async (req, res) => {
   try {
     // Configura la URL de la API de Zammad y tu token de autenticación
@@ -220,13 +220,6 @@ app.post('/crearTicket', async (req, res) => {
       group_id: 1,
       customer_id: idRegistroTickets,
       organization_id: 1,
-      article: {
-        type: 'web',
-        internal: true,
-        subject: 'Incidentes',
-        body: descripcionTickets,
-        origin_by_id: idRegistroTickets,
-      }
     };
   
     // Realiza la solicitud POST a la API de Zammad usando axios
@@ -235,17 +228,56 @@ app.post('/crearTicket', async (req, res) => {
         'Authorization': `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
-  });
+    });
 
-   // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
-   res.json(response.data);
+    // Obtiene el ID del ticket recién creado desde la respuesta
+    const idDelTicketCreado = response.data.id;
+    idticketZammad=idDelTicketCreado
+
+    // Envía la respuesta con el ID del ticket
+    res.json({ idDelTicketCreado });
   } catch (error) {
     console.error('Error al crear el ticket:', error);
     res.status(500).json({ error: 'Error al crear el ticket' });
   }
 });
 
-  
+
+app.post('/crearArticle', async (req, res) => {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://34.145.88.14/api/v1/ticket_articles';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
+
+    // Datos del artículo que se va a crear (puedes ajustar según tus necesidades)
+    const articleData = {
+      ticket_id: idticketZammad,
+      subject: 'Pruebas',
+      body: descripcionTickets,
+      content_type: "text/html",
+      type: "phone",
+      internal: false,
+      sender: "Customer",
+      origin_by_id: idRegistroTickets, 
+      time_unit: null
+    };
+
+    // Realiza la solicitud a la API de Zammad para crear el artículo
+    const response = await axios.post(apiUrl, articleData, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    // Responde con la información del artículo recién creado
+    res.json(response.data);
+  } catch (error) {
+    // Maneja los errores y responde con un código de estado 500 si hay un problema
+    console.error('Error al crear el artículo de ticket:', error);
+    res.status(500).json({ error: 'Error al crear el artículo de ticket' });
+  }
+});
+
 //consultar el id_Perfil
 
 async function obtenerIdPerfilUsuario(idUsuario) {
@@ -873,6 +905,17 @@ async function registrar_INCI(agent) {
         console.log('Respuesta de /crearTicket:', response.data);
       } catch (error) {
         console.error('Error al llamar a /crearTicket:', error);
+      }
+
+      
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearArticle';  // Reemplaza 3000 con el puerto correcto de tu servidor
+        const response = await axios.get(apiUrl);
+    
+        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
+        console.log('Respuesta de /crearArticle:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /crearArticle:', error);
       }
     
     
