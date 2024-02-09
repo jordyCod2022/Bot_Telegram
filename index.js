@@ -9,7 +9,7 @@ dotenv.config();
 const connectionTimeoutMillis = 40000;
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const bot = new TelegramBot(telegramToken, { polling: false });
-const bodyParser = require('body-parser');
+
 
 
 let validadCedula=false;
@@ -33,12 +33,6 @@ let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
 
-//variables validacion zammad
-
-let getnombreZammad;
-let getapellidoZammad;
-
-
 
 const pool = new Pool({
   connectionString: process.env.conexion,
@@ -48,10 +42,9 @@ const pool = new Pool({
   connectionTimeoutMillis: connectionTimeoutMillis,
 });
 
-//Rutas base de datos:
 async function getNombre(id_colaborador) {
   try {
-    // Realizar la consulta a la base de datos para obtener el nombre y el id_colaborador
+   
     const result = await pool.query(
       'SELECT id_colaborador, nombre_colaborador, apellido_colaborador FROM public.colaboradores WHERE id_colaborador = $1',
       [id_colaborador]
@@ -72,14 +65,14 @@ async function getNombre(id_colaborador) {
       // También puedes retornar los datos directamente
       return { id_colaborador, nombre: nombre_colaborador, apellido: apellido_colaborador, id_colaborador: id_colaborador };
     } else {
-      // Si no se encuentra un usuario con el id_colaborador proporcionado
+ 
       console.log('Usuario no encontrado');
       return { id_colaborador: null, nombre: null, apellido: null, id_colaborador: null };
     }
   } catch (error) {
-    // Manejar errores durante la consulta a la base de datos
+
     console.error('Error en la consulta a la base de datos:', error);
-    // Puedes lanzar el error para que sea manejado en el contexto que llama a esta función
+
     throw new Error('Error al obtener el nombre, apellido e ID del usuario');
   }
 }
@@ -89,11 +82,10 @@ async function getNombre(id_colaborador) {
 //Listar todos los tickets de zammad
 app.get('/listarUsuarios', async (req, res) => {
   try {
-    // Configura la URL de la API de Zammad y tu token de autenticación
+
     const apiUrl = 'http://34.145.88.14//api/v1/users';
     const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
-    // Realiza la solicitud a la API de Zammad usando axios
     const response = await axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -106,7 +98,7 @@ app.get('/listarUsuarios', async (req, res) => {
       apellido: usuario.lastname,
     }));
 
-    // Verificar si hay coincidencia con las variables deseadas
+
     const idCoincidente = obtenerIdCoincidente(usuariosConId, nombreClienteZammad, apellidoClienteZammad);
 
     if (idCoincidente !== null) {
@@ -130,25 +122,25 @@ function obtenerIdCoincidente(usuarios, nombreCliente, apellidoCliente) {
       return usuario.id;
     }
   }
-  return null; // Retorna null si no se encuentra coincidencia
+  return null; 
 }
 
 
 
 app.get('/listarTickets', async (req, res) => {
   try {
-    // Configura la URL de la API de Zammad y tu token de autenticación
+  
     const apiUrl = 'http://34.145.88.14/api/v1/tickets';
     const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
-    // Realiza la solicitud a la API de Zammad usando axios
+
     const response = await axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
       },
     });
 
-    // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
+
     res.json(response.data);
   } catch (error) {
     console.error('Error al listar tickets:', error);
@@ -159,7 +151,7 @@ app.get('/listarTickets', async (req, res) => {
 
 app.post('/crearTicket', async (req, res) => {
   try {
-    // Configura la URL de la API de Zammad y tu token de autenticación
+
     const apiUrl = 'http://34.145.88.14/api/v1/tickets';
     const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
@@ -168,17 +160,8 @@ app.post('/crearTicket', async (req, res) => {
       title: tituloZammad,
       group_id: 1,
       customer_id: idRegistroTickets,
-      article: {
-        type: 'web',
-        customer_id: idRegistroTickets,
-        subject: 'Incidentes',
-        from:'freddy.valentin@inclusion.gob.ec',
-        body: descripcionTickets
-      }
     };
     
-
-    // Realiza la solicitud POST a la API de Zammad usando axios
     const response = await axios.post(apiUrl, nuevoTicket, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -186,14 +169,12 @@ app.post('/crearTicket', async (req, res) => {
       },
     });
 
-    // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
     res.json(response.data);
   } catch (error) {
     console.error('Error al crear el ticket:', error);
     res.status(500).json({ error: 'Error al crear el ticket' });
   }
 });
-
 
 
 app.get('/listarUsers', async (req, res) => {
@@ -225,8 +206,46 @@ app.get('/listarUsers', async (req, res) => {
   }
 });
 
+User
 
+app.post('/crearTicket', async (req, res) => {
+  try {
+    // Configura la URL de la API de Zammad y tu token de autenticación
+    const apiUrl = 'http://34.145.88.14/api/v1/tickets';
+    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
+    // Datos del nuevo ticket a crear
+    const nuevoTicket = {
+      title: tituloZammad,
+      group_id: 1,
+      customer_id: idRegistroTickets,
+      organization_id: 1,
+      article: {
+        type: 'web',
+        internal: true,
+        subject: 'Incidentes',
+        body: descripcionTickets,
+        origin_by_id: idRegistroTickets,
+      }
+    };
+  
+    // Realiza la solicitud POST a la API de Zammad usando axios
+    const response = await axios.post(apiUrl, nuevoTicket, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+  });
+
+   // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
+   res.json(response.data);
+  } catch (error) {
+    console.error('Error al crear el ticket:', error);
+    res.status(500).json({ error: 'Error al crear el ticket' });
+  }
+});
+
+  
 //consultar el id_Perfil
 
 async function obtenerIdPerfilUsuario(idUsuario) {
