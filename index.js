@@ -806,13 +806,13 @@ async function registrar_INCI(agent) {
     getNombre(idClienteZammad);
 
     try {
-      await llamarAPI('https://bot-telegram-ares.onrender.com/listarUsuarios');
+      await llamarAPIGET('https://bot-telegram-ares.onrender.com/listarUsuarios');
     } catch (error) {
       console.error('Error al llamar a /listarUsuarios:', error);
     }
 
     try {
-      await llamarAPI('https://bot-telegram-ares.onrender.com/crearTicket');
+      await llamarAPIPOST('https://bot-telegram-ares.onrender.com/crearTicket');
     } catch (error) {
       console.error('Error al llamar a /crearTicket:', error);
     }
@@ -856,9 +856,18 @@ function asignarUsuarioAleatorio(usuariosAsignados) {
   return usuariosAsignados[indiceAleatorio].id_asignacion_user;
 }
 
-async function llamarAPI(apiUrl) {
+async function llamarAPIGET(apiUrl) {
   try {
     const respuesta = await axios.get(apiUrl);
+    console.log(`Respuesta de ${apiUrl}:`, respuesta.data);
+  } catch (error) {
+    console.error(`Error al llamar a ${apiUrl}:`, error);
+  }
+}
+
+async function llamarAPIPOST(apiUrl) {
+  try {
+    const respuesta = await axios.post(apiUrl);
     console.log(`Respuesta de ${apiUrl}:`, respuesta.data);
   } catch (error) {
     console.error(`Error al llamar a ${apiUrl}:`, error);
