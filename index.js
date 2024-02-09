@@ -148,10 +148,9 @@ app.get('/listarTickets', async (req, res) => {
   }
 });
 
-
 app.post('/crearTicket', async (req, res) => {
   try {
-
+    // Configura la URL de la API de Zammad y tu token de autenticación
     const apiUrl = 'http://34.145.88.14/api/v1/tickets';
     const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
@@ -160,8 +159,18 @@ app.post('/crearTicket', async (req, res) => {
       title: tituloZammad,
       group_id: 1,
       customer_id: idRegistroTickets,
+      organization_id: 1,
+      article: {
+        type: 'web',
+        internal: false,
+        customer_id: idRegistroTickets,
+        subject: 'Incidentes',
+        body: descripcionTickets
+      }
     };
     
+
+    // Realiza la solicitud POST a la API de Zammad usando axios
     const response = await axios.post(apiUrl, nuevoTicket, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -169,12 +178,14 @@ app.post('/crearTicket', async (req, res) => {
       },
     });
 
+    // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
     res.json(response.data);
   } catch (error) {
     console.error('Error al crear el ticket:', error);
     res.status(500).json({ error: 'Error al crear el ticket' });
   }
 });
+
 
 
 app.get('/listarUsers', async (req, res) => {
@@ -207,44 +218,7 @@ app.get('/listarUsers', async (req, res) => {
 });
 
 
-app.post('/crearTicket', async (req, res) => {
-  try {
-    // Configura la URL de la API de Zammad y tu token de autenticación
-    const apiUrl = 'http://34.145.88.14/api/v1/tickets';
-    const authToken = 'K5A-8T30jvllDf105D1OHP-mCj7v933GCaJtg4ju1Oh2JhqhAX8Dniw-_SoLyS-7';
 
-    // Datos del nuevo ticket a crear
-    const nuevoTicket = {
-      title: tituloZammad,
-      group_id: 1,
-      customer_id: idRegistroTickets,
-      organization_id: 1,
-      article: {
-        type: "phone",
-        internal: true,
-        subject: 'Incidentes',
-        body: descripcionTickets,
-       
-      }
-    };
-  
-    // Realiza la solicitud POST a la API de Zammad usando axios
-    const response = await axios.post(apiUrl, nuevoTicket, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json',
-      },
-  });
-
-   // Envía la respuesta de Zammad como respuesta a la solicitud HTTP
-   res.json(response.data);
-  } catch (error) {
-    console.error('Error al crear el ticket:', error);
-    res.status(500).json({ error: 'Error al crear el ticket' });
-  }
-});
-
-  
 //consultar el id_Perfil
 
 async function obtenerIdPerfilUsuario(idUsuario) {
