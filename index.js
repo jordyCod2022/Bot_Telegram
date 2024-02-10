@@ -10,7 +10,7 @@ const connectionTimeoutMillis = 40000;
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const bot = new TelegramBot(telegramToken, { polling: false });
 
-const TelegramBot = require('node-telegram-bot-api');
+
 
 let validadCedula=false;
 let usuario_cedula=0;
