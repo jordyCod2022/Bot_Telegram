@@ -10,7 +10,7 @@ const connectionTimeoutMillis = 40000;
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const bot = new TelegramBot(telegramToken, { polling: false });
 
-
+const TelegramBot = require('node-telegram-bot-api');
 
 let validadCedula=false;
 let usuario_cedula=0;
@@ -41,6 +41,24 @@ const pool = new Pool({
   },
   connectionTimeoutMillis: connectionTimeoutMillis,
 });
+
+
+async function SaludoAres(agent) {
+  // ... tu código anterior ...
+
+  // Crear el botón de prueba
+  const keyboard = [
+    [{ text: 'Botón de prueba' }]
+  ];
+  const replyMarkup = {
+    keyboard: keyboard,
+    resize_keyboard: true,
+    one_time_keyboard: true
+  };
+
+  // Enviar el mensaje con el botón
+  bot.sendMessage(agent.originalRequest.data.message.chat.id, '¡Hola soy Ares! ✨ Me alegra estar aquí. \nPara poder ayudarte, por favor, proporciona tu número de cédula.', { reply_markup: replyMarkup });
+}
 
 async function getNombre(id_colaborador) {
   try {
@@ -77,9 +95,7 @@ async function getNombre(id_colaborador) {
   }
 }
 
-//Rutas zammad:
 
-//Listar todos los tickets de zammad
 app.get('/listarUsuarios', async (req, res) => {
   try {
 
@@ -955,13 +971,6 @@ async function buscarSolucionBaseConocimientos() {
 
 
 
-async function SaludoAres(agent) {
- // obtenerTodosLosTelefonosYEnviarMensajes()
-
-  validar_saludo=true;
-  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
-  agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
-}
 
 
 
