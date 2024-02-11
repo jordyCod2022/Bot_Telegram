@@ -1333,18 +1333,18 @@ async function validar_cedula(agent) {
 
 
           // Teclado de respuesta con botones de texto
-          var botones = {
-            reply_markup: {
-                keyboard: [
-                    [{ text: "Mis incidentes", callback_data: "1" }],
-                    [{ text: "Registrar incidente", callback_data: "2" }],
-                    [{ text: "Salir", callback_data: "0" }],
-                ],
-                resize_keyboard: true,
-                one_time_keyboard: true,
-            },
-            parse_mode: "HTML",
-        };
+          // Teclado en línea con botones y datos adicionales
+var botones = {
+  reply_markup: {
+      inline_keyboard: [
+          [{ text: "Mis incidentes", callback_data: "1" }],
+          [{ text: "Registrar incidente", callback_data: "2" }],
+          [{ text: "Salir", callback_data: "0" }],
+      ],
+  },
+  parse_mode: "HTML",
+};
+
         
 
           // Enviar el mensaje con botones
@@ -1374,18 +1374,18 @@ async function validar_cedula(agent) {
             console.log("CHAT ID:", chatId);
 
             // Teclado de respuesta con botones de texto
-            var botones = {
-              reply_markup: {
-                  keyboard: [
-                      [{ text: "Mis incidentes", callback_data: "1" }],
-                      [{ text: "Registrar incidente", callback_data: "2" }],
-                      [{ text: "Salir", callback_data: "0" }],
-                  ],
-                  resize_keyboard: true,
-                  one_time_keyboard: true,
-              },
-              parse_mode: "HTML",
-          };
+           // Teclado en línea con botones y datos adicionales
+var botones = {
+  reply_markup: {
+      inline_keyboard: [
+          [{ text: "Mis incidentes", callback_data: "1" }],
+          [{ text: "Registrar incidente", callback_data: "2" }],
+          [{ text: "Salir", callback_data: "0" }],
+      ],
+  },
+  parse_mode: "HTML",
+};
+
           
 
             // Enviar el mensaje con botones
@@ -1397,20 +1397,18 @@ async function validar_cedula(agent) {
             console.log("CHAT ID:", chatId)
 
 
-            // Teclado de respuesta con botones de texto
-            var botones = {
-              reply_markup: {
-                  keyboard: [
-                      [{ text: "Mis incidentes", callback_data: "1" }],
-                      [{ text: "Registrar incidente", callback_data: "2" }],
-                      [{ text: "Salir", callback_data: "0" }],
-                  ],
-                  resize_keyboard: true,
-                  one_time_keyboard: true,
-              },
-              parse_mode: "HTML",
-          };
-          
+          // Teclado en línea con botones y datos adicionales
+var botones = {
+  reply_markup: {
+      inline_keyboard: [
+          [{ text: "Mis incidentes", callback_data: "1" }],
+          [{ text: "Registrar incidente", callback_data: "2" }],
+          [{ text: "Salir", callback_data: "0" }],
+      ],
+  },
+  parse_mode: "HTML",
+};
+
 
             // Enviar el mensaje con botones
             botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
