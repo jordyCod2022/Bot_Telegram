@@ -1328,19 +1328,18 @@ async function validar_cedula(agent) {
           banderaPerfil=true
 
           var chatId = telefonoColaboradorGlobal;
+          console.log("CHAT ID:", chatId)
 
           var botones = {
             reply_markup: {
-                keyboard: [
-                    ["Web"],
-                    ["Twitter"],
-                    ["Instagram"],
-                    ["Facebook"],
-                    ["YouTube"],
-                    ["Twitch"]
-                ],
-                one_time_keyboard: true, // Esto hará que el teclado desaparezca después de que se toque un botón
-                resize_keyboard: true // Esto hará que el teclado se redimensione automáticamente si hay demasiados botones
+                inline_keyboard: [
+                    [{ text: "Web", url: "https://forocoches.com" },
+                    { text: "Twitter", url: "https://twitter.com/" },
+                    { text: "Instagram", url: "https://www.instagram.com//" },
+                    { text: "Facebook", url: "https://www.facebook.com//" },
+                    { text: "YouTube", url: "https://www.youtube.com/" },
+                    { text: "Twitch", url: "https://www.twitch.tv/" }]
+                ]
             },
             parse_mode: "HTML",
         };
