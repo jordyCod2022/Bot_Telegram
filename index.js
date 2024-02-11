@@ -449,7 +449,6 @@ async function obtenerCategorias() {
     }
 
   }
-
   async function obtenerColaboradorPorCedula(numeroCedula) {
     console.log('Cédula recibida:', numeroCedula);
   
@@ -477,6 +476,8 @@ async function obtenerCategorias() {
       if (rows.length > 0) {
         const colaborador = rows[0];
         telefonoColaboradorGlobal = colaborador.telefono_colaborador; // Guardar en la variable global
+  
+        console.log('Teléfono del colaborador:', telefonoColaboradorGlobal); // Imprimir el teléfono
   
         let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
   
