@@ -1330,31 +1330,18 @@ async function validar_cedula(agent) {
           var chatId = telefonoColaboradorGlobal;
           console.log("CHAT ID:", chatId)
 
+          var botones = {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Mis incidentes", callback_data: "1" }],
+                [{ text: "Registrar incidente", callback_data: "2" }],
+                [{ text: "Salir", callback_data: "0" }],
+              ],
+            },
+            parse_mode: "HTML",
+          };
 
-
-          // Teclado de respuesta con botones de texto
-          // Teclado en línea con botones y datos adicionales
-var botones = {
-  reply_markup: {
-      inline_keyboard: [
-          [{ text: "Mis incidentes", callback_data: "1" }],
-          [{ text: "Registrar incidente", callback_data: "2" }],
-          [{ text: "Salir", callback_data: "0" }],
-      ],
-  },
-  parse_mode: "HTML",
-};
-
-        
-
-          // Enviar el mensaje con botones
-          botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
-
-
-          // Acciones para el perfil 2 (Usuario Administrador)
-          agent.add("A continuación, te presento las acciones disponibles:\n\n3️⃣ Consultar Pendientes\n4️⃣ Gestionar Incidentes Asignados\n0️⃣ Salir")
-
-
+          botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
 
 
         } else {
@@ -1367,51 +1354,49 @@ var botones = {
             await InsertarUsuarioRepotado(numeroCedula);
             console.log("*******");
             console.log(globalIncidentes);
-            agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
+           
 
 
             var chatId = telefonoColaboradorGlobal;
             console.log("CHAT ID:", chatId);
 
-            // Teclado de respuesta con botones de texto
-           // Teclado en línea con botones y datos adicionales
-var botones = {
-  reply_markup: {
-      inline_keyboard: [
-          [{ text: "Mis incidentes", callback_data: "1" }],
-          [{ text: "Registrar incidente", callback_data: "2" }],
-          [{ text: "Salir", callback_data: "0" }],
-      ],
-  },
-  parse_mode: "HTML",
-};
+
+            var botones = {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "Mis incidentes", callback_data: "1" }],
+                  [{ text: "Registrar incidente", callback_data: "2" }],
+                  [{ text: "Salir", callback_data: "0" }],
+                ],
+              },
+              parse_mode: "HTML",
+            };
+
+
 
           
-
-            // Enviar el mensaje con botones
-            botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
           } catch (error) {
-            agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
-
+           
             var chatId = telefonoColaboradorGlobal;
             console.log("CHAT ID:", chatId)
 
 
-          // Teclado en línea con botones y datos adicionales
-var botones = {
-  reply_markup: {
-      inline_keyboard: [
-          [{ text: "Mis incidentes", callback_data: "1" }],
-          [{ text: "Registrar incidente", callback_data: "2" }],
-          [{ text: "Salir", callback_data: "0" }],
-      ],
-  },
-  parse_mode: "HTML",
-};
+            // Teclado en línea con botones y datos adicionales
+            var botones = {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "Mis incidentes", callback_data: "1" }],
+                  [{ text: "Registrar incidente", callback_data: "2" }],
+                  [{ text: "Salir", callback_data: "0" }],
+                ],
+              },
+              parse_mode: "HTML",
+            };
 
 
             // Enviar el mensaje con botones
-            botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
 
 
           }
