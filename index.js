@@ -58,7 +58,7 @@ async function SaludoAres(agent) {
  
    agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
-   botAres.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+
 
 }
 
