@@ -54,47 +54,16 @@ async function SaludoAres(agent) {
  
    validar_saludo=true;
 
-   var chatId = telefonoColaboradorGlobal;
-   var botones = {
-     reply_markup: {
-       inline_keyboard: [
-         [{ text: "Web", url: "https://forocoches.com" },
-         { text: "Twitter", url: "https://twitter.com/" },
-         { text: "Instagram", url: "https://www.instagram.com//" },
-         { text: "Facebook", url: "https://www.facebook.com//" },
-         { text: "YouTube", url: "https://www.youtube.com/" },
-         { text: "Twitch", url: "https://www.twitch.tv/" }]
-       ]
-     },
-     parse_mode: "HTML",
-   };
+ 
  
    agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
-   botAres.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+ 
 
 }
 
 
 
-bot.command('rrss', (ctx) => {
-  var chatId = telefonoColaboradorGlobal;
-  var botones = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Web", url: "https://forocoches.com" },
-        { text: "Twitter", url: "https://twitter.com/" },
-        { text: "Instagram", url: "https://www.instagram.com//" },
-        { text: "Facebook", url: "https://www.facebook.com//" },
-        { text: "YouTube", url: "https://www.youtube.com/" },
-        { text: "Twitch", url: "https://www.twitch.tv/" }]
-      ]
-    },
-    parse_mode: "HTML",
-  };
-
-  bot.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
-});
 
 async function getNombre(id_colaborador) {
   try {
@@ -496,7 +465,21 @@ async function obtenerCategorias() {
         telefonoColaboradorGlobal = colaborador.telefono_colaborador; // Guardar en la variable global
   
         console.log('Teléfono del colaborador:', telefonoColaboradorGlobal); // Imprimir el teléfono
-  
+        var chatId = telefonoColaboradorGlobal;
+        var botones = {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "Web", url: "https://forocoches.com" },
+              { text: "Twitter", url: "https://twitter.com/" },
+              { text: "Instagram", url: "https://www.instagram.com//" },
+              { text: "Facebook", url: "https://www.facebook.com//" },
+              { text: "YouTube", url: "https://www.youtube.com/" },
+              { text: "Twitch", url: "https://www.twitch.tv/" }]
+            ]
+          },
+          parse_mode: "HTML",
+        };
+        botAres.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
         let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
   
         if (colaborador.nombre_departamento) {
