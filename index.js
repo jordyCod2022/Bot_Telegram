@@ -55,8 +55,11 @@ async function SaludoAres(agent) {
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
 
 }
-bot.command('rrss', (ctx) => {
-  var chatId = telefonoColaboradorGlobal;
+
+
+async function SaludoAres(agent) {
+  validar_saludo = true;
+  
   var botones = {
     reply_markup: {
       inline_keyboard: [
@@ -71,8 +74,14 @@ bot.command('rrss', (ctx) => {
     parse_mode: "HTML",
   };
 
-  bot.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
-});
+
+  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
+
+
+  agent.add(new TelegramMessage('<b><i>Estas son las redes sociales:</i></b>', botones));
+}
+
+
 
 async function getNombre(id_colaborador) {
   try {
