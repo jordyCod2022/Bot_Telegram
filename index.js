@@ -1364,8 +1364,8 @@ async function validar_cedula(agent) {
             var botones = {
               reply_markup: {
                 inline_keyboard: [
-                  [{ text: "Mis incidentes", callback_data: "1" }],
-                  [{ text: "Registrar incidente", callback_data: "2" }],
+                  [{ text: "M", callback_data: "1" }],
+                  [{ text: "R", callback_data: "2" }],
                   [{ text: "Salir", callback_data: "0" }],
                 ],
               },
@@ -1386,8 +1386,8 @@ async function validar_cedula(agent) {
             var botones = {
               reply_markup: {
                 inline_keyboard: [
-                  [{ text: "Mis incidentes", callback_data: "1" }],
-                  [{ text: "Registrar incidente", callback_data: "2" }],
+                  [{ text: "Mis", callback_data: "1" }],
+                  [{ text: "Registrar ", callback_data: "2" }],
                   [{ text: "Salir", callback_data: "0" }],
                 ],
               },
