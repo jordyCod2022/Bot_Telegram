@@ -1145,8 +1145,8 @@ async function obtenerIncidenteInfo(agent) {
         var botones = {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Registrar nuevo incidente", callback_data: "2" }],
-              [{ text: "Salir", callback_data: "0" }],
+              [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
+              [{ text: "Salir 👋", callback_data: "0" }],
             ],
           },
           parse_mode: "HTML",
@@ -1299,15 +1299,16 @@ async function ingresarConocimiento(agent) {
             var botones = {
               reply_markup: {
                 inline_keyboard: [
-                  [{ text: "Si", callback_data: "si" }],
-                  [{ text: "No", callback_data: "no" }],
+                  [{ text: "Si ✅", callback_data: "si" }],
+                  [{ text: "No ❌", callback_data: "no" }],
                   [{ text: "Ver otra solucion💡", callback_data: "7" }],
                 ],
               },
               parse_mode: "HTML",
             };
 
-            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+            botAres.sendMessage(chatId, "<b><i>¿Resolviste el incidente?:</i></b> 🤖", botones);
+
 
             bandera = true;
           }, 1100); // Retraso de 1 segundo (1000 milisegundos)
@@ -1382,9 +1383,9 @@ async function validar_cedula(agent) {
           var botones = {
             reply_markup: {
               inline_keyboard: [
-                [{ text: "Mis pendientes", callback_data: "3" }],
-                [{ text: "Gestionar", callback_data: "4" }],
-                [{ text: "Salir", callback_data: "0" }],
+                [{ text: "Mis pendientes 📝", callback_data: "3" }],
+                [{ text: "Gestionar 🛠️", callback_data: "4" }],
+                [{ text: "Salir👋", callback_data: "0" }],
               ],
             },
             parse_mode: "HTML",
@@ -1417,9 +1418,9 @@ setTimeout(() => {
   var botones = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "Mis incidentes reportados", callback_data: "1" }],
-        [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
-        [{ text: "Salir", callback_data: "0" }],
+        [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
+        [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
+        [{ text: "Salir👋", callback_data: "0" }],
       ],
     },
     parse_mode: "HTML",
@@ -1440,9 +1441,9 @@ setTimeout(() => {
   var botones = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "Mis incidentes reportados", callback_data: "1" }],
-        [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
-        [{ text: "Salir", callback_data: "0" }],
+        [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
+        [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
+        [{ text: "Salir👋", callback_data: "0" }],
       ],
     },
     parse_mode: "HTML",
