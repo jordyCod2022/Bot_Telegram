@@ -49,17 +49,36 @@ const pool = new Pool({
 
 
 async function SaludoAres(agent) {
+
+
  
    validar_saludo=true;
+
+   var chatId = telefonoColaboradorGlobal;
+   var botones = {
+     reply_markup: {
+       inline_keyboard: [
+         [{ text: "Web", url: "https://forocoches.com" },
+         { text: "Twitter", url: "https://twitter.com/" },
+         { text: "Instagram", url: "https://www.instagram.com//" },
+         { text: "Facebook", url: "https://www.facebook.com//" },
+         { text: "YouTube", url: "https://www.youtube.com/" },
+         { text: "Twitch", url: "https://www.twitch.tv/" }]
+       ]
+     },
+     parse_mode: "HTML",
+   };
+ 
    agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
+   botAres.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
 
 }
 
 
-async function SaludoAres(agent) {
-  validar_saludo = true;
-  
+
+bot.command('rrss', (ctx) => {
+  var chatId = telefonoColaboradorGlobal;
   var botones = {
     reply_markup: {
       inline_keyboard: [
@@ -74,12 +93,8 @@ async function SaludoAres(agent) {
     parse_mode: "HTML",
   };
 
-
-  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊',botones);
-
-}
-
-
+  bot.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+});
 
 async function getNombre(id_colaborador) {
   try {
