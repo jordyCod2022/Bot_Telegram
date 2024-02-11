@@ -1335,15 +1335,17 @@ async function validar_cedula(agent) {
           // Teclado de respuesta con botones de texto
           var botones = {
             reply_markup: {
-              keyboard: [
-                ["Web", "Twitter", "Instagram"],
-                ["Facebook", "YouTube", "Twitch"]
-              ],
-              resize_keyboard: true,
-              one_time_keyboard: true,
+                keyboard: [
+                    [{ text: "Mis incidentes", callback_data: "1" }],
+                    [{ text: "Registrar incidente", callback_data: "2" }],
+                    [{ text: "Salir", callback_data: "0" }],
+                ],
+                resize_keyboard: true,
+                one_time_keyboard: true,
             },
             parse_mode: "HTML",
-          };
+        };
+        
 
           // Enviar el mensaje con botones
           botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
@@ -1374,15 +1376,17 @@ async function validar_cedula(agent) {
             // Teclado de respuesta con botones de texto
             var botones = {
               reply_markup: {
-                keyboard: [
-                  ["Web", "Twitter", "Instagram"],
-                  ["Facebook", "YouTube", "Twitch"]
-                ],
-                resize_keyboard: true,
-                one_time_keyboard: true,
+                  keyboard: [
+                      [{ text: "Mis incidentes", callback_data: "1" }],
+                      [{ text: "Registrar incidente", callback_data: "2" }],
+                      [{ text: "Salir", callback_data: "0" }],
+                  ],
+                  resize_keyboard: true,
+                  one_time_keyboard: true,
               },
               parse_mode: "HTML",
-            };
+          };
+          
 
             // Enviar el mensaje con botones
             botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
@@ -1396,15 +1400,17 @@ async function validar_cedula(agent) {
             // Teclado de respuesta con botones de texto
             var botones = {
               reply_markup: {
-                keyboard: [
-                  ["Web", "Twitter", "Instagram"],
-                  ["Facebook", "YouTube", "Twitch"]
-                ],
-                resize_keyboard: true,
-                one_time_keyboard: true,
+                  keyboard: [
+                      [{ text: "Mis incidentes", callback_data: "1" }],
+                      [{ text: "Registrar incidente", callback_data: "2" }],
+                      [{ text: "Salir", callback_data: "0" }],
+                  ],
+                  resize_keyboard: true,
+                  one_time_keyboard: true,
               },
               parse_mode: "HTML",
-            };
+          };
+          
 
             // Enviar el mensaje con botones
             botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
