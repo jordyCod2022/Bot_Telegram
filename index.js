@@ -1138,22 +1138,22 @@ async function obtenerIncidenteInfo(agent) {
         `;
         agent.add(mensajeIncidente);
       }
-
-      var chatId = telefonoColaboradorGlobal;
-      console.log("CHAT ID:", chatId)
-
-      var botones = {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: "Registrar nuevo incidente", callback_data: "2" }],
-            [{ text: "Salir", callback_data: "0" }],
-           
-          ],
-        },
-        parse_mode: "HTML",
-      };
-
-      botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
+      setTimeout(() => {
+        var chatId = telefonoColaboradorGlobal;
+        console.log("CHAT ID:", chatId);
+      
+        var botones = {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "Registrar nuevo incidente", callback_data: "2" }],
+              [{ text: "Salir", callback_data: "0" }],
+            ],
+          },
+          parse_mode: "HTML",
+        };
+      
+        botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
+      }, 1100); 
 
 
   
