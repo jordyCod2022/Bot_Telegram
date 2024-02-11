@@ -1331,11 +1331,16 @@ async function validar_cedula(agent) {
 
           var botones = {
             reply_markup: {
-                inline_keyboard: [
-                    [{ text: "Ver incidentes pendientes" },
-                    { text: "Registrar un nuevo incidente" }
-                    ]
-                ]
+                keyboard: [
+                    ["Web"],
+                    ["Twitter"],
+                    ["Instagram"],
+                    ["Facebook"],
+                    ["YouTube"],
+                    ["Twitch"]
+                ],
+                one_time_keyboard: true, // Esto hará que el teclado desaparezca después de que se toque un botón
+                resize_keyboard: true // Esto hará que el teclado se redimensione automáticamente si hay demasiados botones
             },
             parse_mode: "HTML",
         };
@@ -1364,11 +1369,16 @@ async function validar_cedula(agent) {
 
             var botones = {
               reply_markup: {
-                  inline_keyboard: [
-                      [{ text: "Ver incidentes pendientes" },
-                      { text: "Registrar un nuevo incidente" }
-                      ]
-                  ]
+                  keyboard: [
+                      ["Web"],
+                      ["Twitter"],
+                      ["Instagram"],
+                      ["Facebook"],
+                      ["YouTube"],
+                      ["Twitch"]
+                  ],
+                  one_time_keyboard: true, // Esto hará que el teclado desaparezca después de que se toque un botón
+                  resize_keyboard: true // Esto hará que el teclado se redimensione automáticamente si hay demasiados botones
               },
               parse_mode: "HTML",
           };
@@ -1378,15 +1388,18 @@ async function validar_cedula(agent) {
           } catch (error) {
             agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
 
-            var chatId = telefonoColaboradorGlobal;
-
             var botones = {
               reply_markup: {
-                  inline_keyboard: [
-                      [{ text: "Ver incidentes pendientes" },
-                      { text: "Registrar un nuevo incidente" }
-                      ]
-                  ]
+                  keyboard: [
+                      ["Web"],
+                      ["Twitter"],
+                      ["Instagram"],
+                      ["Facebook"],
+                      ["YouTube"],
+                      ["Twitch"]
+                  ],
+                  one_time_keyboard: true, // Esto hará que el teclado desaparezca después de que se toque un botón
+                  resize_keyboard: true // Esto hará que el teclado se redimensione automáticamente si hay demasiados botones
               },
               parse_mode: "HTML",
           };
