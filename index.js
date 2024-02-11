@@ -1310,7 +1310,7 @@ async function ingresarConocimiento(agent) {
             botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
 
             bandera = true;
-          }, 1000); // Retraso de 1 segundo (1000 milisegundos)
+          }, 1100); // Retraso de 1 segundo (1000 milisegundos)
         } else {
           // Manejar el caso en que no se encuentra una solución
           console.log('❌ No se encontró una solución con el ID proporcionado.');
@@ -1426,7 +1426,7 @@ setTimeout(() => {
   };
 
   botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-}, 1000); // Retraso de 1 segundo (1000 milisegundos)
+}, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
           } catch (error) {
 // ... (código anterior)
@@ -1449,7 +1449,7 @@ setTimeout(() => {
   };
 
   botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-}, 1000); // Retraso de 1 segundo (1000 milisegundos)
+}, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
 
           }
