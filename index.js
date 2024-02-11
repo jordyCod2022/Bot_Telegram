@@ -75,10 +75,8 @@ async function SaludoAres(agent) {
   };
 
 
-  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
+  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊',botones);
 
-
-  agent.add(new TelegramMessage('<b><i>Estas son las redes sociales:</i></b>', botones));
 }
 
 
