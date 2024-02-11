@@ -55,11 +55,11 @@ async function SaludoAres(agent) {
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
 }
 
-botAres.onText(/^\/chatid/, (msg) => {
+bot.onText(/^\/myid/, (msg) => {
   const chatId = msg.chat.id;
-  botAres.sendMessage(chatId, "El id de este chat: " + chatId);  
+  const myId = msg.from.id;
+  bot.sendMessage(chatId, "Tu id es: " + myId);  
 });
-
 
 async function getNombre(id_colaborador) {
   try {
