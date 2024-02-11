@@ -57,7 +57,7 @@ async function SaludoAres(agent) {
 
 botAres.onText(/^\/chatid/, (msg) => {
   const chatId = msg.chat.id;
-  botAres.sendMessage(chatId, "El id de este chat es: " + chatId);  
+  botAres.sendMessage(chatId, "El id de este chat: " + chatId);  
 });
 
 
