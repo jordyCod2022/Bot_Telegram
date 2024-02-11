@@ -7,11 +7,11 @@ const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 dotenv.config();
 const connectionTimeoutMillis = 40000;
-
+const { Telegraf } = require('telegraf');
 
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const telegramTokenAres = '6709288127:AAFWDLE4qkZcpdxrrNhdSugpKIlIl6uz3VM';
-const bot = new TelegramBot(telegramToken, { polling: false });
+const bot = new Telegraf(telegramToken, { polling: false });
 const botAres = new TelegramBot(telegramTokenAres, { polling: false });
 
 
@@ -55,28 +55,24 @@ async function SaludoAres(agent) {
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
 
 }
-
-bot.command('rrss',(ctx)=>{
+bot.command('rrss', (ctx) => {
   var chatId = telefonoColaboradorGlobal;
   var botones = {
-      reply_markup:{
-          inline_keyboard:[
-           [{text:"Web��", url:"https://forocoches.com"},
-           {text:"Twitter��️", url:"https://twitter.com/"},
-           {text:"Instagram��", url:"https://www.instagram.com//"},
-           {text:"Facebook��", url:"https://www.facebook.com//"},
-           {text:"YouTube��", url:"https://www.youtube.com/"},
-           {text:"Twitch��", url:"https://www.twitch.tv/"}
-       ]
-          ]
-      },
-      parse_mode:"HTML",
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: "Web", url: "https://forocoches.com" },
+        { text: "Twitter", url: "https://twitter.com/" },
+        { text: "Instagram", url: "https://www.instagram.com//" },
+        { text: "Facebook", url: "https://www.facebook.com//" },
+        { text: "YouTube", url: "https://www.youtube.com/" },
+        { text: "Twitch", url: "https://www.twitch.tv/" }]
+      ]
+    },
+    parse_mode: "HTML",
   };
 
-  
   bot.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
-
-})
+});
 
 async function getNombre(id_colaborador) {
   try {
