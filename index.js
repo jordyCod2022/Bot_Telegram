@@ -1360,10 +1360,38 @@ async function validar_cedula(agent) {
             console.log(globalIncidentes);
             agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
 
+            var chatId = telefonoColaboradorGlobal;
+
+            var botones = {
+              reply_markup: {
+                  inline_keyboard: [
+                      [{ text: "Ver incidentes pendientes" },
+                      { text: "Registrar un nuevo incidente" }
+                      ]
+                  ]
+              },
+              parse_mode: "HTML",
+          };
+            botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+            
 
           } catch (error) {
             agent.add("A continuación, te presento las opciones disponibles:\n\nSelecciona el número correspondiente según la acción que deseas realizar:\n\n1️⃣ Ver tus incidentes.\n2️⃣ Registrar un nuevo incidente.\n0️⃣ Salir.")
 
+            var chatId = telefonoColaboradorGlobal;
+
+            var botones = {
+              reply_markup: {
+                  inline_keyboard: [
+                      [{ text: "Ver incidentes pendientes" },
+                      { text: "Registrar un nuevo incidente" }
+                      ]
+                  ]
+              },
+              parse_mode: "HTML",
+          };
+            botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+            
            
           }
         }
