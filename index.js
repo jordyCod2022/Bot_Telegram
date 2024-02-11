@@ -438,7 +438,7 @@ async function obtenerCategorias() {
   }
   async function obtenerColaboradorPorCedula(numeroCedula) {
     console.log('Cédula recibida:', numeroCedula);
-  
+
     const query = `
       SELECT 
         colaboradores.nombre_colaborador, colaboradores.telefono_colaborador,
@@ -456,49 +456,47 @@ async function obtenerCategorias() {
         colaboradores.cedula = $1
     `;
     console.log('Consulta SQL:', query);
-  
-    try {
-      const { rows } = await pool.query(query, [numeroCedula]);
-  
-      if (rows.length > 0) {
-        const colaborador = rows[0];
-        telefonoColaboradorGlobal = colaborador.telefono_colaborador; // Guardar en la variable global
-  
-        console.log('Teléfono del colaborador:', telefonoColaboradorGlobal); // Imprimir el teléfono
-        var chatId = telefonoColaboradorGlobal;
-        var botones = {
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: "Web", url: "https://forocoches.com" },
-              { text: "Twitter", url: "https://twitter.com/" },
-              { text: "Instagram", url: "https://www.instagram.com//" },
-              { text: "Facebook", url: "https://www.facebook.com//" },
-              { text: "YouTube", url: "https://www.youtube.com/" },
-              { text: "Twitch", url: "https://www.twitch.tv/" }]
-            ]
-          },
-          parse_mode: "HTML",
-        };
-        botAres.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
-        let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
-  
-        if (colaborador.nombre_departamento) {
-          mensaje += ` eres del departamento: ${colaborador.nombre_departamento}.`;
-        }
-  
-        const id_usuario = colaborador.id_usuario;
-  
-        return { mensaje, id_usuario };
-  
-      } else {
-        return { exists: false };
-      }
-    } catch (error) {
-      console.error('Error al ejecutar la consulta:', error);
-      throw new Error('Error al obtener información del colaborador.');
-    }
-  }
 
+    try {
+        const { rows } = await pool.query(query, [numeroCedula]);
+
+        if (rows.length > 0) {
+            const colaborador = rows[0];
+            telefonoColaboradorGlobal = colaborador.telefono_colaborador;
+
+            console.log('Teléfono del colaborador:', telefonoColaboradorGlobal);
+            var chatId = telefonoColaboradorGlobal;
+            var botones = {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: "Web", url: "https://forocoches.com" },
+                        { text: "Twitter", url: "https://twitter.com/" },
+                        { text: "Instagram", url: "https://www.instagram.com//" },
+                        { text: "Facebook", url: "https://www.facebook.com//" },
+                        { text: "YouTube", url: "https://www.youtube.com/" },
+                        { text: "Twitch", url: "https://www.twitch.tv/" }]
+                    ]
+                },
+                parse_mode: "HTML",
+            };
+            botAres.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+            let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
+
+            if (colaborador.nombre_departamento) {
+                mensaje += ` eres del departamento: ${colaborador.nombre_departamento}.`;
+            }
+
+            const id_usuario = colaborador.id_usuario;
+
+            return { mensaje, id_usuario };
+        } else {
+            return { exists: false };
+        }
+    } catch (error) {
+        console.error('Error al ejecutar la consulta:', error);
+        throw new Error('Error al obtener información del colaborador.');
+    }
+}
 
 async function InsertarUsuarioRepotado(numeroCedula) {
   try {
