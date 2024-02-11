@@ -563,7 +563,31 @@ async function Base_Conocimiento(agent) {
 
 
       bandera = true;
-      agent.add('🤖✨ ¡Perfecto! Ahora puedes seleccionar una solución. Escribe el numero 7️⃣ para elegir un título de solución.');
+
+      // ... (código anterior)
+
+          // Después de enviar el mensaje con los pasos de la solución
+          setTimeout(() => {
+            var chatId = telefonoColaboradorGlobal;
+            console.log("CHAT ID:", chatId);
+
+            // Teclado en línea con botones y datos adicionales
+            var botones = {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "Ver solucion", callback_data: "7" }],
+               
+                ],
+              },
+              parse_mode: "HTML",
+            };
+
+            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+          }, 1100); // Retraso de 1 segundo (1000 milisegundos)
+
+
+
+
       validarIngresar = true;
 
 
@@ -1245,9 +1269,7 @@ function obtenerCedulaDesdeMensaje(agent) {
 
   return null; // Devuelve null si no se encontró el número de cédula en el mensaje
 }
-
 async function ingresarConocimiento(agent) {
-
   const id_titulo = obtenerIdConocimientoDesdeMensaje(agent);
 
   if (validarIngresar) {
@@ -1264,35 +1286,31 @@ async function ingresarConocimiento(agent) {
           const pasos = solucion.contenido_conocimiento_incidente.split(/\d+\.\s+/);
           const pasosFormateados = pasos
             .filter(paso => paso.trim() !== '')
-            .map((paso, index) => `${index + 1}. ${paso.trim()}\n`) // Agregamos \n al final de cada paso
-            .join(''); // Unimos los pasos sin agregar espacio entre ellos
+            .map((paso, index) => `${index + 1}. ${paso.trim()}\n`)
+            .join('');
 
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
 
+          // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
+          setTimeout(() => {
+            var chatId = telefonoColaboradorGlobal;
+            console.log("CHAT ID:", chatId);
 
-          var chatId = telefonoColaboradorGlobal;
-          console.log("CHAT ID:", chatId)
+            var botones = {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "Si", callback_data: "si" }],
+                  [{ text: "No", callback_data: "no" }],
+                  [{ text: "Ver otra solucion💡", callback_data: "7" }],
+                ],
+              },
+              parse_mode: "HTML",
+            };
 
-          var botones = {
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: "Si", callback_data: "si" }],
-                [{ text: "No", callback_data: "no" }],
-                [{ text: "Ver otra solucion💡", callback_data: "7" }],
-              ],
-            },
-            parse_mode: "HTML",
-          };
+            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
 
-          botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-
-    
-          bandera = true;
-
-
-
-
-
+            bandera = true;
+          }, 1000); // Retraso de 1 segundo (1000 milisegundos)
         } else {
           // Manejar el caso en que no se encuentra una solución
           console.log('❌ No se encontró una solución con el ID proporcionado.');
@@ -1315,7 +1333,6 @@ async function ingresarConocimiento(agent) {
     agent.add("🚫 No tienes permisos para ver información. Contacta al administrador si necesitas acceso.");
   }
 }
-
 
 
 
@@ -1389,46 +1406,50 @@ async function validar_cedula(agent) {
 
 
 
-            var chatId = telefonoColaboradorGlobal;
-            console.log("CHAT ID:", chatId);
+        // ... (código anterior)
 
-            // Teclado en línea con botones y datos adicionales
-            var botones = {
-              reply_markup: {
-                inline_keyboard: [
-                  [{ text: "Mis incidentes reportados", callback_data: "1" }],
-                  [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
-                  [{ text: "Salir", callback_data: "0" }],
-                ],
-              },
-              parse_mode: "HTML",
-            };
+// Después de enviar el mensaje con los pasos de la solución
+setTimeout(() => {
+  var chatId = telefonoColaboradorGlobal;
+  console.log("CHAT ID:", chatId);
 
+  // Teclado en línea con botones y datos adicionales
+  var botones = {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: "Mis incidentes reportados", callback_data: "1" }],
+        [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
+        [{ text: "Salir", callback_data: "0" }],
+      ],
+    },
+    parse_mode: "HTML",
+  };
 
+  botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+}, 1000); // Retraso de 1 segundo (1000 milisegundos)
 
-
-            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
           } catch (error) {
+// ... (código anterior)
 
-            var chatId = telefonoColaboradorGlobal;
-            console.log("CHAT ID:", chatId)
+// Después de enviar el mensaje con los pasos de la solución
+setTimeout(() => {
+  var chatId = telefonoColaboradorGlobal;
+  console.log("CHAT ID:", chatId);
 
+  // Teclado en línea con botones y datos adicionales
+  var botones = {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: "Mis incidentes reportados", callback_data: "1" }],
+        [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
+        [{ text: "Salir", callback_data: "0" }],
+      ],
+    },
+    parse_mode: "HTML",
+  };
 
-            // Teclado en línea con botones y datos adicionales
-            var botones = {
-              reply_markup: {
-                inline_keyboard: [
-                  [{ text: "Mis incidentes reportados", callback_data: "1" }],
-                  [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
-                  [{ text: "Salir", callback_data: "0" }],
-                ],
-              },
-              parse_mode: "HTML",
-            };
-
-
-            // Enviar el mensaje con botones
-            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+  botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+}, 1000); // Retraso de 1 segundo (1000 milisegundos)
 
 
           }
