@@ -1333,8 +1333,8 @@ async function validar_cedula(agent) {
           var botones = {
             reply_markup: {
               inline_keyboard: [
-                [{ text: "Mis incidentes", callback_data: "1" }],
-                [{ text: "Registrar incidente", callback_data: "2" }],
+                [{ text: "Mis incidentes 100", callback_data: "1" }],
+                [{ text: "Registrar incidente 200", callback_data: "2" }],
                 [{ text: "Salir", callback_data: "0" }],
               ],
             },
