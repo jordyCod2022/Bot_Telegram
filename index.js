@@ -28,6 +28,7 @@ let validarPerfil=false
 let validarIngresar=false
 let nombreTituloGlobal = null;
 let descripcionInciGlobal = null;
+let telefonoColaboradorGlobal;
 
 //Variables para enviar datos a Zammad
 let tituloZammad;
@@ -48,18 +49,34 @@ const pool = new Pool({
 
 
 async function SaludoAres(agent) {
-
  
    validar_saludo=true;
    agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
    agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
+
 }
 
-bot.onText(/^\/myid/, (msg) => {
-  const chatId = msg.chat.id;
-  const myId = msg.from.id;
-  bot.sendMessage(chatId, "Tu id es: " + myId);  
-});
+bot.command('rrss',(ctx)=>{
+  var chatId = telefonoColaboradorGlobal;
+  var botones = {
+      reply_markup:{
+          inline_keyboard:[
+           [{text:"Web��", url:"https://forocoches.com"},
+           {text:"Twitter��️", url:"https://twitter.com/"},
+           {text:"Instagram��", url:"https://www.instagram.com//"},
+           {text:"Facebook��", url:"https://www.facebook.com//"},
+           {text:"YouTube��", url:"https://www.youtube.com/"},
+           {text:"Twitch��", url:"https://www.twitch.tv/"}
+       ]
+          ]
+      },
+      parse_mode:"HTML",
+  };
+
+  
+  bot.telegram.sendMessage(chatId, "<b><i>Estas son las redes sociales:</i></b>", botones);
+
+})
 
 async function getNombre(id_colaborador) {
   try {
@@ -433,51 +450,52 @@ async function obtenerCategorias() {
 
   }
 
-
-async function obtenerColaboradorPorCedula(numeroCedula) {
-  console.log('Cédula recibida:', numeroCedula); // Imprimir el valor de cedula para depuración
-  const query = `
-    SELECT 
-      colaboradores.nombre_colaborador, 
-      departamento.nombre_departamento AS nombre_departamento,
-      subquery_usuarios.id_usuario
-    FROM 
-      public.colaboradores 
-    INNER JOIN 
-      public.departamento ON colaboradores.id_departamento = departamento.id_departamento
-    LEFT JOIN (
-      SELECT id_usuario, id_colaborador
-      FROM public.usuarios
-    ) AS subquery_usuarios ON colaboradores.id_colaborador = subquery_usuarios.id_colaborador
-    WHERE 
-      colaboradores.cedula = $1
-  `;
-  console.log('Consulta SQL:', query); // Imprimir la consulta SQL para depuración
-
-  try {
-    const { rows } = await pool.query(query, [numeroCedula]);
-
-    if (rows.length > 0) {
-      const colaborador = rows[0];
-      let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
-
-
-      if (colaborador.nombre_departamento) {
-        mensaje += ` eres del departamento: ${colaborador.nombre_departamento}.`;
+  async function obtenerColaboradorPorCedula(numeroCedula) {
+    console.log('Cédula recibida:', numeroCedula);
+  
+    const query = `
+      SELECT 
+        colaboradores.nombre_colaborador, colaboradores.telefono_colaborador,
+        departamento.nombre_departamento AS nombre_departamento,
+        subquery_usuarios.id_usuario
+      FROM 
+        public.colaboradores 
+      INNER JOIN 
+        public.departamento ON colaboradores.id_departamento = departamento.id_departamento
+      LEFT JOIN (
+        SELECT id_usuario, id_colaborador
+        FROM public.usuarios
+      ) AS subquery_usuarios ON colaboradores.id_colaborador = subquery_usuarios.id_colaborador
+      WHERE 
+        colaboradores.cedula = $1
+    `;
+    console.log('Consulta SQL:', query);
+  
+    try {
+      const { rows } = await pool.query(query, [numeroCedula]);
+  
+      if (rows.length > 0) {
+        const colaborador = rows[0];
+        telefonoColaboradorGlobal = colaborador.telefono_colaborador; // Guardar en la variable global
+  
+        let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
+  
+        if (colaborador.nombre_departamento) {
+          mensaje += ` eres del departamento: ${colaborador.nombre_departamento}.`;
+        }
+  
+        const id_usuario = colaborador.id_usuario;
+  
+        return { mensaje, id_usuario };
+  
+      } else {
+        return { exists: false };
       }
-
-      const id_usuario = colaborador.id_usuario;
-
-      return { mensaje, id_usuario };
-
-    } else {
-      return { exists: false }; // Devolvemos un objeto con la propiedad exists en false
+    } catch (error) {
+      console.error('Error al ejecutar la consulta:', error);
+      throw new Error('Error al obtener información del colaborador.');
     }
-  } catch (error) {
-    console.error('Error al ejecutar la consulta:', error);
-    throw new Error('Error al obtener información del colaborador.');
   }
-}
 
 
 async function InsertarUsuarioRepotado(numeroCedula) {
