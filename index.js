@@ -1115,7 +1115,24 @@ async function obtenerIncidenteInfo(agent) {
         agent.add(mensajeIncidente);
       }
 
-      agent.add("¿Deseas hacer alguna otra acción? Recuerda, estas son las demás opciones disponibles:\n\n 2️⃣ Registrar un nuevo incidente.\n 0️⃣ Salir.")
+      var chatId = telefonoColaboradorGlobal;
+      console.log("CHAT ID:", chatId)
+
+      var botones = {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Registrar nuevo incidente", callback_data: "2" }],
+            [{ text: "Salir", callback_data: "0" }],
+           
+          ],
+        },
+        parse_mode: "HTML",
+      };
+
+      botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
+
+
+  
 
     } catch (error) {
       console.error('Error al obtener información del incidente:', error);
@@ -1252,9 +1269,24 @@ async function ingresarConocimiento(agent) {
 
           agent.add(`📝 Contenido:\n${pasosFormateados}`);
 
-          // Preguntar por la satisfacción del usuario
-          agent.add('💡 ¿La solución proporcionada resolvió tu problema? Por favor, responde "Sí" o "No."\n\n🔄 ¿Quieres ver otra solución? Si es así, escribe el número 7️⃣');
 
+          var chatId = telefonoColaboradorGlobal;
+          console.log("CHAT ID:", chatId)
+
+          var botones = {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Si", callback_data: "si" }],
+                [{ text: "No", callback_data: "no" }],
+                [{ text: "Ver otra solucion💡", callback_data: "7" }],
+              ],
+            },
+            parse_mode: "HTML",
+          };
+
+          botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+
+    
           bandera = true;
 
 
@@ -1333,8 +1365,8 @@ async function validar_cedula(agent) {
           var botones = {
             reply_markup: {
               inline_keyboard: [
-                [{ text: "Mis incidentes 100", callback_data: "1" }],
-                [{ text: "Registrar incidente 200", callback_data: "2" }],
+                [{ text: "Mis pendientes", callback_data: "3" }],
+                [{ text: "Gestionar", callback_data: "4" }],
                 [{ text: "Salir", callback_data: "0" }],
               ],
             },
@@ -1354,18 +1386,18 @@ async function validar_cedula(agent) {
             await InsertarUsuarioRepotado(numeroCedula);
             console.log("*******");
             console.log(globalIncidentes);
-           
+
 
 
             var chatId = telefonoColaboradorGlobal;
             console.log("CHAT ID:", chatId);
 
-
+            // Teclado en línea con botones y datos adicionales
             var botones = {
               reply_markup: {
                 inline_keyboard: [
-                  [{ text: "M", callback_data: "1" }],
-                  [{ text: "R", callback_data: "2" }],
+                  [{ text: "Mis incidentes reportados", callback_data: "1" }],
+                  [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
                   [{ text: "Salir", callback_data: "0" }],
                 ],
               },
@@ -1374,10 +1406,10 @@ async function validar_cedula(agent) {
 
 
 
-          
+
             botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
           } catch (error) {
-           
+
             var chatId = telefonoColaboradorGlobal;
             console.log("CHAT ID:", chatId)
 
@@ -1386,8 +1418,8 @@ async function validar_cedula(agent) {
             var botones = {
               reply_markup: {
                 inline_keyboard: [
-                  [{ text: "Mis", callback_data: "1" }],
-                  [{ text: "Registrar ", callback_data: "2" }],
+                  [{ text: "Mis incidentes reportados", callback_data: "1" }],
+                  [{ text: "Registrar nuevo incidente ", callback_data: "2" }],
                   [{ text: "Salir", callback_data: "0" }],
                 ],
               },
