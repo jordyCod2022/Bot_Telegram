@@ -473,7 +473,8 @@ async function obtenerColaboradorPorCedula(numeroCedula) {
       let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
 
       if (colaborador.nombre_departamento) {
-        mensaje += ` eres del departamento: ${colaborador.nombre_departamento}.`;
+        mensaje += ` Perteneces al departamento: ${colaborador.nombre_departamento}. Para ayudarte, selecciona la opción que mejor corresponda a tu requerimiento. 🧑🏻‍💻`;
+
       }
 
       const id_usuario = colaborador.id_usuario;
