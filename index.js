@@ -49,19 +49,23 @@ const pool = new Pool({
 
 
 async function SaludoAres(agent) {
+  const saludos = [
+    '¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊',
+    '¡Saludos! Soy Ares, tu asistente virtual. 🚀',
+    '¡Hola! Ares en línea para ayudarte. 🌟',
+    '¡Bienvenido! Soy Ares, ¿en qué puedo ayudarte hoy? 💬',
+    '¡Hola, Soy Ares, listo para asistirte. 👋',
+    '¡Salve! Ares presente para ayudarte. 🌈',
+    '¡Qué tal! Soy Ares, ¿cómo puedo ser de ayuda hoy? 🌺'
 
+  ];
 
+  const saludoSeleccionado = saludos[Math.floor(Math.random() * saludos.length)];
 
   validar_saludo = true;
-
-
-
-  agent.add('¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊');
+  agent.add(saludoSeleccionado);
   agent.add('Para poder ayudarte, por favor, proporciona tu número de cédula.');
-
-
 }
-
 
 
 
@@ -566,24 +570,24 @@ async function Base_Conocimiento(agent) {
 
       // ... (código anterior)
 
-          // Después de enviar el mensaje con los pasos de la solución
-          setTimeout(() => {
-            var chatId = telefonoColaboradorGlobal;
-            console.log("CHAT ID:", chatId);
+      // Después de enviar el mensaje con los pasos de la solución
+      setTimeout(() => {
+        var chatId = telefonoColaboradorGlobal;
+        console.log("CHAT ID:", chatId);
 
-            // Teclado en línea con botones y datos adicionales
-            var botones = {
-              reply_markup: {
-                inline_keyboard: [
-                  [{ text: "Ver solucion", callback_data: "7" }],
-               
-                ],
-              },
-              parse_mode: "HTML",
-            };
+        // Teclado en línea con botones y datos adicionales
+        var botones = {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "Ver solucion", callback_data: "7" }],
 
-            botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-          }, 1100); // Retraso de 1 segundo (1000 milisegundos)
+            ],
+          },
+          parse_mode: "HTML",
+        };
+
+        botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+      }, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
 
 
@@ -859,20 +863,20 @@ async function registrar_INCI(agent) {
       getNombre(idClienteZammad);
 
       try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';  // Reemplaza 3000 con el puerto correcto de tu servidor
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
         const response = await axios.get(apiUrl);
 
-        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
+
         console.log('Respuesta de /listarUsuarios:', response.data);
       } catch (error) {
         console.error('Error al llamar a /listarUsuarios:', error);
       }
 
       try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';  // Reemplaza 3000 con el puerto correcto de tu servidor
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
         const response = await axios.post(apiUrl);
 
-        // Hacer algo con la respuesta, por ejemplo, imprimir en la consola
+
         console.log('Respuesta de /crearTicket:', response.data);
       } catch (error) {
         console.error('Error al llamar a /crearTicket:', error);
@@ -1141,7 +1145,7 @@ async function obtenerIncidenteInfo(agent) {
       setTimeout(() => {
         var chatId = telefonoColaboradorGlobal;
         console.log("CHAT ID:", chatId);
-      
+
         var botones = {
           reply_markup: {
             inline_keyboard: [
@@ -1151,12 +1155,12 @@ async function obtenerIncidenteInfo(agent) {
           },
           parse_mode: "HTML",
         };
-      
+
         botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
-      }, 1100); 
+      }, 1100);
 
 
-  
+
 
     } catch (error) {
       console.error('Error al obtener información del incidente:', error);
@@ -1407,50 +1411,50 @@ async function validar_cedula(agent) {
 
 
 
-        // ... (código anterior)
+            // ... (código anterior)
 
-// Después de enviar el mensaje con los pasos de la solución
-setTimeout(() => {
-  var chatId = telefonoColaboradorGlobal;
-  console.log("CHAT ID:", chatId);
+            // Después de enviar el mensaje con los pasos de la solución
+            setTimeout(() => {
+              var chatId = telefonoColaboradorGlobal;
+              console.log("CHAT ID:", chatId);
 
-  // Teclado en línea con botones y datos adicionales
-  var botones = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
-        [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
-        [{ text: "Salir👋", callback_data: "0" }],
-      ],
-    },
-    parse_mode: "HTML",
-  };
+              // Teclado en línea con botones y datos adicionales
+              var botones = {
+                reply_markup: {
+                  inline_keyboard: [
+                    [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
+                    [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
+                    [{ text: "Salir👋", callback_data: "0" }],
+                  ],
+                },
+                parse_mode: "HTML",
+              };
 
-  botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-}, 1100); // Retraso de 1 segundo (1000 milisegundos)
+              botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+            }, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
           } catch (error) {
-// ... (código anterior)
+            // ... (código anterior)
 
-// Después de enviar el mensaje con los pasos de la solución
-setTimeout(() => {
-  var chatId = telefonoColaboradorGlobal;
-  console.log("CHAT ID:", chatId);
+            // Después de enviar el mensaje con los pasos de la solución
+            setTimeout(() => {
+              var chatId = telefonoColaboradorGlobal;
+              console.log("CHAT ID:", chatId);
 
-  // Teclado en línea con botones y datos adicionales
-  var botones = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
-        [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
-        [{ text: "Salir👋", callback_data: "0" }],
-      ],
-    },
-    parse_mode: "HTML",
-  };
+              // Teclado en línea con botones y datos adicionales
+              var botones = {
+                reply_markup: {
+                  inline_keyboard: [
+                    [{ text: "Mis incidentes reportados 📄", callback_data: "1" }],
+                    [{ text: "Registrar nuevo incidente 📋", callback_data: "2" }],
+                    [{ text: "Salir👋", callback_data: "0" }],
+                  ],
+                },
+                parse_mode: "HTML",
+              };
 
-  botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
-}, 1100); // Retraso de 1 segundo (1000 milisegundos)
+              botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+            }, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
 
           }
