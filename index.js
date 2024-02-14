@@ -1373,7 +1373,7 @@ async function validar_cedula(agent) {
 
 
     if (mensajeForma) {
-      agent.add(`${mensajeForma} ¡Validación exitosa! ✅`);
+      agent.add(`${mensajeForma}`);
 
       validadCedula = true;
 
