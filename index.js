@@ -185,7 +185,7 @@ app.post('/crearTicket', async (req, res) => {
       group_id: 1,
       customer_id: idRegistroTickets, // Cliente
       organization_id: 1, // MIES
-      owner_id: 3, // encargado de los tickets
+      owner_id: 9, // encargado de los tickets
       
       article: {
         type: 'web',
