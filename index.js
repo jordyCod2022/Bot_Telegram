@@ -642,40 +642,25 @@ async function registrar_INCI_SI(agent) {
       const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
       const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
 
-      const ImpactoDis = await obtenerImpactos();
-      const defectImpa = ImpactoDis.length > 0 ? ImpactoDis[0] : null;
-      const impacto_id = defectImpa ? defectImpa.id_impacto : null;
-
-      const resolucionDispo = await obtenerResolucion();
-      const detectReso = resolucionDispo.length > 0 ? resolucionDispo[0] : null;
-      const resolucion_id = detectReso ? detectReso.id_resolucion : null;
-
-      const urgenDis = await obtenerUrgencia();
-      const defectUr = urgenDis.length > 0 ? urgenDis[0] : null;
-      const urgencia_id = defectUr ? defectUr.id_urgencia : null;
+     
 
       const repoartacion_user_id = usuario_cedula
 
       const query = `
-        INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_impacto, id_urgencia, id_nivelescala, id_reportacion_user, id_asignacion_user, id_cierre, id_resolucion, incidente_nombre, incidente_descrip, fecha_incidente, estatus_incidente)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_nivelescala, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       `;
 
       const valores = [
         idCate,
         estado_id,
         prioridad_id,
-        impacto_id,
-        urgencia_id,
         idNivel,
         repoartacion_user_id,
         asignacion_user_id,
-        cierre_id,
-        resolucion_id,
         nombreTituloGlobal,
         descripcionInciGlobal,
         fechaRegi,
-        estado_incidente
       ];
 
       await pool.query(query, valores);
@@ -787,7 +772,8 @@ async function Confirmacion(agent) {
       // Llamada a la función para enviar mensaje a Telegram
       await enviarMensajeTelegram(infoColaborador, id_asignado);
 
-      agent.add('✅ Incidente enviado al departamento de TICs. Está en estado pendiente. ¡Gracias por tu reporte! 🚀');
+      agent.add('✅ Incidente enviado al departamento de Recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');
+
 
       bandera = false;
       validar_saludo = false;
@@ -888,7 +874,7 @@ async function registrar_INCI(agent) {
         prioridad_id, // prioridad incidente
         idNivel, // nivel de escalamiento
         repoartacion_user_id, // usuario que reporta incidente
-        asignacion_user_id, // usuario al que se le asigno el incidente
+        asignacion_user_id, // usuario al que se le asignó el incidente
         nombreTituloGlobal,  // titulo del incidente
         descripcionInciGlobal, // descripcion del incidente 
         fechaRegi // fecha de registro del incidente
