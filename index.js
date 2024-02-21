@@ -183,9 +183,10 @@ app.post('/crearTicket', async (req, res) => {
     const nuevoTicket = {
       title: tituloZammad,
       group_id: 1,
-      customer_id: idRegistroTickets,
-      organization_id: 1,
-      owner_id: 3,
+      customer_id: idRegistroTickets, // Cliente
+      organization_id: 1, // MIES
+      owner_id: 9, // encargado de los tickets
+      
       article: {
         type: 'web',
         internal: false,
@@ -195,6 +196,7 @@ app.post('/crearTicket', async (req, res) => {
         origin_by_id: idRegistroTickets,
 
       }
+
     };
 
 
@@ -834,6 +836,8 @@ async function registrar_INCI(agent) {
       const asignacion_user_id = asignarUsuarioAleatorio(user_asignado);
       id_asignado = await obtenerChatId(asignacion_user_id);
 
+      // Categorias
+
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
       const idCate = defectoCate ? defectoCate.id_cate : null;
@@ -842,21 +846,10 @@ async function registrar_INCI(agent) {
       const defectoNiveles = nivelIncidente.length > 0 ? nivelIncidente[0] : null;
       const idNivel = defectoNiveles ? defectoNiveles.id_nivelescala : null;
 
+      // prioridad incidente
       const PrioDispo = await obtenerPrioridad();
       const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
       const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
-
-      const ImpactoDis = await obtenerImpactos();
-      const defectImpa = ImpactoDis.length > 0 ? ImpactoDis[0] : null;
-      const impacto_id = defectImpa ? defectImpa.id_impacto : null;
-
-      const resolucionDispo = await obtenerResolucion();
-      const detectReso = resolucionDispo.length > 0 ? resolucionDispo[0] : null;
-      const resolucion_id = detectReso ? detectReso.id_resolucion : null;
-
-      const urgenDis = await obtenerUrgencia();
-      const defectUr = urgenDis.length > 0 ? urgenDis[0] : null;
-      const urgencia_id = defectUr ? defectUr.id_urgencia : null;
 
       const repoartacion_user_id = usuario_cedula
 
@@ -890,20 +883,15 @@ async function registrar_INCI(agent) {
       `;
 
       const valores = [
-        idCate,
-        estado_id,
-        prioridad_id,
-        impacto_id,
-        urgencia_id,
-        idNivel,
-        repoartacion_user_id,
-        asignacion_user_id,
-        cierre_id,
-        resolucion_id,
-        nombreTituloGlobal,
-        descripcionInciGlobal,
-        fechaRegi,
-        estado_incidente
+        idCate, // Categoria del incidente
+        estado_id, // estado del inicidente
+        prioridad_id, // prioridad incidente
+        idNivel, // nivel de escalamiento
+        repoartacion_user_id, // usuario que reporta incidente
+        asignacion_user_id, // usuario al que se le asigno el incidente
+        nombreTituloGlobal,  // titulo del incidente
+        descripcionInciGlobal, // descripcion del incidente 
+        fechaRegi // fecha de registro del incidente
       ];
 
       await pool.query(query, valores);
