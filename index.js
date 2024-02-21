@@ -11,7 +11,7 @@ const { Telegraf } = require('telegraf');
 
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
-const bot = new Telegraf(telegramToken, { polling: false });
+const bot = new TelegramBot(telegramToken, { polling: false });
 const botAres = new TelegramBot(telegramTokenAres, { polling: false });
 
 
