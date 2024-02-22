@@ -331,25 +331,6 @@ async function ObtenerRespuestaTitulo_Base(agent) {
   }
 }
 
-async function ObtenerTituloZammad(agent) {
-  try {
-    const regex = /([\s\S]+)/;
-    const match = agent.query.match(regex);
-
-    if (match) {
-      const textoCompleto = match[1].trim();
-      tituloZammad = textoCompleto;
-
-      return tituloZammad;
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Error al obtener la información del título:', error);
-    return null;
-  }
-}
-
 
 /*---------------------------------------*/
 
@@ -826,7 +807,7 @@ async function registrar_INCI(agent) {
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
 
-    
+      tituloZammad = nombreTituloGlobal
 
 
       user_asignado = await obtenerUsuariosDisponiblesIn();
@@ -858,7 +839,29 @@ async function registrar_INCI(agent) {
 
       const repoartacion_user_id = usuario_cedula
 
-  
+      idClienteZammad = repoartacion_user_id
+      getNombre(idClienteZammad);
+
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
+        const response = await axios.get(apiUrl);
+
+
+        console.log('Respuesta de /listarUsuarios:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /listarUsuarios:', error);
+      }
+
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
+        const response = await axios.post(apiUrl);
+
+
+        console.log('Respuesta de /crearTicket:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /crearTicket:', error);
+      }
+
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
@@ -888,36 +891,6 @@ async function registrar_INCI(agent) {
       agent.add('✅ El incidente ha sido registrado exitosamente');
       validarIngresar = false
 
-      idClienteZammad = repoartacion_user_id
-      getNombre(idClienteZammad);
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
-        const response = await axios.get(apiUrl);
-
-
-        console.log('Respuesta de /listarUsuarios:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /listarUsuarios:', error);
-      }
-
-      agent.add("Asigna un titulo a tu ticket")
-      const zammadTittle=await ObtenerTituloZammad()
-      console.log(zammadTittle)
-      
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
-        const response = await axios.post(apiUrl);
-    
-    
-        console.log('Respuesta de /crearTicket:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /crearTicket:', error);
-      }
-    
-
-      
-
     } else {
       console.log('Campos obligatorios faltantes:');
       console.log('nombre:', nombreTituloGlobal);
@@ -939,10 +912,6 @@ async function registrar_INCI(agent) {
 
   }
 }
-
-
-
-
 
 function asignarUsuarioAleatorio(usuariosAsignados) {
   const indiceAleatorio = Math.floor(Math.random() * usuariosAsignados.length);
