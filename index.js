@@ -901,7 +901,20 @@ async function registrar_INCI(agent) {
         console.error('Error al llamar a /listarUsuarios:', error);
       }
 
-      crearTicketZammad()
+      agent.add("Asigna un titulo a tu ticket")
+      const zammadTittle=await ObtenerTituloZammad()
+      console.log(zammadTittle)
+      
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
+        const response = await axios.post(apiUrl);
+    
+    
+        console.log('Respuesta de /crearTicket:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /crearTicket:', error);
+      }
+    
 
       
 
@@ -928,21 +941,8 @@ async function registrar_INCI(agent) {
 }
 
 
-async function crearTicketZammad(){
-  agent.add("Asigna un titulo a tu ticket")
-  const zammadTittle=await ObtenerTituloZammad()
-  console.log(zammadTittle)
-  
-  try {
-    const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
-    const response = await axios.post(apiUrl);
 
 
-    console.log('Respuesta de /crearTicket:', response.data);
-  } catch (error) {
-    console.error('Error al llamar a /crearTicket:', error);
-  }
-}
 
 function asignarUsuarioAleatorio(usuariosAsignados) {
   const indiceAleatorio = Math.floor(Math.random() * usuariosAsignados.length);
