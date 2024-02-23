@@ -590,7 +590,7 @@ async function Base_Conocimiento(agent) {
           parse_mode: "HTML",
         };
 
-        botAres.sendMessage(chatId,botones);
+        botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
       }, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
 
@@ -665,8 +665,6 @@ async function registrar_INCI_SI(agent) {
       ];
 
       await pool.query(query, valores);
-
-      console.log('Incidente registrado exitosamente.');
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
       validadCedula = false
 
@@ -1120,7 +1118,7 @@ async function obtenerIncidenteInfo(agent) {
         };
 
         botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
-      }, 1100);
+      }, 1500);
 
 
 
