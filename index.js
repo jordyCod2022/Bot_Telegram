@@ -867,20 +867,15 @@ async function registrar_INCI(agent) {
 
       agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
       
-       // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
-       // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
-        setTimeout(() => {
-          var chatId = telefonoColaboradorGlobal;
-          console.log("CHAT ID:", chatId);
 
-          botAres.sendMessage(chatId, { text: 'Titulo:', callback_data: '12' });
+      var chatId = telefonoColaboradorGlobal;
+      console.log("CHAT ID:", chatId);
+    
+      botAres.sendMessage(chatId, { text: ' ', callback_data: '12' });
+    
 
-
-          bandera = true;
-        }, 1000); // Retraso de 1 segundo (1000 milisegundos)
-
-
-
+ 
+    
 
 
 
