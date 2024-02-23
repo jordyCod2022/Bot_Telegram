@@ -938,7 +938,7 @@ async function registrar_INCI(agent) {
 
 async function tituloTicket(agent){
 
-  agent.add("Hola")
+  agent.add('Hola')
   console.log(agent)
   
   console.log("**********************************************************")
