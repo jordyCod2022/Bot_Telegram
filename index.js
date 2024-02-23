@@ -345,6 +345,9 @@ async function ObtenertituloTicket(agent) {
       return probandoTitulo;
     }
 
+    console.log("Sali")
+    console.log(probandoTitulo)
+
     return null;
   } catch (error) {
     console.error('Error al obtener la información del título:', error);
@@ -937,8 +940,8 @@ async function tituloTicket(agent){
 
   const tituloLocal=ObtenertituloTicket(agent)
   
-  agent.add(tituloLocal)
-
+  console.log("**********************************************************")
+  console.log(tituloLocal)
 }
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
