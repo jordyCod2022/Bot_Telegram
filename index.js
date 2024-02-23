@@ -867,15 +867,25 @@ async function registrar_INCI(agent) {
 
       agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
       
+      // Después de enviar el mensaje con los pasos de la solución
+      setTimeout(() => {
+        var chatId = telefonoColaboradorGlobal;
+        console.log("CHAT ID:", chatId);
 
-      var chatId = telefonoColaboradorGlobal;
-      console.log("CHAT ID:", chatId);
-    
-      botAres.sendMessage(chatId, { text: ' ', callback_data: '12' });
-    
+        // Teclado en línea con botones y datos adicionales
+        var botones = {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "Asignar un titulo", callback_data: "10" }],
 
- 
-    
+            ],
+          },
+          parse_mode: "HTML",
+        };
+
+        botAres.sendMessage(chatId, "<b><i>Por favor presiona el boton para asignar un titulo a tu ticket:</i></b>", botones);
+      }, 1100); // Retraso de 1 segundo (1000 milisegundos)
+
 
 
 
