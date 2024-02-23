@@ -942,7 +942,7 @@ async function tituloTicket(agent){
   console.log(agent)
   
   console.log("**********************************************************")
-  console.log(tituloLocal)
+
 }
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
