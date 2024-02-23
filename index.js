@@ -873,7 +873,7 @@ async function registrar_INCI(agent) {
           var chatId = telefonoColaboradorGlobal;
           console.log("CHAT ID:", chatId);
 
-          botAres.sendMessage(chatId, { text: '', callback_data: '12' });
+          botAres.sendMessage(chatId, { text: 'Titulo:', callback_data: '12' });
 
 
           bandera = true;
