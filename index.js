@@ -873,7 +873,8 @@ async function registrar_INCI(agent) {
           var chatId = telefonoColaboradorGlobal;
           console.log("CHAT ID:", chatId);
 
-          botAres.sendMessage(chatId, { callback_data: 12 }); // Corregir la sintaxis del objeto
+          botAres.sendMessage(chatId, { text: '', callback_data: '12' });
+
 
           bandera = true;
         }, 1000); // Retraso de 1 segundo (1000 milisegundos)
