@@ -475,7 +475,8 @@ async function obtenerColaboradorPorCedula(numeroCedula) {
       let mensaje = `👋 ¡Hola ${colaborador.nombre_colaborador}! `;
 
       if (colaborador.nombre_departamento) {
-        mensaje += ` Perteneces al departamento: ${colaborador.nombre_departamento}. Para ayudarte, selecciona la opción que mejor corresponda a tu requerimiento. 🧑🏻‍💻`;
+        mensaje += `,estoy aquí para ayudarte. Por favor, selecciona la opción que mejor se ajuste a tu requerimiento. 🤖💬`;
+
 
       }
 
@@ -589,7 +590,7 @@ async function Base_Conocimiento(agent) {
           parse_mode: "HTML",
         };
 
-        botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+        botAres.sendMessage(chatId,botones);
       }, 1100); // Retraso de 1 segundo (1000 milisegundos)
 
 
@@ -753,7 +754,6 @@ async function Confirmacion(agent) {
 
     // Realizar acciones en base a la respuesta del usuario
     if (respuestaUsuario.includes('si')) {
-      agent.add('Procesando incidente');
       await delay(3000);
       await registrar_INCI_SI(agent);
       bandera = false;
@@ -762,7 +762,6 @@ async function Confirmacion(agent) {
       banderaPerfil = false;
       validarIngresar = false
     } else if (respuestaUsuario.includes('no')) {
-      agent.add('Procesando incidente');
       await delay(3000);
       await registrar_INCI(agent);
 
@@ -772,9 +771,7 @@ async function Confirmacion(agent) {
       // Llamada a la función para enviar mensaje a Telegram
       await enviarMensajeTelegram(infoColaborador, id_asignado);
 
-      agent.add('✅ Incidente enviado al departamento de Recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');
-
-
+      agent.add('✅ Incidente enviado al departamento de recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');
       bandera = false;
       validar_saludo = false;
       banderaPerfil = false;
@@ -824,7 +821,6 @@ async function registrar_INCI(agent) {
       // Categorias
 
       */
-
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
       const idCate = defectoCate ? defectoCate.id_cate : null;
@@ -886,10 +882,7 @@ async function registrar_INCI(agent) {
       const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
       await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
 
-
-
       console.log('Incidente registrado exitosamente.');
-      agent.add('✅ El incidente ha sido registrado exitosamente');
       validarIngresar = false
 
     } else {
@@ -902,12 +895,6 @@ async function registrar_INCI(agent) {
     }
   } catch (error) {
     console.error('ERROR al registrar el incidente', error);
-
-    if (user_asignado && user_asignado.length > 0) {
-      const queryRevertirUsuarioAsignado = 'UPDATE asignacion_user SET disponibilidad = 0 WHERE id_asignacion_user = $1';
-      await pool.query(queryRevertirUsuarioAsignado, [user_asignado[0].id_asignacion_user]);
-    }
-
     agent.add('🚨 Ocurrió un error al registrar el incidente. Por favor, inténtalo más tarde o contacta al soporte técnico.');
 
 
