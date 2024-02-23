@@ -185,7 +185,7 @@ app.post('/crearTicket', async (req, res) => {
       group_id: 1,
       customer_id: idRegistroTickets, // Cliente
       organization_id: 1, // MIES
-      owner_id: 9, // encargado de los tickets
+      owner_id: 3, // encargado de los tickets jordybernabe
       
       article: {
         type: 'web',
@@ -809,8 +809,7 @@ async function registrar_INCI(agent) {
 
       tituloZammad = nombreTituloGlobal
 
-
-      user_asignado = await obtenerUsuariosDisponiblesIn();
+      /*user_asignado = await obtenerUsuariosDisponiblesIn();
 
       if (!user_asignado || user_asignado.length === 0) {
         agent.add('🚨 No hay usuarios asignados disponibles en este momento, tu reporte será enviado al encargado general.');
@@ -823,6 +822,8 @@ async function registrar_INCI(agent) {
       id_asignado = await obtenerChatId(asignacion_user_id);
 
       // Categorias
+
+      */
 
       const categoriasDisponiblesa = await obtenerCategorias();
       const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
@@ -874,7 +875,7 @@ async function registrar_INCI(agent) {
         prioridad_id, // prioridad incidente
         idNivel, // nivel de escalamiento
         repoartacion_user_id, // usuario que reporta incidente
-        asignacion_user_id, // usuario al que se le asignó el incidente
+        asignacion_user_id=null, // usuario al que se le asignó el incidente
         nombreTituloGlobal,  // titulo del incidente
         descripcionInciGlobal, // descripcion del incidente 
         fechaRegi // fecha de registro del incidente
