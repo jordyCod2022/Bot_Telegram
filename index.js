@@ -938,7 +938,7 @@ async function registrar_INCI(agent) {
 
 async function tituloTicket(agent){
 
-  const tituloLocal=ObtenertituloTicket(agent)
+  console.log(agent)
   
   console.log("**********************************************************")
   console.log(tituloLocal)
