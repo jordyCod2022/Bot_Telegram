@@ -37,6 +37,7 @@ let nombreClienteZammad;
 let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
+let probandoTitulo;
 
 
 const pool = new Pool({
@@ -330,6 +331,27 @@ async function ObtenerRespuestaTitulo_Base(agent) {
     return null;
   }
 }
+
+async function ObtenertituloTicket(agent) {
+  try {
+    const regex = /([\s\S]+)/;
+    const match = agent.query.match(regex);
+
+    if (match) {
+      const textoCompleto = match[1].trim();
+
+      probandoTitulo = textoCompleto;
+
+      return probandoTitulo;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error al obtener la información del título:', error);
+    return null;
+  }
+}
+
 
 
 /*---------------------------------------*/
@@ -834,29 +856,7 @@ async function registrar_INCI(agent) {
 
       const repoartacion_user_id = usuario_cedula
 
-      idClienteZammad = repoartacion_user_id
-      getNombre(idClienteZammad);
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
-        const response = await axios.get(apiUrl);
-
-
-        console.log('Respuesta de /listarUsuarios:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /listarUsuarios:', error);
-      }
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
-        const response = await axios.post(apiUrl);
-
-
-        console.log('Respuesta de /crearTicket:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /crearTicket:', error);
-      }
-
+     
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
@@ -883,6 +883,40 @@ async function registrar_INCI(agent) {
       console.log('Incidente registrado exitosamente.');
       validarIngresar = false
 
+      idClienteZammad = repoartacion_user_id
+      getNombre(idClienteZammad);
+
+      agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda. Por favor, proporciona más detalles para una mejor asistencia. 😊🎫");
+      
+
+
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
+        const response = await axios.get(apiUrl);
+
+
+        console.log('Respuesta de /listarUsuarios:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /listarUsuarios:', error);
+      }
+
+      try {
+        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
+        const response = await axios.post(apiUrl);
+
+
+        console.log('Respuesta de /crearTicket:', response.data);
+      } catch (error) {
+        console.error('Error al llamar a /crearTicket:', error);
+      }
+
+
+
+
+
+
+
+
     } else {
       console.log('Campos obligatorios faltantes:');
       console.log('nombre:', nombreTituloGlobal);
@@ -899,9 +933,12 @@ async function registrar_INCI(agent) {
   }
 }
 
-function asignarUsuarioAleatorio(usuariosAsignados) {
-  const indiceAleatorio = Math.floor(Math.random() * usuariosAsignados.length);
-  return usuariosAsignados[indiceAleatorio].id_asignacion_user;
+async function tituloTicket(agent){
+
+  const tituloLocal=ObtenertituloTicket(agent)
+  
+  agent.add(tituloLocal)
+
 }
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
@@ -912,7 +949,7 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
       return null;
     }
 
-    // Realiza la búsqueda en la base de conocimientos utilizando el ID
+  
     const query = `
       SELECT * 
       FROM public.base_conocimiento_incidentes
@@ -924,7 +961,7 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
     return result.rows.length > 0 ? result.rows[0] : null;
   } catch (error) {
     console.error('Error al buscar en la base de conocimientos por ID:', error);
-    throw error; // Propagar el error para manejarlo en el código que llama a esta función
+    throw error; 
   }
 }
 
@@ -1595,6 +1632,7 @@ app.post("/", express.json(), (request, response) => {
   intentMap.set('Salida', Salida);
   intentMap.set('gestionar', gestionar);
   intentMap.set('ingresarConocimiento', ingresarConocimiento);
+  intentMap.set('tituloTicket', tituloTicket);
   agent.handleRequest(intentMap);
 });
 
