@@ -8,6 +8,7 @@ const TelegramBot = require('node-telegram-bot-api');
 dotenv.config();
 const connectionTimeoutMillis = 40000;
 const { Telegraf } = require('telegraf');
+const { callback } = require("telegraf/typings/button");
 
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
@@ -38,6 +39,7 @@ let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
 let probandoTitulo;
+
 
 
 const pool = new Pool({
@@ -324,29 +326,6 @@ async function ObtenerRespuestaTitulo_Base(agent) {
 
       return { nombreTituloGlobal, descripcionInciGlobal };
     }
-
-    return null;
-  } catch (error) {
-    console.error('Error al obtener la información del título:', error);
-    return null;
-  }
-}
-
-async function ObtenertituloTicket(agent) {
-  try {
-    const regex = /([\s\S]+)/;
-    const match = agent.query.match(regex);
-
-    if (match) {
-      const textoCompleto = match[1].trim();
-
-      probandoTitulo = textoCompleto;
-
-      return probandoTitulo;
-    }
-
-    console.log("Sali")
-    console.log(probandoTitulo)
 
     return null;
   } catch (error) {
@@ -891,27 +870,16 @@ async function registrar_INCI(agent) {
 
       agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
       
+       // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
+       // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
+        setTimeout(() => {
+          var chatId = telefonoColaboradorGlobal;
+          console.log("CHAT ID:", chatId);
 
+          botAres.sendMessage(chatId, { callback_data: 12 }); // Corregir la sintaxis del objeto
 
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
-        const response = await axios.get(apiUrl);
-
-
-        console.log('Respuesta de /listarUsuarios:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /listarUsuarios:', error);
-      }
-
-      try {
-        const apiUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
-        const response = await axios.post(apiUrl);
-
-
-        console.log('Respuesta de /crearTicket:', response.data);
-      } catch (error) {
-        console.error('Error al llamar a /crearTicket:', error);
-      }
+          bandera = true;
+        }, 1000); // Retraso de 1 segundo (1000 milisegundos)
 
 
 
@@ -936,13 +904,32 @@ async function registrar_INCI(agent) {
   }
 }
 
-async function tituloTicket(agent){
+async function tituloTicket(agent) {
+  const probandoTitulo = agent.query;
 
-  agent.add('Hola')
-  console.log(agent.query)
-  
-  console.log("**********************************************************")
+  // Verificar si probandoTitulo tiene un valor
+  if (probandoTitulo) {
+    tituloZammad=probandoTitulo
+      try {
+          // Llamada a /listarUsuarios
+          const listarUsuariosUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
+          const listarUsuariosResponse = await axios.get(listarUsuariosUrl);
 
+          console.log('Respuesta de /listarUsuarios:', listarUsuariosResponse.data);
+      } catch (error) {
+          console.error('Error al llamar a /listarUsuarios:', error);
+      }
+
+      try {
+          // Llamada a /crearTicket
+          const crearTicketUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
+          const crearTicketResponse = await axios.post(crearTicketUrl);
+
+          console.log('Respuesta de /crearTicket:', crearTicketResponse.data);
+      } catch (error) {
+          console.error('Error al llamar a /crearTicket:', error);
+      }
+  }
 }
 
 async function obtenerSolucionPorId(id_conocimiento_incidente) {
