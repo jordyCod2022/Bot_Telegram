@@ -7,9 +7,6 @@ const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 dotenv.config();
 const connectionTimeoutMillis = 40000;
-const { Telegraf } = require('telegraf');
-const { callback } = require("telegraf/typings/button");
-
 const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
 const bot = new TelegramBot(telegramToken, { polling: false });
