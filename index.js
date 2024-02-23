@@ -1118,7 +1118,7 @@ async function obtenerIncidenteInfo(agent) {
         };
 
         botAres.sendMessage(chatId, "<b><i>¿Deseas hacer alguna otra acción?</i></b>", botones);
-      }, 1500);
+      }, 1700);
 
 
 
