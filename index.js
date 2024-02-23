@@ -889,7 +889,7 @@ async function registrar_INCI(agent) {
       idClienteZammad = repoartacion_user_id
       getNombre(idClienteZammad);
 
-      agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda. Por favor, proporciona más detalles para una mejor asistencia. 😊🎫");
+      agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
       
 
 
