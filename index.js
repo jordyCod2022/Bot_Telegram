@@ -770,7 +770,7 @@ async function Confirmacion(agent) {
       // Llamada a la función para enviar mensaje a Telegram
       await enviarMensajeTelegram(infoColaborador, id_asignado);
 
-      agent.add('✅ Incidente enviado al departamento de recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');
+     
       bandera = false;
       validar_saludo = false;
       banderaPerfil = false;
@@ -909,6 +909,7 @@ async function registrar_INCI(agent) {
 
 async function tituloTicket(agent) {
   const probandoTitulo = agent.query;
+  console.log(probandoTitulo)
 
   // Verificar si probandoTitulo tiene un valor
   if (probandoTitulo) {
@@ -929,9 +930,11 @@ async function tituloTicket(agent) {
           const crearTicketResponse = await axios.post(crearTicketUrl);
 
           console.log('Respuesta de /crearTicket:', crearTicketResponse.data);
+          agent.add('✅ Incidente enviado al departamento de recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');  
       } catch (error) {
           console.error('Error al llamar a /crearTicket:', error);
       }
+      
   }
 }
 
