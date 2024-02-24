@@ -1432,6 +1432,25 @@ async function validar_cedula(agent) {
           } catch (error) {
             // ... (código anterior)
 
+            setTimeout(() => {
+              var chatId = telefonoColaboradorGlobal;
+              console.log("CHAT ID:", chatId);
+            
+              // Teclado en línea con botones y datos adicionales
+              var botones = {
+                reply_markup: {
+                  inline_keyboard: [
+                    [{ text: "Mis incidentes reportados 📄", callback_data: "1", color: "blue" }],
+                    [{ text: "Registrar nuevo incidente 📋", callback_data: "2", color: "green" }],
+                    [{ text: "Salir👋", callback_data: "0", color: "red" }],
+                  ],
+                },
+                parse_mode: "HTML",
+              };
+            
+              botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
+            }, 1100); // Retraso de 1 segundo (1000 milisegundos)
+            
 
 
           }
