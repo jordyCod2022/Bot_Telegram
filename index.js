@@ -1589,12 +1589,16 @@ app.post("/llegadaZammad", async (req, res) => {
 app.post("/asignacionTicket", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
-  console.log(zammadData.owner.firstname)
-  
+
+  if (zammadData && zammadData.owner && zammadData.owner.firstname) {
+    const ownerFirstname = zammadData.owner.firstname;
+    console.log(`Nombre del propietario del ticket: ${ownerFirstname}`);
+  } else {
+    console.log('No se pudo obtener el nombre del propietario del ticket.');
+  }
+
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
-
-
 
 
 
