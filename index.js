@@ -1575,7 +1575,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/llegadaZammad", (req, res) => {
-  const zammadData = req.body;
+  const zammadData = JSON.stringify(req.body);
   console.log(zammadData)
   console.log(zammadData.priority)
   
