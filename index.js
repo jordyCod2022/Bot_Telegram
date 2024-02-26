@@ -1592,7 +1592,33 @@ app.post("/asignacionTicket", async (req, res) => {
 
   if (zammadData && zammadData.ticket && zammadData.ticket.owner) {
     const ownerFirstname = zammadData.ticket.owner.firstname;
-    console.log(`Nombre del propietario del ticket: ${ownerFirstname}`);
+    const ticketNumber = zammadData.ticket.number;
+
+    try {
+      // Consulta para obtener el id_colaborador
+      const result = await pool.query(
+        'SELECT id_colaborador FROM public.colaboradores WHERE nombre_colaborador = $1',
+        [ownerFirstname]
+      );
+
+      if (result.rows.length > 0) {
+        const idColaborador = result.rows[0].id_colaborador;
+        console.log(`ID del colaborador: ${idColaborador}`);
+        console.log(`Número del ticket: ${ticketNumber}`);
+
+        // Actualización en la tabla incidente
+        await pool.query(
+          'UPDATE public.incidente SET id_asignacion_user = $1 WHERE id_ticket = $2',
+          [idColaborador, ticketNumber]
+        );
+
+        console.log(`Se actualizó el id_asignacion_user en la tabla incidente.`);
+      } else {
+        console.log('No se encontró un colaborador con el nombre especificado.');
+      }
+    } catch (error) {
+      console.error('Error al realizar la consulta o la actualización:', error);
+    }
   } else {
     console.log('No se pudo obtener el nombre del propietario del ticket.');
   }
