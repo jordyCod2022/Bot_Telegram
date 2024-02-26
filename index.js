@@ -1642,20 +1642,55 @@ app.post("/asignacionTicket", async (req, res) => {
   res.sendStatus(200);
 });
 
-
 app.post("/actualizarEstado", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
 
-  if (zammadData && zammadData.ticket && zammadData.ticket.state_id) {
+  if (zammadData && zammadData.ticket && zammadData.ticket.state_id && zammadData.ticket.customer_id && zammadData.ticket.customer && zammadData.ticket.customer.firstname) {
     const stateId = zammadData.ticket.state_id;
-    console.log(`El state_id del ticket es: ${stateId}`);
+    const customerId = zammadData.ticket.customer_id;
+    const customerFirstname = zammadData.ticket.customer.firstname;
+    const ticketNumber = zammadData.ticket.number;
+
+    try {
+      // Consulta para obtener el id_colaborador, nombre_colaborador y telefono_colaborador
+      const result = await pool.query(
+        'SELECT id_colaborador, nombre_colaborador, telefono_colaborador FROM public.colaboradores WHERE nombre_colaborador = $1',
+        [customerFirstname]
+      );
+
+      if (result.rows.length > 0) {
+        const idColaborador = result.rows[0].id_colaborador;
+        const nombreColaborador = result.rows[0].nombre_colaborador;
+        const telefonoColaborador = result.rows[0].telefono_colaborador;
+
+        console.log(`El state_id del ticket es: ${stateId}`);
+        console.log(`El customer_id del ticket es: ${customerId}`);
+        console.log(`El firstname del cliente es: ${customerFirstname}`);
+        console.log(`El id_colaborador es: ${idColaborador}`);
+        console.log(`El teléfono del colaborador es: ${telefonoColaborador}`);
+        console.log(`El número del ticket es: ${ticketNumber}`);
+
+        // Actualización en la tabla incidente
+        await pool.query(
+          'UPDATE public.incidente SET id_estado = $1 WHERE id_ticket = $2',
+          [stateId, ticketNumber]
+        );
+
+        console.log('Se actualizó el id_estado en la tabla incidente.');
+      } else {
+        console.log('No se encontró un colaborador con el nombre especificado.');
+      }
+    } catch (error) {
+      console.error('Error al realizar la consulta o la actualización:', error);
+    }
   } else {
-    console.log('No se pudo obtener el state_id del ticket.');
+    console.log('No se pudo obtener el state_id, customer_id, firstname o number del ticket.');
   }
 
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
+
 
 
 async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
