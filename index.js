@@ -935,7 +935,7 @@ async function tituloTicket(agent) {
   }
 }
 
-async function obtenerSolucionPorId(id_seleccionado, globalGpt) {
+async function obtenerSolucionPorId(id_seleccionado) {
   try {
     // Verifica si el ID es null o no es un número
     if (!id_seleccionado || isNaN(id_seleccionado)) {
@@ -985,7 +985,8 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     const aiResponse = response['choices'][0]['message']['content'] || '';
     //Retgornar la respuesta en base al Id seleccionado
     return aiResponse;
-    globalGpt = aiResponse;
+    globalGpt = this.aiResponse;
+    console.log('Prompt desde funcion: ', globalGpt)
   } catch (error) {
     console.error('Error al buscar solución con OpenAI:', error);
     throw error; 
