@@ -1643,6 +1643,19 @@ app.post("/asignacionTicket", async (req, res) => {
 });
 
 
+app.post("/actualizarEstado", async (req, res) => {
+  const zammadDataString = JSON.stringify(req.body);
+  const zammadData = JSON.parse(zammadDataString);
+
+  if (zammadData && zammadData.ticket && zammadData.ticket.state_id) {
+    const stateId = zammadData.ticket.state_id;
+    console.log(`El state_id del ticket es: ${stateId}`);
+  } else {
+    console.log('No se pudo obtener el state_id del ticket.');
+  }
+
+  res.sendStatus(200); // Responde con un código 200 (OK)
+});
 
 
 async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
