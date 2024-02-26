@@ -1577,7 +1577,7 @@ app.get("/", (req, res) => {
 app.post("/llegadaZammad", (req, res) => {
   const zammadData = req.body;
   console.log(zammadData)
-  console.log(zammadData.priority_id)
+  console.log(zammadData.priority)
   
 
   res.sendStatus(200); // Responde con un código 200 (OK)
