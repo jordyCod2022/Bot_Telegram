@@ -1560,7 +1560,7 @@ app.post("/llegadaZammad", async (req, res) => {
     const ticketNumber = zammadData.ticket.number;
     const priorityData = zammadData.ticket.priority;
 
-    // Identificar el nivel de prioridad y realizar la acción correspondiente
+    // Identificar el nivel de prioridad y realizar la acción correspon}
     switch (priorityData.id) {
       case 3:
         console.log(`Ticket #${ticketNumber}: La prioridad es Alta. Realizar acción para prioridad alta.`);
