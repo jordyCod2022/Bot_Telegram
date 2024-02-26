@@ -1573,6 +1573,12 @@ app.get("/", (req, res) => {
   res.send("¡Bienvenido, estamos dentro!");
 });
 
+app.post("/llegadaZammad", (req, res) => {
+  console.log('Zammad Request headers: ' + JSON.stringify(req.headers));
+  console.log('Zammad Request body: ' + JSON.stringify(req.body));
+});
+
+
 app.post("/", express.json(), (request, response) => {
   const agent = new WebhookClient({ request, response });
 
