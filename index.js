@@ -1551,7 +1551,7 @@ app.get("/", (req, res) => {
   res.send("¡Bienvenido, estamos dentro!");
 });
 
-app.post("/llegadaZammad", (req, res) => {
+app.post("/llegadaZammad", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
 
@@ -1564,19 +1564,19 @@ app.post("/llegadaZammad", (req, res) => {
     switch (priorityData.id) {
       case 3:
         console.log(`Ticket #${ticketNumber}: La prioridad es Alta. Realizar acción para prioridad alta.`);
-        // Realizar acción para prioridad alta
+        // Actualizar la base de datos con el nuevo valor
+        await actualizarPrioridadEnBD(ticketNumber, 3);
         break;
       case 2:
         console.log(`Ticket #${ticketNumber}: La prioridad es Normal. Realizar acción para prioridad normal.`);
-        // Realizar acción para prioridad normal
+        await actualizarPrioridadEnBD(ticketNumber, 2);
         break;
       case 1:
         console.log(`Ticket #${ticketNumber}: La prioridad es Baja. Realizar acción para prioridad baja.`);
-        // Realizar acción para prioridad baja
+        await actualizarPrioridadEnBD(ticketNumber, 1);
         break;
       default:
         console.log(`Ticket #${ticketNumber}: Prioridad no reconocida. Realizar acción por defecto o manejar el caso.`);
-        // Acción por defecto o manejar el caso
     }
   } else {
     console.log('La propiedad "priority" no está presente en los datos o está indefinida.');
@@ -1584,6 +1584,18 @@ app.post("/llegadaZammad", (req, res) => {
 
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
+
+async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
+  try {
+    const result = await pool.query(
+      'UPDATE public.incidente SET id_prioridad = $1 WHERE id_ticket = $2',
+      [nuevaPrioridad, idTicket]
+    );
+    console.log(`Ticket #${idTicket} actualizado con nueva prioridad: ${nuevaPrioridad}`);
+  } catch (error) {
+    console.error(`Error al actualizar la prioridad del ticket #${idTicket}:`, error);
+  }
+}
 
 
 app.post("/", express.json(), (request, response) => {
