@@ -1576,7 +1576,14 @@ app.get("/", (req, res) => {
 
 app.post("/llegadaZammad", (req, res) => {
   console.log('Zammad Completo: ', req.body);
-  // Aquí puedes agregar la lógica para manejar la solicitud de Zammad
+
+  res.sendStatus(200); // Responde con un código 200 (OK)
+});
+
+app.post("/actualizarPropietario", (req, res) => {
+  console("Ticket asigando a melina salinas")
+  console.log('Zammad Completo: ', req.body);
+
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
