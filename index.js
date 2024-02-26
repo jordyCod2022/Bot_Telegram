@@ -1595,22 +1595,39 @@ app.post("/asignacionTicket", async (req, res) => {
     const ticketNumber = zammadData.ticket.number;
 
     try {
-      // Consulta para obtener el id_colaborador
+      // Consulta para obtener el id_colaborador, nombre_colaborador, apellido_colaborador y telefono_colaborador
       const result = await pool.query(
-        'SELECT id_colaborador FROM public.colaboradores WHERE nombre_colaborador = $1',
+        'SELECT id_colaborador, nombre_colaborador, apellido_colaborador, telefono_colaborador FROM public.colaboradores WHERE nombre_colaborador = $1',
         [ownerFirstname]
       );
 
       if (result.rows.length > 0) {
         const idColaborador = result.rows[0].id_colaborador;
+        const nombreColaborador = result.rows[0].nombre_colaborador;
+        const apellidoColaborador = result.rows[0].apellido_colaborador;
+        const telefonoColaborador = result.rows[0].telefono_colaborador;
+        
         console.log(`ID del colaborador: ${idColaborador}`);
+        console.log(`Nombre del colaborador: ${nombreColaborador}`);
+        console.log(`Apellido del colaborador: ${apellidoColaborador}`);
         console.log(`Número del ticket: ${ticketNumber}`);
+        console.log(`Teléfono del colaborador: ${telefonoColaborador}`);
 
         // Actualización en la tabla incidente
         await pool.query(
           'UPDATE public.incidente SET id_asignacion_user = $1 WHERE id_ticket = $2',
           [idColaborador, ticketNumber]
         );
+
+        try {
+          const chatId = telefonoColaborador;
+          const mensajeTelegram = `Tu ticket número ${ticketNumber} ha sido asignado a ${nombreColaborador}. Te estaremos notificando el avance del mismo.`;
+      
+          // Enviar mensaje a Telegram
+          await bot.telegram.sendMessage(chatId, mensajeTelegram);
+        } catch (error) {
+          console.error('ERROR al enviar mensaje a Telegram', error);
+        }
 
         console.log(`Se actualizó el id_asignacion_user en la tabla incidente.`);
       } else {
@@ -1623,8 +1640,10 @@ app.post("/asignacionTicket", async (req, res) => {
     console.log('No se pudo obtener el nombre del propietario del ticket.');
   }
 
-  res.sendStatus(200); // Responde con un código 200 (OK)
+  res.sendStatus(200);
 });
+
+
 
 
 async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
