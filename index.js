@@ -1580,12 +1580,6 @@ app.post("/llegadaZammad", (req, res) => {
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
-app.post("/actualizarPropietario", (req, res) => {
-  console("Ticket asigando a melina salinas")
-  console.log('Zammad Completo: ', req.body);
-
-  res.sendStatus(200); // Responde con un código 200 (OK)
-});
 
 
 app.post("/", express.json(), (request, response) => {
