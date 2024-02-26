@@ -797,9 +797,6 @@ async function registrar_INCI(agent) {
 
     const fechaRegi = new Date();
     fechaGlobal=fechaRegi
-    let estado_incidente = 1;
-    let estado_id = 2;
-    let cierre_id = 2;
 
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
@@ -837,9 +834,6 @@ async function registrar_INCI(agent) {
 
         botAres.sendMessage(chatId, "<b><i>Por favor presiona el boton para asignar un titulo a tu ticket:</i></b>", botones);
       }, 1100); // Retraso de 1 segundo (1000 milisegundos)
-
-
-
 
 
 
@@ -891,7 +885,7 @@ async function tituloTicket(agent) {
       }
 
       
-
+     const asignacion_user_id=null;
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente,id_ticket)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -903,7 +897,7 @@ async function tituloTicket(agent) {
         prioridad_id=null, // prioridad incidente
         idNivel=null, // nivel de escalamiento
         idClienteZammad, // usuario que reporta incidente
-        asignacion_user_id=null, // usuario al que se le asignó el incidente
+        asignacion_user_id, // usuario al que se le asignó el incidente
         nombreTituloGlobal,  // titulo del incidente
         descripcionInciGlobal, // descripcion del incidente 
         fechaGlobal, // fecha de registro del incidente
