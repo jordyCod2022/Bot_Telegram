@@ -11,7 +11,9 @@ const telegramToken = '6777426387:AAHvHB1oJdcMqt6hutj2D1ZqcI7y0a2dFBg';
 const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
 const bot = new TelegramBot(telegramToken, { polling: false });
 const botAres = new TelegramBot(telegramTokenAres, { polling: false });
-
+const OpenAI = require('openai');
+const apiKey = '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'; 
+const openaiClient = new OpenAI({ key: apiKey });
 
 
 let validadCedula = false;
@@ -560,20 +562,14 @@ async function Base_Conocimiento(agent) {
     descripcionInciGlobal = respuestaTitulo.descripcionInciGlobal;
 
     // 🕵️‍♂️ Llamas a buscarSolucionBaseConocimientos para buscar en la base de conocimientos
-    const resultadoBaseConocimientos = await buscarSolucionBaseConocimientos();
+    const respuestaIA = await buscarSolucionBaseConocimientos(descripcionInciGlobal);
 
-    if (resultadoBaseConocimientos && resultadoBaseConocimientos.length > 0) {
+    if (respuestaIA && respuestaIA.length > 0) {
       // 🎉 Realizas acciones en función de las soluciones encontradas
-      agent.add(`🚀 ¡Soluciones encontradas!`);
-
-      resultadoBaseConocimientos.forEach((solucion, index) => {
-        agent.add(`🆔 ID: ${solucion.id_conocimiento_incidente}, 📖 Título: ${solucion.titulo_conocimiento_incidente}`);
-      });
-
+      agent.add(`🤖 ¡Soluciones encontradas!`);
+      agent.add(respuestaIA)
 
       bandera = true;
-
-      // ... (código anterior)
 
       // Después de enviar el mensaje con los pasos de la solución
       setTimeout(() => {
@@ -965,46 +961,29 @@ async function obtenerSolucionPorId(id_conocimiento_incidente) {
 
 
 
-async function buscarSolucionBaseConocimientos() {
+async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
   try {
-    // Verifica si nombreTituloGlobal es null
-    if (nombreTituloGlobal === null) {
-      console.error('El título es nulo. No se puede buscar en la base de conocimientos.');
+    if (!descripcionInciGlobal) {
+      console.error('La descripción del incidente es nula o está vacía.');
       return null;
     }
 
-    // Utiliza la variable global para obtener el título
-    const nombre_titulo = nombreTituloGlobal;
+    // Construye el prompt que se enviará a OpenAI
+    const prompt = `Quiero que me des soluciones sobre esto "${descripcionInciGlobal}" quiero que me des soluciones con un identificador, es decir, una ID. Por el momento, solo quiero la ID que sea numerica y corta y un título de solución para que pueda elegir mediante el ID el que desee y que sean máximo 5 y que tengan una linea de espacio entre sí.`;
 
-    // Realiza la búsqueda en la base de conocimientos utilizando el título
-    const query = `
-      SELECT * 
-      FROM public.base_conocimiento_incidentes
-      WHERE 
-        EXISTS (
-          SELECT 1
-          FROM UNNEST(etiquetas_conocimiento_incidente) AS etiqueta
-          WHERE LOWER(etiqueta) LIKE '%${nombre_titulo}%'
-        )
-      
-    `;
-
-    const result = await pool.query(query);
-
-    return result.rows.length > 0 ? result.rows : null;
+    const response = await openaiClient.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+    });
+    
+    const aiResponse = response['choices'][0]['message']['content'] || '';
+    //Retgornar la respuesta en base al Id seleccionado
+    return aiResponse;
   } catch (error) {
-    console.error('Error al buscar en la base de conocimientos:', error);
-    throw error; // Propagar el error para manejarlo en el código que llama a esta función
+    console.error('Error al buscar solución con OpenAI:', error);
+    throw error; 
   }
 }
-
-
-
-
-
-
-
-
 
 
 async function Estado_Incidente_ADMIN(agent) {
@@ -1333,13 +1312,6 @@ async function ingresarConocimiento(agent) {
     agent.add("🚫 No tienes permisos para ver información. Contacta al administrador si necesitas acceso.");
   }
 }
-
-
-
-
-
-
-
 
 
 
