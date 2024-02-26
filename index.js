@@ -14,6 +14,7 @@ const botAres = new TelegramBot(telegramTokenAres, { polling: false });
 const OpenAI = require('openai');
 const openaiClient = new OpenAI({ key: process.env.OPENAI_API_KEY });
 
+app.use(express.json());
 
 let validadCedula = false;
 let usuario_cedula = 0;
@@ -1575,7 +1576,8 @@ app.get("/", (req, res) => {
 
 app.post("/llegadaZammad", (req, res) => {
   console.log('Zammad Completo: ', req.body);
-  res.sendStatus(200);
+  // Aquí puedes agregar la lógica para manejar la solicitud de Zammad
+  res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
 
