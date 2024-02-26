@@ -944,7 +944,7 @@ async function obtenerSolucionPorId(id_seleccionado) {
     }
 
     // Construye el nuevo prompt con el ID seleccionado y el prompt antiguo
-    const newPrompt = `${globalGpt}\n\nID seleccionado: ${id_seleccionado}`;
+    const newPrompt = `${globalGpt}\n\nID seleccionado: ${id_seleccionado}, necesito una instrucción detallada mediante pasos obligatoriamente y que sean cortos los pasos.`;
     console.log('PROMPT NUEVO COMPLETO', newPrompt);
     // Envía el nuevo prompt al modelo de lenguaje
     const response = await openaiClient.chat.completions.create({
