@@ -29,6 +29,8 @@ let validarIngresar = false
 let nombreTituloGlobal = null;
 let descripcionInciGlobal = null;
 let telefonoColaboradorGlobal;
+let globalTicketNumber;
+let fechaGlobal;
 
 //Variables para enviar datos a Zamma
 let tituloZammad;
@@ -786,7 +788,7 @@ async function Confirmacion(agent) {
 
 
 async function registrar_INCI(agent) {
-  let user_asignado;
+
 
   try {
     console.log("nombre_titulo:", nombreTituloGlobal);
@@ -794,6 +796,7 @@ async function registrar_INCI(agent) {
     descripcionTickets = descripcionInciGlobal
 
     const fechaRegi = new Date();
+    fechaGlobal=fechaRegi
     let estado_incidente = 1;
     let estado_id = 2;
     let cierre_id = 2;
@@ -803,56 +806,7 @@ async function registrar_INCI(agent) {
 
       tituloZammad = nombreTituloGlobal
 
-      /*user_asignado = await obtenerUsuariosDisponiblesIn();
-
-      if (!user_asignado || user_asignado.length === 0) {
-        agent.add('🚨 No hay usuarios asignados disponibles en este momento, tu reporte será enviado al encargado general.');
-        console.log('No hay usuarios asignados disponibles en este momento.');
-        return;
-      }
-
-      //elegir usuarios 
-      const asignacion_user_id = asignarUsuarioAleatorio(user_asignado);
-      id_asignado = await obtenerChatId(asignacion_user_id);
-
-      // Categorias
-
-      */
-      const categoriasDisponiblesa = await obtenerCategorias();
-      const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
-      const idCate = defectoCate ? defectoCate.id_cate : null;
-
-      const nivelIncidente = await escala_niveles();
-      const defectoNiveles = nivelIncidente.length > 0 ? nivelIncidente[0] : null;
-      const idNivel = defectoNiveles ? defectoNiveles.id_nivelescala : null;
-
-      // prioridad incidente
-      const PrioDispo = await obtenerPrioridad();
-      const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
-      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
-
       const repoartacion_user_id = usuario_cedula
-
-     
-
-      const query = `
-        INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      `;
-
-      const valores = [
-        idCate, // Categoria del incidente
-        estado_id, // estado del inicidente
-        prioridad_id, // prioridad incidente
-        idNivel, // nivel de escalamiento
-        repoartacion_user_id, // usuario que reporta incidente
-        asignacion_user_id=null, // usuario al que se le asignó el incidente
-        nombreTituloGlobal,  // titulo del incidente
-        descripcionInciGlobal, // descripcion del incidente 
-        fechaRegi // fecha de registro del incidente
-      ];
-
-      await pool.query(query, valores);
 
       const consultaActualizarAsignacion_user = 'UPDATE asignacion_user SET disponibilidad = 1 WHERE id_asignacion_user = $1';
       await pool.query(consultaActualizarAsignacion_user, [asignacion_user_id]);
@@ -923,15 +877,43 @@ async function tituloTicket(agent) {
       }
 
       try {
-          // Llamada a /crearTicket
-          const crearTicketUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
-          const crearTicketResponse = await axios.post(crearTicketUrl);
-
-          console.log('Respuesta de /crearTicket:', crearTicketResponse.data);
-          agent.add('✅ Incidente enviado al departamento de recepción de Tickets Zammad.¡Gracias por tu reporte! 🚀');  
+        // Llamada a /crearTicket
+        const crearTicketUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
+        const crearTicketResponse = await axios.post(crearTicketUrl);
+      
+        // Almacena el número del ticket en la variable global
+        globalTicketNumber = crearTicketResponse.data.number;
+      
+        console.log('Respuesta de /crearTicket:', crearTicketResponse.data);
+        agent.add(`✅ Incidente enviado al departamento de recepción de Tickets Zammad. Número de ticket: ${globalTicketNumber}. ¡Gracias por tu reporte! 🚀`);  
       } catch (error) {
-          console.error('Error al llamar a /crearTicket:', error);
+        console.error('Error al llamar a /crearTicket:', error);
       }
+
+      
+
+      const query = `
+        INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente,id_ticket)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      `;
+
+      const valores = [
+        idCate=null, // Categoria del incidente
+        estado_id=null, // estado del inicidente
+        prioridad_id=null, // prioridad incidente
+        idNivel=null, // nivel de escalamiento
+        idClienteZammad, // usuario que reporta incidente
+        asignacion_user_id=null, // usuario al que se le asignó el incidente
+        nombreTituloGlobal,  // titulo del incidente
+        descripcionInciGlobal, // descripcion del incidente 
+        fechaGlobal, // fecha de registro del incidente
+        globalTicketNumber
+      ];
+
+      await pool.query(query, valores);
+
+      
+      
       
   }
 }
