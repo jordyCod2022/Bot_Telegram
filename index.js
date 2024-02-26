@@ -12,7 +12,7 @@ const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
 const bot = new TelegramBot(telegramToken, { polling: false });
 const botAres = new TelegramBot(telegramTokenAres, { polling: false });
 const OpenAI = require('openai');
-const openaiClient = new OpenAI({ key: process.env.OPENAI_API_KEY_JORDY });
+const openaiClient = new OpenAI({ key: process.env.OPENAI_API_KEY});
 
 
 let validadCedula = false;
