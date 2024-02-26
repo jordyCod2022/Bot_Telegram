@@ -1624,7 +1624,7 @@ app.post("/asignacionTicket", async (req, res) => {
           const mensajeTelegram = `Tu ticket número ${ticketNumber} ha sido asignado a ${nombreColaborador}. Te estaremos notificando el avance del mismo.`;
       
           // Enviar mensaje a Telegram
-          await bot.telegram.sendMessage(chatId, mensajeTelegram);
+          await bot.sendMessage(chatId, mensajeTelegram);
         } catch (error) {
           console.error('ERROR al enviar mensaje a Telegram', error);
         }
