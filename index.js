@@ -1575,11 +1575,23 @@ app.get("/", (req, res) => {
 });
 
 app.post("/llegadaZammad", (req, res) => {
-  console.log('Zammad Completo: ', req.body);
+  const zammadData = req.body;
+
+  // Verificar la existencia de datos en el cuerpo de la solicitud
+  if (zammadData) {
+    // Verificar si se ha actualizado la prioridad
+    if (zammadData.priority) {
+      console.log('Se ejecutó el disparador de cambio de prioridad. Nueva prioridad:', zammadData.priority.name);
+    } else {
+      // Otros casos para identificar los demás disparadores
+      console.log('Se ejecutó un disparador no identificado.');
+    }
+  } else {
+    console.error('Datos de Zammad no encontrados en el cuerpo de la solicitud.');
+  }
 
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
-
 
 
 app.post("/", express.json(), (request, response) => {
