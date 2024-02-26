@@ -1585,6 +1585,19 @@ app.post("/llegadaZammad", async (req, res) => {
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
+
+app.post("/asignacionTicket", async (req, res) => {
+  const zammadDataString = JSON.stringify(req.body);
+  const zammadData = JSON.parse(zammadDataString);
+
+  console.log("Ticket de melina")
+  res.sendStatus(200); // Responde con un código 200 (OK)
+});
+
+
+
+
+
 async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
   try {
     const result = await pool.query(
