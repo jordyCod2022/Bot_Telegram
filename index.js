@@ -29,7 +29,7 @@ let nombreTituloGlobal = null;
 let descripcionInciGlobal = null;
 let telefonoColaboradorGlobal;
 
-//Variables para enviar datos a Zammad
+//Variables para enviar datos a Zamma
 let tituloZammad;
 let idClienteZammad;
 let nombreClienteZammad;
