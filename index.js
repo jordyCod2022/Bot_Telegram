@@ -1574,8 +1574,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/llegadaZammad", (req, res) => {
-  console.log('Zammad Request headers: ' + JSON.stringify(req.headers));
-  console.log('Zammad Request body: ' + JSON.stringify(req.body));
+  console.log('Zammad Completo: ', req.body);
+  res.sendStatus(200);
 });
 
 
