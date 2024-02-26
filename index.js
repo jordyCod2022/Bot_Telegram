@@ -38,6 +38,7 @@ let idRegistroTickets;
 let descripcionTickets;
 let probandoTitulo;
 let globalGpt;
+let promptNuevo;
 
 
 
@@ -953,7 +954,7 @@ async function obtenerSolucionPorId(id_seleccionado, promptAntiguo) {
 
     // Obtiene la respuesta del modelo
     const aiResponseNuevo = response['choices'][0]['message']['content'] || '';
-
+    promptNuevo = aiResponseNuevo;
     // Retorna la respuesta de la IA
     return aiResponseNuevo;
   } catch (error) {
@@ -983,7 +984,7 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     const aiResponse = response['choices'][0]['message']['content'] || '';
     //Retgornar la respuesta en base al Id seleccionado
     return aiResponse;
-    this.globalGpt = aiResponse;
+    globalGpt = aiResponse;
   } catch (error) {
     console.error('Error al buscar solución con OpenAI:', error);
     throw error; 
@@ -1262,7 +1263,7 @@ async function ingresarConocimiento(agent) {
         const solucion = await obtenerSolucionPorId(id_titulo);
 
         if (solucion) {
-          agent.add(`📝 Solucióm:\n${aiResponseNuevo}`);
+          agent.add(`📝 Solucióm:\n${promptNuevo}`);
 
           // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
           setTimeout(() => {
