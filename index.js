@@ -942,7 +942,6 @@ async function obtenerSolucionPorId(id_seleccionado) {
       console.error('El ID seleccionado no es válido.');
       return null;
     }
-    console.log('ID SELECCIONADO', id_seleccionado);
 
     // Construye el nuevo prompt con el ID seleccionado y el prompt antiguo
     const newPrompt = `${globalGpt}\n\nID seleccionado: ${id_seleccionado}`;
@@ -984,9 +983,8 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     
     const aiResponse = response['choices'][0]['message']['content'] || '';
     //Retgornar la respuesta en base al Id seleccionado
-    globalGpt = this.aiResponse;
+    globalGpt = aiResponse;
     return aiResponse;
-    console.log('Prompt desde funcion: ', globalGpt)
   } catch (error) {
     console.error('Error al buscar solución con OpenAI:', error);
     throw error; 
