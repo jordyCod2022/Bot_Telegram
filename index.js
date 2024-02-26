@@ -12,7 +12,7 @@ const telegramTokenAres = '6664335798:AAHLrk9aovXXIQWsYxy6X5d1KeqDTJmBB4M';
 const bot = new TelegramBot(telegramToken, { polling: false });
 const botAres = new TelegramBot(telegramTokenAres, { polling: false });
 const OpenAI = require('openai');
-const openaiClient = new OpenAI({ key: process.env.OPENAI_API_KEY});
+const openaiClient = new OpenAI({ key: process.env.OPENAI_API_KEY });
 
 
 let validadCedula = false;
@@ -37,6 +37,7 @@ let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
 let probandoTitulo;
+let globalGpt;
 
 
 
@@ -933,26 +934,30 @@ async function tituloTicket(agent) {
   }
 }
 
-async function obtenerSolucionPorId(id_conocimiento_incidente) {
+async function obtenerSolucionPorId(id_seleccionado, promptAntiguo) {
   try {
     // Verifica si el ID es null o no es un número
-    if (!id_conocimiento_incidente || isNaN(id_conocimiento_incidente)) {
-      console.error('El ID proporcionado no es válido.');
+    if (!id_seleccionado || isNaN(id_seleccionado)) {
+      console.error('El ID seleccionado no es válido.');
       return null;
     }
 
-  
-    const query = `
-      SELECT * 
-      FROM public.base_conocimiento_incidentes
-      WHERE id_conocimiento_incidente = ${id_conocimiento_incidente};
-    `;
+    // Construye el nuevo prompt con el ID seleccionado y el prompt antiguo
+    const newPrompt = `${promptAntiguo}\n\nID seleccionado: ${id_seleccionado}`;
 
-    const result = await pool.query(query);
+    // Envía el nuevo prompt al modelo de lenguaje
+    const response = await openaiClient.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: newPrompt }],
+    });
 
-    return result.rows.length > 0 ? result.rows[0] : null;
+    // Obtiene la respuesta del modelo
+    const aiResponseNuevo = response['choices'][0]['message']['content'] || '';
+
+    // Retorna la respuesta de la IA
+    return aiResponseNuevo;
   } catch (error) {
-    console.error('Error al buscar en la base de conocimientos por ID:', error);
+    console.error('Error al obtener solución por ID con OpenAI:', error);
     throw error; 
   }
 }
@@ -978,6 +983,7 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     const aiResponse = response['choices'][0]['message']['content'] || '';
     //Retgornar la respuesta en base al Id seleccionado
     return aiResponse;
+    this.globalGpt = aiResponse;
   } catch (error) {
     console.error('Error al buscar solución con OpenAI:', error);
     throw error; 
@@ -1256,17 +1262,7 @@ async function ingresarConocimiento(agent) {
         const solucion = await obtenerSolucionPorId(id_titulo);
 
         if (solucion) {
-          // Mostrar la información de la solución
-          agent.add(`📖 Título: ${solucion.titulo_conocimiento_incidente}`);
-
-          // Procesar la lista de pasos
-          const pasos = solucion.contenido_conocimiento_incidente.split(/\d+\.\s+/);
-          const pasosFormateados = pasos
-            .filter(paso => paso.trim() !== '')
-            .map((paso, index) => `${index + 1}. ${paso.trim()}\n`)
-            .join('');
-
-          agent.add(`📝 Contenido:\n${pasosFormateados}`);
+          agent.add(`📝 Solucióm:\n${aiResponseNuevo}`);
 
           // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
           setTimeout(() => {
