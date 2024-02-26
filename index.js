@@ -984,8 +984,8 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     
     const aiResponse = response['choices'][0]['message']['content'] || '';
     //Retgornar la respuesta en base al Id seleccionado
-    return aiResponse;
     globalGpt = this.aiResponse;
+    return aiResponse;
     console.log('Prompt desde funcion: ', globalGpt)
   } catch (error) {
     console.error('Error al buscar solución con OpenAI:', error);
