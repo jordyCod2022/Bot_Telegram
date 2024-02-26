@@ -935,7 +935,7 @@ async function tituloTicket(agent) {
   }
 }
 
-async function obtenerSolucionPorId(id_seleccionado, promptAntiguo) {
+async function obtenerSolucionPorId(id_seleccionado, globalGpt) {
   try {
     // Verifica si el ID es null o no es un número
     if (!id_seleccionado || isNaN(id_seleccionado)) {
@@ -944,7 +944,7 @@ async function obtenerSolucionPorId(id_seleccionado, promptAntiguo) {
     }
 
     // Construye el nuevo prompt con el ID seleccionado y el prompt antiguo
-    const newPrompt = `${promptAntiguo}\n\nID seleccionado: ${id_seleccionado}`;
+    const newPrompt = `${globalGpt}\n\nID seleccionado: ${id_seleccionado}`;
 
     // Envía el nuevo prompt al modelo de lenguaje
     const response = await openaiClient.chat.completions.create({
@@ -974,7 +974,7 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     }
 
     // Construye el prompt que se enviará a OpenAI
-    const prompt = `Quiero que me des soluciones sobre esto "${descripcionInciGlobal}" quiero que me des soluciones con un identificador, es decir, una ID. Por el momento, solo quiero la ID que sea numerica y corta y un título de solución para que pueda elegir mediante el ID el que desee y que sean máximo 5 y que tengan una linea de espacio entre sí.`;
+    const prompt = `Quiero que me des soluciones sobre esto "${descripcionInciGlobal}" quiero que me des soluciones con un identificador, es decir, una ID. Por el momento, solo quiero la ID que sea numerica y corta y un título de solución para que pueda elegir mediante el ID el que desee y que sean máximo 5 y que tengan una linea de espacio entre sí, y que sean solo IDs del 1 al 5 (ejemplo) ID: 1, ID:2, etc`;
 
     const response = await openaiClient.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -1263,7 +1263,7 @@ async function ingresarConocimiento(agent) {
         const solucion = await obtenerSolucionPorId(id_titulo);
 
         if (solucion) {
-          agent.add(`📝 Solucióm:\n${promptNuevo}`);
+          agent.add(`📝 Solución:\n${promptNuevo}`);
 
           // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
           setTimeout(() => {
