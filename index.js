@@ -1580,25 +1580,26 @@ app.post("/llegadaZammad", (req, res) => {
 
   // Verificar si existe la propiedad 'priority' en los datos
   if (zammadData && zammadData.ticket && zammadData.ticket.priority) {
+    const ticketNumber = zammadData.ticket.number;
     const priorityData = zammadData.ticket.priority;
 
     // Identificar el nivel de prioridad y realizar la acción correspondiente
     switch (priorityData.id) {
       case 3:
-        console.log('La prioridad es Alta. Realizar acción para prioridad alta.');
-   
+        console.log(`Ticket #${ticketNumber}: La prioridad es Alta. Realizar acción para prioridad alta.`);
+        // Realizar acción para prioridad alta
         break;
       case 2:
-        console.log('La prioridad es Normal. Realizar acción para prioridad normal.');
-       
+        console.log(`Ticket #${ticketNumber}: La prioridad es Normal. Realizar acción para prioridad normal.`);
+        // Realizar acción para prioridad normal
         break;
       case 1:
-        console.log('La prioridad es Baja. Realizar acción para prioridad baja.');
-    
+        console.log(`Ticket #${ticketNumber}: La prioridad es Baja. Realizar acción para prioridad baja.`);
+        // Realizar acción para prioridad baja
         break;
       default:
-        console.log('Prioridad no reconocida. Realizar acción por defecto o manejar el caso.');
-       
+        console.log(`Ticket #${ticketNumber}: Prioridad no reconocida. Realizar acción por defecto o manejar el caso.`);
+        // Acción por defecto o manejar el caso
     }
   } else {
     console.log('La propiedad "priority" no está presente en los datos o está indefinida.');
