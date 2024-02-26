@@ -1590,8 +1590,8 @@ app.post("/asignacionTicket", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
 
-  if (zammadData && zammadData.owner && zammadData.owner.firstname) {
-    const ownerFirstname = zammadData.owner.firstname;
+  if (zammadData && zammadData.ticket && zammadData.ticket.owner) {
+    const ownerFirstname = zammadData.ticket.owner.firstname;
     console.log(`Nombre del propietario del ticket: ${ownerFirstname}`);
   } else {
     console.log('No se pudo obtener el nombre del propietario del ticket.');
@@ -1599,7 +1599,6 @@ app.post("/asignacionTicket", async (req, res) => {
 
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
-
 
 
 async function actualizarPrioridadEnBD(idTicket, nuevaPrioridad) {
