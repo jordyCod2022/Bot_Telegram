@@ -1642,6 +1642,7 @@ app.post("/asignacionTicket", async (req, res) => {
   res.sendStatus(200);
 });
 
+
 app.post("/actualizarEstado", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
@@ -1678,6 +1679,36 @@ app.post("/actualizarEstado", async (req, res) => {
         );
 
         console.log('Se actualizó el id_estado en la tabla incidente.');
+
+        // Condiciones según el valor de state_id
+        if (stateId === 2) {
+         
+          console.log('El state_id es 2. Realizando acciones correspondientes...');
+          try {
+            const chatId = telefonoColaborador;
+            const mensajeTelegram = `🎉 Tu ticket # ${ticketNumber} ha sido abierto. Estaremos notificándote sobre el avance. ¡Gracias por tu colaboración! 🚀`;
+  
+            await bot.sendMessage(chatId, mensajeTelegram);
+          } catch (error) {
+            console.error('ERROR al enviar mensaje a Telegram', error);
+          }
+
+          
+        } else if (stateId === 4) {
+        
+          console.log('El state_id es 4. Realizando acciones correspondientes...');
+          try {
+            const chatId = telefonoColaborador;
+            const mensajeTelegram = `🎉 ¡Excelentes noticias! Tu ticket #${ticketNumber} ha sido cerrado con éxito. Si tienes más preguntas o necesitas asistencia, no dudes en contactarnos. ¡Gracias por tu paciencia y colaboración! 👋`;
+
+  
+            await bot.sendMessage(chatId, mensajeTelegram);
+          } catch (error) {
+            console.error('ERROR al enviar mensaje a Telegram', error);
+          }
+        } else {
+       
+        }
       } else {
         console.log('No se encontró un colaborador con el nombre especificado.');
       }
