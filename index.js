@@ -899,7 +899,7 @@ async function tituloTicket(agent) {
         idNivel=null, // nivel de escalamiento
         idClienteZammad, // usuario que reporta incidente
         asignacion_user_id, // usuario al que se le asignó el incidente
-        nombreTituloGlobal,  // titulo del incidente
+        tituloZammad,  // titulo del incidente
         descripcionInciGlobal, // descripcion del incidente 
         fechaGlobal, // fecha de registro del incidente
         globalTicketNumber
