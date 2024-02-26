@@ -1575,14 +1575,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/llegadaZammad", (req, res) => {
-  const zammadData = JSON.stringify(req.body);
-  console.log(zammadData)
-  console.log(zammadData.priority)
-  
+  const zammadDataString = JSON.stringify(req.body);
+  const zammadData = JSON.parse(zammadDataString);
+
+  // Verificar si existe la propiedad 'priority' en los datos
+  if (zammadData && zammadData.ticket && zammadData.ticket.priority) {
+    const priorityData = zammadData.ticket.priority;
+    console.log('Detalles de la prioridad:', priorityData);
+  } else {
+    console.log('La propiedad "priority" no está presente en los datos o está indefinida.');
+  }
 
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
-
 
 
 app.post("/", express.json(), (request, response) => {
