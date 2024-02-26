@@ -942,10 +942,11 @@ async function obtenerSolucionPorId(id_seleccionado, globalGpt) {
       console.error('El ID seleccionado no es válido.');
       return null;
     }
+    console.log('ID SELECCIONADO', id_seleccionado);
 
     // Construye el nuevo prompt con el ID seleccionado y el prompt antiguo
     const newPrompt = `${globalGpt}\n\nID seleccionado: ${id_seleccionado}`;
-
+    console.log('PROMPT NUEVO COMPLETO', newPrompt);
     // Envía el nuevo prompt al modelo de lenguaje
     const response = await openaiClient.chat.completions.create({
       model: 'gpt-3.5-turbo',
