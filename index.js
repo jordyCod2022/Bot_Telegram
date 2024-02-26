@@ -1579,7 +1579,7 @@ app.post("/llegadaZammad", async (req, res) => {
         console.log(`Ticket #${ticketNumber}: Prioridad no reconocida. Realizar acción por defecto o manejar el caso.`);
     }
   } else {
-    console.log('La propiedad "priority" no está presente en los datos o está indefinida.');
+    console.log('La propiedad "priority" no está presente en los datos o está indefinida');
   }
 
   res.sendStatus(200); // Responde con un código 200 (OK)
