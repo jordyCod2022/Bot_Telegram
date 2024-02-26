@@ -31,6 +31,7 @@ let descripcionInciGlobal = null;
 let telefonoColaboradorGlobal;
 let globalTicketNumber;
 let fechaGlobal;
+let asignacion_user_id=null;
 
 //Variables para enviar datos a Zamma
 let tituloZammad;
@@ -885,7 +886,7 @@ async function tituloTicket(agent) {
       }
 
       
-     const asignacion_user_id=null;
+ 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad,id_nivelescala, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente,id_ticket)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
