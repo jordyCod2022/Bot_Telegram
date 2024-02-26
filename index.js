@@ -1589,8 +1589,8 @@ app.post("/llegadaZammad", async (req, res) => {
 app.post("/asignacionTicket", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
-  console.log(zammadData)
-  console.log("Ticket de melina")
+  console.log(zammadData.owner.firstname)
+  
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
