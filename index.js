@@ -1580,8 +1580,8 @@ app.post("/llegadaZammad", (req, res) => {
   // Verificar la existencia de datos en el cuerpo de la solicitud
   if (zammadData) {
     // Verificar si se ha actualizado la prioridad
-    if (zammadData.priority) {
-      console.log('Se ejecutó el disparador de cambio de prioridad. Nueva prioridad:', zammadData.priority.name);
+    if (zammadData.priority_id) {
+      console.log('Se ejecutó el disparador de cambio de prioridad. Nueva prioridad:', zammadData.priority_id);
     } else {
       // Otros casos para identificar los demás disparadores
       console.log('Se ejecutó un disparador no identificado.');
