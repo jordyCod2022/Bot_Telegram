@@ -40,7 +40,6 @@ let nombreClienteZammad;
 let apellidoClienteZammad;
 let idRegistroTickets;
 let descripcionTickets;
-let probandoTitulo;
 let globalGpt;
 let promptNuevo;
 
@@ -361,71 +360,7 @@ async function obtenerCategorias() {
   }
 }
 
-async function obtenerEstado() {
-  const query = 'SELECT * FROM incidente_estado';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre los estados de incidentes", error);
-    throw error;
-  }
-}
 
-async function obtenerResolucion() {
-  const query = 'SELECT * FROM incidente_resolucion';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerImpactos() {
-  const query = 'SELECT * FROM incidente_impacto';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerUrgencia() {
-  const query = 'SELECT * FROM incidente_urgencia';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerCierre() {
-  const query = 'SELECT * FROM incidente_cierre';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
-
-async function obtenerPrioridad() {
-  const query = 'SELECT * FROM incidente_prioridad';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las prioridades de incidentes", error);
-    throw error;
-  }
-}
 
 async function obtenerUsuariosDisponiblesIn() {
   const query = 'SELECT asignacion_user.*, colaboradores.nombre_colaborador FROM asignacion_user INNER JOIN usuarios ON asignacion_user.id_usuario = usuarios.id_usuario INNER JOIN colaboradores ON usuarios.id_colaborador = colaboradores.id_colaborador WHERE disponibilidad IN (0, 1)';
@@ -439,17 +374,6 @@ async function obtenerUsuariosDisponiblesIn() {
   }
 }
 
-async function escala_niveles() {
-  const query = 'SELECT * FROM incidente_escala';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre los niveles de incidentes", error);
-    throw error;
-  }
-
-}
 async function obtenerColaboradorPorCedula(numeroCedula) {
   console.log('Cédula recibida:', numeroCedula);
 
@@ -544,44 +468,43 @@ async function InsertarUsuarioRepotado(numeroCedula) {
 
 
 
-
 async function Base_Conocimiento(agent) {
   try {
-    // Verificar si el usuario está autenticado
+
     if (!validadCedula || !validarPerfil) {
       agent.add('🔒 Lo siento, debes identificarte, esta opción solo es válida para usuarios normales');
       return;
     }
 
-    // 📚 Llamas a ObtenerRespuestaTitulo_Base para obtener información del título
+  
     const respuestaTitulo = await ObtenerRespuestaTitulo_Base(agent);
 
-    // ✅ Verificas si se obtuvo la información del título correctamente
+  
     if (!respuestaTitulo) {
       console.error('❌ No se pudo obtener la información del título.');
       return; // O maneja el error de acuerdo con tus necesidades
     }
 
-    // 🌐 Asignas las variables globales con la información del título
+  
     nombreTituloGlobal = respuestaTitulo.nombreTituloGlobal;
     descripcionInciGlobal = respuestaTitulo.descripcionInciGlobal;
 
-    // 🕵️‍♂️ Llamas a buscarSolucionBaseConocimientos para buscar en la base de conocimientos
+
     const respuestaIA = await buscarSolucionBaseConocimientos(descripcionInciGlobal);
 
     if (respuestaIA && respuestaIA.length > 0) {
-      // 🎉 Realizas acciones en función de las soluciones encontradas
+
       agent.add(`🤖 ¡Soluciones encontradas!`);
       agent.add(respuestaIA)
 
       bandera = true;
 
-      // Después de enviar el mensaje con los pasos de la solución
+
       setTimeout(() => {
         var chatId = telefonoColaboradorGlobal;
         console.log("CHAT ID:", chatId);
 
-        // Teclado en línea con botones y datos adicionales
+      
         var botones = {
           reply_markup: {
             inline_keyboard: [
@@ -602,7 +525,7 @@ async function Base_Conocimiento(agent) {
 
 
     } else {
-      // 🤔 Manejas el caso en que no se encuentra una solución
+      
       console.log('❌ No se encontró una solución en la base de conocimientos.');
 
       agent.add("🔍 No se encontró una solución en la base de conocimientos.");
@@ -612,10 +535,9 @@ async function Base_Conocimiento(agent) {
 
   } catch (error) {
     console.error('❌ Error en la función Base_Conocimiento:', error);
-    // Maneja el error de acuerdo con tus necesidades
+
   }
 }
-
 
 
 async function registrar_INCI_SI(agent) {
@@ -696,8 +618,10 @@ async function obtenerIncidentesReportados(idReportacionUser) {
           c_reportador.nombre_colaborador AS nombre_reportador,
           CASE
               WHEN i.id_estado = 1 THEN 'Nuevo'
-              WHEN i.id_estado = 2 THEN 'Pendiente'
-              WHEN i.id_estado = 3 THEN 'Cerrado con éxito'
+              WHEN i.id_estado = 2 THEN 'Abierto'
+              WHEN i.id_estado = 3 THEN 'Recordatorio Pendiente'
+              WHEN i.id_estado = 4 THEN 'Cerrado'
+              WHEN i.id_estado = 7 THEN 'Cierre Pendiente'
               ELSE 'Estado Desconocido'
           END AS estado_incidente,
           i.incidente_nombre,
