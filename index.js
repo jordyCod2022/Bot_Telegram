@@ -547,17 +547,17 @@ async function registrar_INCI_SI(agent) {
     
       const repoartacion_user_id = usuario_cedula
 
-      const query = `
-        INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_nivelescala, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
-        VALUES ($1, $2, $3, $4)
-      `;
+          const query = `
+      INSERT INTO incidente (id_estado, incidente_nombre, incidente_descrip, fecha_incidente)
+      VALUES ($1, $2, $3, $4);
+    `;
 
-      const valores = [
-        estado_id,
-        nombreTituloGlobal,
-        descripcionInciGlobal,
-        fechaRegi,
-      ];
+    const valores = [
+      estado_id,
+      nombreTituloGlobal,
+      descripcionInciGlobal,
+      fechaRegi,
+    ];
 
       await pool.query(query, valores);
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
