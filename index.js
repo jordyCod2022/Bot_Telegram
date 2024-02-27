@@ -498,12 +498,12 @@ async function Base_Conocimiento(agent) {
         var botones = {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Ver solucion", callback_data: "7" }],
-
+              [{ text: "Ver solucion", callback_data: "7" }, { text: "Enviar incidente a Zammad", callback_data: "8" }],
             ],
           },
           parse_mode: "HTML",
         };
+        
 
         botAres.sendMessage(chatId, "<b><i>Seleccione una opcion:</i></b>", botones);
       }, 1100); // Retraso de 1 segundo (1000 milisegundos)
