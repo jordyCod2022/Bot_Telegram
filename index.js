@@ -549,16 +549,14 @@ async function registrar_INCI_SI(agent) {
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_nivelescala, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
 
       const valores = [
-        idCate,
         estado_id,
         prioridad_id,
         idNivel,
         repoartacion_user_id,
-        asignacion_user_id,
         nombreTituloGlobal,
         descripcionInciGlobal,
         fechaRegi,
