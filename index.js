@@ -549,14 +549,11 @@ async function registrar_INCI_SI(agent) {
 
       const query = `
         INSERT INTO incidente (id_cate, id_estado, id_prioridad, id_nivelescala, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4)
       `;
 
       const valores = [
         estado_id,
-        prioridad_id,
-        idNivel,
-        repoartacion_user_id,
         nombreTituloGlobal,
         descripcionInciGlobal,
         fechaRegi,
@@ -576,11 +573,6 @@ async function registrar_INCI_SI(agent) {
     }
   } catch (error) {
     console.error('ERROR al registrar el incidente', error);
-
-    if (user_asignado && user_asignado.length > 0) {
-      const queryRevertirUsuarioAsignado = 'UPDATE asignacion_user SET disponibilidad = 0 WHERE id_asignacion_user = $1';
-      await pool.query(queryRevertirUsuarioAsignado, [user_asignado[0].id_asignacion_user]);
-    }
 
     agent.add('Ocurrió un error al registrar el incidente.');
   }
