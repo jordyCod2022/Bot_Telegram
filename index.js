@@ -349,16 +349,6 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function obtenerCategorias() {
-  const query = 'SELECT * FROM incidente_categoria';
-  try {
-    const { rows } = await pool.query(query);
-    return rows; // Devolver las categorías
-  } catch (error) {
-    console.error("Lo sentimos, no pudimos obtener información sobre las categorías de incidentes", error);
-    throw error;
-  }
-}
 
 
 
@@ -547,28 +537,14 @@ async function registrar_INCI_SI(agent) {
     console.log("descripcion_inci:", descripcionInciGlobal);
 
     const fechaRegi = new Date();
-    let estado_incidente = 1;
+
     let estado_id = 3;
-    let cierre_id = 2;
+
     let asignacion_user_id = null;
-    let bandera = false;
 
     if (nombreTituloGlobal && descripcionInciGlobal) {
 
-      const categoriasDisponiblesa = await obtenerCategorias();
-      const defectoCate = categoriasDisponiblesa.length > 0 ? categoriasDisponiblesa[0] : null;
-      const idCate = defectoCate ? defectoCate.id_cate : null;
-
-      const nivelIncidente = await escala_niveles();
-      const defectoNiveles = nivelIncidente.length > 0 ? nivelIncidente[0] : null;
-      const idNivel = defectoNiveles ? defectoNiveles.id_nivelescala : null;
-
-      const PrioDispo = await obtenerPrioridad();
-      const defectPrio = PrioDispo.length > 0 ? PrioDispo[0] : null;
-      const prioridad_id = defectPrio ? defectPrio.id_prioridad : null;
-
-     
-
+    
       const repoartacion_user_id = usuario_cedula
 
       const query = `
@@ -640,7 +616,7 @@ async function obtenerIncidentesReportados(idReportacionUser) {
           i.id_reportacion_user = $1
       ORDER BY
           i.id_incidente DESC
-      LIMIT 2;
+      LIMIT 3;
   `;
 
   try {
