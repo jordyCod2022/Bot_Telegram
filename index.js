@@ -498,7 +498,7 @@ async function Base_Conocimiento(agent) {
         var botones = {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Ver solucion", callback_data: "7" }, { text: "Enviar incidente a Zammad", callback_data: "no" }],
+              [{ text: "Ver solucion", callback_data: "7" }, { text: "Enviar a Zammad", callback_data: "no" }],
             ],
           },
           parse_mode: "HTML",
@@ -1475,7 +1475,6 @@ app.post("/llegadaZammad", async (req, res) => {
   res.sendStatus(200); // Responde con un código 200 (OK)
 });
 
-
 app.post("/asignacionTicket", async (req, res) => {
   const zammadDataString = JSON.stringify(req.body);
   const zammadData = JSON.parse(zammadDataString);
@@ -1503,20 +1502,35 @@ app.post("/asignacionTicket", async (req, res) => {
         console.log(`Número del ticket: ${ticketNumber}`);
         console.log(`Teléfono del colaborador: ${telefonoColaborador}`);
 
+        // Verificar si el nombre del colaborador es "Jordy Joseph"
+        if (nombreColaborador === "Jordy Joseph") {
+          try {
+            const chatId = telefonoColaborador;
+            const mensajeTelegram = `Hola, tu ticket ha ingresado a la recepción de Zammad y estamos trabajando para asignarlo a un encargado. Te mantendremos informado sobre cualquier avance. ¡Gracias por tu colaboración! 🚀`;
+
+
+            await bot.sendMessage(chatId, mensajeTelegram);
+            console.log(`Mensaje enviado a ${nombreColaborador}.`);
+          } catch (error) {
+            console.error('ERROR al enviar mensaje a Telegram', error);
+          }
+        } else {
+          // Envío de mensaje de buenas noticias
+          try {
+            const chatId = telefonoColaborador;
+            const mensajeTelegram = `🎉 ¡Buenas noticias! Tu ticket número ${ticketNumber} ha sido asignado a ${nombreColaborador}. Estaremos notificándote sobre el avance. ¡Gracias por tu colaboración! 🚀`;
+
+            await bot.sendMessage(chatId, mensajeTelegram);
+          } catch (error) {
+            console.error('ERROR al enviar mensaje a Telegram', error);
+          }
+        }
+
         // Actualización en la tabla incidente
         await pool.query(
           'UPDATE public.incidente SET id_asignacion_user = $1 WHERE id_ticket = $2',
           [idColaborador, ticketNumber]
         );
-
-        try {
-          const chatId = telefonoColaborador;
-          const mensajeTelegram = `🎉 ¡Buenas noticias! Tu ticket número ${ticketNumber} ha sido asignado a ${nombreColaborador}. Estaremos notificándote sobre el avance. ¡Gracias por tu colaboración! 🚀`;
-
-          await bot.sendMessage(chatId, mensajeTelegram);
-        } catch (error) {
-          console.error('ERROR al enviar mensaje a Telegram', error);
-        }
 
         console.log(`Se actualizó el id_asignacion_user en la tabla incidente.`);
       } else {
