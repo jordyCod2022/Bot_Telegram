@@ -538,7 +538,7 @@ async function registrar_INCI_SI(agent) {
 
     const fechaRegi = new Date();
 
-    let estado_id = 3;
+    let estado_id = 4;
 
     let asignacion_user_id = null;
 
