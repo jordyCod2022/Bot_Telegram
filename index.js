@@ -498,7 +498,7 @@ async function Base_Conocimiento(agent) {
         var botones = {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Ver solucion", callback_data: "7" }, { text: "Enviar incidente a Zammad", callback_data: "8" }],
+              [{ text: "Ver solucion", callback_data: "7" }, { text: "Enviar incidente a Zammad", callback_data: "no" }],
             ],
           },
           parse_mode: "HTML",
@@ -705,7 +705,7 @@ async function registrar_INCI(agent) {
       idClienteZammad = repoartacion_user_id
       getNombre(idClienteZammad);
 
-      agent.add("Lamento que estés teniendo problemas. Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
+      agent.add("Estoy creando un ticket para que el administrador de Zammad lo atienda.😊🎫");
       
       // Después de enviar el mensaje con los pasos de la solución
       setTimeout(() => {
