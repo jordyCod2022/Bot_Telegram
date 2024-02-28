@@ -46,6 +46,7 @@ let promptNuevo;
 
 
 
+
 const pool = new Pool({
   connectionString: process.env.conexion,
   ssl: {
@@ -556,6 +557,8 @@ async function registrar_INCI_SI(agent) {
       fechaRegi,
     ];
 
+    await insertarConocimientoIncidente(descripcionInciGlobal,promptNuevo,fechaRegi,repoartacion_user_id)
+
       await pool.query(query, valores);
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
       validadCedula = false
@@ -574,6 +577,27 @@ async function registrar_INCI_SI(agent) {
     agent.add('Ocurrió un error al registrar el incidente.');
   }
 }
+
+async function insertarConocimientoIncidente(titulo, contenido, fechaPublicacion, idUsuarioPublicacion) {
+  const query = 'INSERT INTO public.base_conocimiento_incidentes (titulo_conocimiento_incidente, contenido_conocimiento_incidente, fecha_publicacion_incidente, id_usuario_publicacion) VALUES ($1, $2, $3, $4) RETURNING id_conocimiento_incidente';
+
+  try {
+    const result = await pool.query(query, [titulo, contenido, fechaPublicacion, idUsuarioPublicacion]);
+
+    if (result.rows.length > 0) {
+      const idConocimientoIncidente = result.rows[0].id_conocimiento_incidente;
+      console.log(`Conocimiento de incidente insertado con éxito. ID: ${idConocimientoIncidente}`);
+      return idConocimientoIncidente;
+    } else {
+      console.error('Error al insertar el conocimiento de incidente. No se obtuvo el ID.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error al insertar el conocimiento de incidente:', error.message);
+    throw error;
+  }
+}
+
 
 async function obtenerIncidentesReportados(idReportacionUser) {
   const query = `
@@ -796,7 +820,6 @@ async function tituloTicket(agent) {
 
       
       
-      
   }
 }
 
@@ -828,9 +851,6 @@ async function obtenerSolucionPorId(id_seleccionado) {
   }
 }
 
-
-
-
 async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
   try {
     if (!descripcionInciGlobal) {
@@ -854,121 +874,6 @@ async function buscarSolucionBaseConocimientos(descripcionInciGlobal) {
     console.error('Error al buscar solución con OpenAI:', error);
     throw error; 
   }
-}
-
-
-async function Estado_Incidente_ADMIN(agent) {
-  try {
-    const Estados = await obtenerEstado();
-    const listaEstados = Estados.map(estado =>
-      `**#${estado.id_estado} - ${estado.estado_name}**\n` +
-      `   *Descripción:* ${estado.estado_descrip}`
-    ).join('\n\n');
-    agent.add(`Estados de los incidentes reportados:\n\n${listaEstados}`);
-  } catch (error) {
-    console.error('Error al ejecutar Estado_Incidente_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener los estados de incidentes`);
-  }
-}
-
-async function Incidente_Cate_Admin(agent) {
-  try {
-    const categorias = await obtenerCategorias();
-    const listaCategorias = categorias.map(categoria =>
-      `**#${categoria.id_cate} - ${categoria.nombre_categoria}**\n` +
-      `   *Descripción:* ${categoria.descripcion_categoria}`
-    ).join('\n\n');
-    agent.add(`Las categorías de incidentes son:\n\n${listaCategorias}`);
-  } catch (error) {
-    console.error('Error al ejecutar Incidente_Cate_Admin:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener las categorías de incidentes`);
-  }
-}
-
-async function Resolucion_Incidente_ADMIN(agent) {
-  try {
-    const resoluciones = await obtenerResolucion();
-    const listaResoluciones = resoluciones.map(resolucion =>
-      `**#${resolucion.id_resolucion} - ${resolucion.resolucion_incidente}**\n` +
-      `   *Descripción:* ${resolucion.fecha_resolucion}`
-    ).join('\n\n');
-    agent.add(`Resoluciones:\n\n${listaResoluciones}`);
-  } catch (error) {
-    console.error('Error al ejecutar Resolucion_Incidente_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener las resoluciones de incidentes`);
-  }
-}
-
-async function Impacto_Incidentes_ADMIN(agent) {
-  try {
-    const impactos = await obtenerImpactos();
-    const listaImpactos = impactos.map(impacto =>
-      `**#${impacto.id_impacto} - ${impacto.impacto_name}**\n` +
-      `   *Descripción:* ${impacto.impacto_descrip}`
-    ).join('\n\n');
-    agent.add(`Impactos:\n\n${listaImpactos}`);
-  } catch (error) {
-    console.error('Error al ejecutar Impacto_Incidentes_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener los impactos de incidentes`);
-  }
-}
-
-
-async function Cierre_Incidente_ADMIN(agent) {
-  try {
-    const cierres = await obtenerCierre();
-    const listaCierres = cierres.map(cierre =>
-      `**#${cierre.id_cierre} - ${cierre.cierre_name}**\n` +
-      `   *Descripción:* ${cierre.cierre_descrip}`
-    ).join('\n\n');
-    agent.add(`Las incidencias cerradas son:\n\n${listaCierres}`);
-  } catch (error) {
-    console.error('Error al ejecutar Cierre_Incidente_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener los cierres de incidentes`);
-  }
-}
-
-async function Urgencia_Incidente_ADMIN(agent) {
-  try {
-    const urgencias = await obtenerUrgencia();
-    const listaUrgencias = urgencias.map(urgencia =>
-      `**#${urgencia.id_urgencia} - ${urgencia.urgencia_name}**\n` +
-      `   *Descripción:* ${urgencia.urgencia_descrip}`
-    ).join('\n\n');
-    agent.add(`Las incidencias de urgencia son:\n\n${listaUrgencias}`);
-  } catch (error) {
-    console.error('Error al ejecutar Urgencia_Incidente_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener las incidencias de urgencia`);
-  }
-}
-
-async function Prioridad_Incidentes_ADMIN(agent) {
-  try {
-    const prioridades = await obtenerPrioridad();
-    const listaprioridades = prioridades.map(prioridad =>
-      `**#${prioridad.id_prioridad} - ${prioridad.prioridad_name}**\n` +
-      `   *Descripción:* ${prioridad.prioridad_descrip}`
-    ).join('\n\n');
-    agent.add(`Las incidencias de prioridades son:\n\n${listaprioridades}`);
-  } catch (error) {
-    console.error('Error al ejecutar Prioridad_Incidentes_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener las incidencias de prioridades`);
-  }
-}
-
-async function Escalamiento_Niveles_ADMIN(agent) {
-  try {
-    const nivelesEscalamiento = await escala_niveles();
-    const listanivel = nivelesEscalamiento.map(nivel =>
-      `**#${nivel.id_nivelescala} - ${nivel.nivelescala_name}**\n` +
-      `   *Descripción:* ${nivel.nivelescala_descrip}`
-    ).join('\n\n');
-    agent.add(`Las incidencias de niveles son:\n\n${listanivel}`);
-  } catch (error) {
-    console.error('Error al ejecutar Escalamiento_Niveles_ADMIN:', error);
-    agent.add(`Lo siento, ocurrió un error al obtener las incidencias de niveles de escalamiento`);
-  }
-
 }
 
 async function obtenerIncidenteInfo(agent) {
@@ -1645,17 +1550,10 @@ app.post("/", express.json(), (request, response) => {
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
   let intentMap = new Map();
-  intentMap.set('Incidente_Cate_Admin', Incidente_Cate_Admin);
-  intentMap.set('Estado_Incidente_ADMIN', Estado_Incidente_ADMIN);
-  intentMap.set('Impacto_Incidentes_ADMIN', Impacto_Incidentes_ADMIN);
-  intentMap.set('Urgencia_Incidente_ADMIN', Urgencia_Incidente_ADMIN);
-  intentMap.set('Resolucion_Incidente_ADMIN', Resolucion_Incidente_ADMIN);
-  intentMap.set('Cierre_Incidente_ADMIN', Cierre_Incidente_ADMIN);
-  intentMap.set('Prioridad_Incidentes_ADMIN', Prioridad_Incidentes_ADMIN)
+
   intentMap.set('validar_cedula', validar_cedula);
   intentMap.set('Usuarios_Disponibles_incidente', Usuarios_Disponibles_incidente);
   intentMap.set('SaludoAres', SaludoAres);
-  intentMap.set('Escalamiento_Niveles_ADMIN', Escalamiento_Niveles_ADMIN);
   intentMap.set('Base_Conocimiento', Base_Conocimiento);
   intentMap.set('Confirmacion', Confirmacion);
   intentMap.set('Consultar_Seguimiento', obtenerIncidenteInfo);
