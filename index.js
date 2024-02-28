@@ -32,6 +32,7 @@ let telefonoColaboradorGlobal;
 let globalTicketNumber;
 let fechaGlobal;
 let asignacion_user_id=null;
+let usuarioActual;
 
 //Variables para enviar datos a Zamma
 let tituloZammad;
@@ -537,23 +538,19 @@ async function registrar_INCI_SI(agent) {
     console.log("descripcion_inci:", descripcionInciGlobal);
 
     const fechaRegi = new Date();
-
     let estado_id = 4;
-
-    let asignacion_user_id = null;
-
     if (nombreTituloGlobal && descripcionInciGlobal) {
-
-    
-      const repoartacion_user_id = usuario_cedula
+    const repoartacion_user_id = usuario_cedula
 
           const query = `
-      INSERT INTO incidente (id_estado, incidente_nombre, incidente_descrip, fecha_incidente)
-      VALUES ($1, $2, $3, $4);
+      INSERT INTO incidente (id_estado, id_reportacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
+      VALUES ($1, $2, $3, $4, $5);
     `;
+    
 
     const valores = [
       estado_id,
+      repoartacion_user_id,
       nombreTituloGlobal,
       descripcionInciGlobal,
       fechaRegi,
