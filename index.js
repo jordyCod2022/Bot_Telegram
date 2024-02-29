@@ -564,7 +564,7 @@ async function registrar_INCI_SI(agent) {
       validadCedula = false
 
     } else {
-      console.log('Campos obligatorios faltantes:');
+      console.log('Campos obligatorios faltantes');
       console.log('nombre:', nombreTituloGlobal);
       console.log('descripcion:', nombreTituloGlobal);
       console.log('fechaRegistro:', fechaRegi);
@@ -769,11 +769,11 @@ async function tituloTicket(agent) {
   const probandoTitulo = agent.query;
   console.log(probandoTitulo)
 
-  // Verificar si probandoTitulo tiene un valor
+
   if (probandoTitulo) {
     tituloZammad=probandoTitulo
       try {
-          // Llamada a /listarUsuarios
+     
           const listarUsuariosUrl = 'https://bot-telegram-ares.onrender.com/listarUsuarios';
           const listarUsuariosResponse = await axios.get(listarUsuariosUrl);
 
@@ -783,11 +783,11 @@ async function tituloTicket(agent) {
       }
 
       try {
-        // Llamada a /crearTicket
+    
         const crearTicketUrl = 'https://bot-telegram-ares.onrender.com/crearTicket';
         const crearTicketResponse = await axios.post(crearTicketUrl);
       
-        // Almacena el número del ticket en la variable global
+        
         globalTicketNumber = crearTicketResponse.data.number;
       
         console.log('Respuesta de /crearTicket:', crearTicketResponse.data);
@@ -1035,7 +1035,7 @@ async function ingresarConocimiento(agent) {
         if (solucion) {
           agent.add(`📝 Solución:\n${promptNuevo}`);
 
-          // Agregar un retraso de 1 segundo antes de enviar el siguiente mensaje
+        
           setTimeout(() => {
             var chatId = telefonoColaboradorGlobal;
             console.log("CHAT ID:", chatId);
@@ -1055,9 +1055,9 @@ async function ingresarConocimiento(agent) {
 
 
             bandera = true;
-          }, 1100); // Retraso de 1 segundo (1000 milisegundos)
+          }, 1100); 
         } else {
-          // Manejar el caso en que no se encuentra una solución
+         
           console.log('❌ No se encontró una solución con el ID proporcionado.');
 
           agent.add("🔍 No se encontró una solución con el ID proporcionado.");
