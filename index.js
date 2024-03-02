@@ -543,14 +543,16 @@ async function registrar_INCI_SI(agent) {
     if (nombreTituloGlobal && descripcionInciGlobal) {
     const repoartacion_user_id = usuario_cedula
     const id_asignacion_user=6
+    const id_cate=7
 
           const query = `
-      INSERT INTO incidente (id_estado, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
-      VALUES ($1, $2, $3, $4, $5, $6);
+      INSERT INTO incidente (id_cate, id_estado, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
+      VALUES ($1, $2, $3, $4, $5, $6, $7);
     `;
     
 
     const valores = [
+      id_cate,
       estado_id,
       repoartacion_user_id,
       id_asignacion_user,
@@ -806,7 +808,7 @@ async function tituloTicket(agent) {
       `;
 
       const valores = [
-        idCate=null, // Categoria del incidente
+        idCate=7, // Categoria del incidente
         estado_id=null, // estado del inicidente
         prioridad_id=null, // prioridad incidente
         idNivel=null, // nivel de escalamiento
