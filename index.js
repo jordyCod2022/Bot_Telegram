@@ -542,16 +542,18 @@ async function registrar_INCI_SI(agent) {
     let estado_id = 4;
     if (nombreTituloGlobal && descripcionInciGlobal) {
     const repoartacion_user_id = usuario_cedula
+    const id_asignacion_user=6
 
           const query = `
-      INSERT INTO incidente (id_estado, id_reportacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
-      VALUES ($1, $2, $3, $4, $5);
+      INSERT INTO incidente (id_estado, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
+      VALUES ($1, $2, $3, $4, $5, $6);
     `;
     
 
     const valores = [
       estado_id,
       repoartacion_user_id,
+      id_asignacion_user,
       nombreTituloGlobal,
       descripcionInciGlobal,
       fechaRegi,
