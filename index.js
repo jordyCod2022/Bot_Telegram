@@ -539,9 +539,7 @@ async function Base_Conocimiento(agent) {
   }
 }
 
-
 async function registrar_INCI_SI(agent) {
-
   try {
     console.log("nombre_titulo:", nombreTituloGlobal);
     console.log("descripcion_inci:", descripcionInciGlobal);
@@ -549,55 +547,51 @@ async function registrar_INCI_SI(agent) {
     const fechaRegi = new Date();
     let estado_id = 4;
     if (nombreTituloGlobal && descripcionInciGlobal) {
-    const repoartacion_user_id = usuario_cedula
-    const id_asignacion_user=6
-    const id_cate=7
+      const repoartacion_user_id = usuario_cedula
+      const id_asignacion_user = 6
+      const id_cate = 7
 
-        const query = `
+      const query = `
         INSERT INTO incidente (id_cate, id_estado, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id_incidente;
       `;
 
-    
+      const valores = [
+        id_cate,
+        estado_id,
+        repoartacion_user_id,
+        id_asignacion_user,
+        nombreTituloGlobal,
+        descripcionInciGlobal,
+        fechaRegi,
+      ];
 
-    const valores = [
-      id_cate,
-      estado_id,
-      repoartacion_user_id,
-      id_asignacion_user,
-      nombreTituloGlobal,
-      descripcionInciGlobal,
-      fechaRegi,
-    ];
-    const result = await pool.query(query, valores);
-    const idIncidenteInsertado = result.rows[0].id_incidente;
+      const result = await pool.query(query, valores);
+      const idIncidenteInsertado = result.rows[0].id_incidente;
 
-    console.log('ID del incidente insertado:', idIncidenteInsertado);
-        
+      console.log('ID del incidente insertado:', idIncidenteInsertado);
 
-    await insertarConocimientoIncidente(descripcionInciGlobal,promptNuevo,fechaRegi,repoartacion_user_id)
+      await insertarConocimientoIncidente(descripcionInciGlobal, promptNuevo, fechaRegi, repoartacion_user_id);
 
-      await pool.query(query, valores);
       var fechaHoraFormateada = new Date();
       hora_fin = fechaHoraFormateada.toISOString();
 
       const queryTiemposResolucion = `
-      INSERT INTO tiemposResolucionAres (hora_inicio, hora_fin, id_incidente)
-      VALUES ($1, $2, $3);
-    `;
-    
-    const valoresTiemposResolucion = [
-      hora_inicio, 
-      hora_fin, 
-      idIncidenteInsertado, 
-    ];
-    
-    await pool.query(queryTiemposResolucion, valoresTiemposResolucion);
-    
+        INSERT INTO tiemposResolucionAres (hora_inicio, hora_fin, id_incidente)
+        VALUES ($1, $2, $3);
+      `;
+
+      const valoresTiemposResolucion = [
+        hora_inicio,
+        hora_fin,
+        idIncidenteInsertado,
+      ];
+
+      await pool.query(queryTiemposResolucion, valoresTiemposResolucion);
 
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
-      validadCedula = false
+      validadCedula = false;
 
     } else {
       console.log('Campos obligatorios faltantes');
@@ -613,6 +607,7 @@ async function registrar_INCI_SI(agent) {
     agent.add('Ocurrió un error al registrar el incidente.');
   }
 }
+
 
 async function insertarConocimientoIncidente(titulo, contenido, fechaPublicacion, idUsuarioPublicacion) {
   const query = 'INSERT INTO public.base_conocimiento_incidentes (titulo_conocimiento_incidente, contenido_conocimiento_incidente, fecha_publicacion_incidente, id_usuario_publicacion) VALUES ($1, $2, $3, $4) RETURNING id_conocimiento_incidente';
