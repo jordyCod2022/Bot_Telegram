@@ -590,7 +590,7 @@ async function registrar_INCI_SI(agent) {
 
       await pool.query(queryTiemposResolucion, valoresTiemposResolucion);
 
-      agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
+      agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día!');
       validadCedula = false;
 
     } else {
