@@ -44,6 +44,11 @@ let descripcionTickets;
 let globalGpt;
 let promptNuevo;
 
+//variables de resolucion Ares
+
+let hora_inicio;
+let hora_fin;
+
 
 
 
@@ -57,6 +62,9 @@ const pool = new Pool({
 
 
 async function SaludoAres(agent) {
+
+  var fechaHoraFormateada = new Date();
+  hora_inicio = fechaHoraFormateada.toISOString();
   const saludos = [
     '¡Hola soy Ares! 🤖✨ Me alegra estar aquí. 😊',
     '¡Saludos! Soy Ares, tu asistente virtual. 🚀',
@@ -545,11 +553,17 @@ async function registrar_INCI_SI(agent) {
     const id_asignacion_user=6
     const id_cate=7
 
-          const query = `
-      INSERT INTO incidente (id_cate, id_estado, id_reportacion_user, id_asignacion_user,incidente_nombre, incidente_descrip, fecha_incidente)
-      VALUES ($1, $2, $3, $4, $5, $6, $7);
-    `;
-    
+        const query = `
+        INSERT INTO incidente (id_cate, id_estado, id_reportacion_user, id_asignacion_user, incidente_nombre, incidente_descrip, fecha_incidente)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id_incidente;
+      `;
+
+      const result = await pool.query(query, valores);
+      const idIncidenteInsertado = result.rows[0].id_incidente;
+
+      console.log('ID del incidente insertado:', idIncidenteInsertado);
+          
 
     const valores = [
       id_cate,
@@ -564,6 +578,23 @@ async function registrar_INCI_SI(agent) {
     await insertarConocimientoIncidente(descripcionInciGlobal,promptNuevo,fechaRegi,repoartacion_user_id)
 
       await pool.query(query, valores);
+      var fechaHoraFormateada = new Date();
+      hora_fin = fechaHoraFormateada.toISOString();
+
+      const queryTiemposResolucion = `
+      INSERT INTO tiemposResolucionAres (hora_inicio, hora_fin, id_incidente)
+      VALUES ($1, $2, $3);
+    `;
+    
+    const valoresTiemposResolucion = [
+      hora_inicio, 
+      hora_fin, 
+      idIncidenteInsertado, 
+    ];
+    
+    await pool.query(queryTiemposResolucion, valoresTiemposResolucion);
+    
+
       agent.add('✅ ¡Incidente resuelto con éxito! He registrado el incidente, estoy aquí para cualquier otro problema ¡Que tengas un excelente día! 🌈');
       validadCedula = false
 
