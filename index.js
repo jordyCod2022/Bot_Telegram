@@ -559,11 +559,7 @@ async function registrar_INCI_SI(agent) {
         RETURNING id_incidente;
       `;
 
-      const result = await pool.query(query, valores);
-      const idIncidenteInsertado = result.rows[0].id_incidente;
-
-      console.log('ID del incidente insertado:', idIncidenteInsertado);
-          
+    
 
     const valores = [
       id_cate,
@@ -574,6 +570,11 @@ async function registrar_INCI_SI(agent) {
       descripcionInciGlobal,
       fechaRegi,
     ];
+    const result = await pool.query(query, valores);
+    const idIncidenteInsertado = result.rows[0].id_incidente;
+
+    console.log('ID del incidente insertado:', idIncidenteInsertado);
+        
 
     await insertarConocimientoIncidente(descripcionInciGlobal,promptNuevo,fechaRegi,repoartacion_user_id)
 
